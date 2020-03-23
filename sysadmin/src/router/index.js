@@ -13,6 +13,7 @@ export default new Router({
       path: '/home', name: 'home', meta: { title: "主页" }, component: () => import('@/components/home'),
       children: [
         { path: '/studentlist', name: 'studentlist', meta: { title: "学生列表" }, component: () => import('@/components/userinformation/student/studentlist') },
+        { path: '/companylist', name: 'companylist', meta: { title: "学生列表" }, component: () => import('@/components/userinformation/companylist') },
         
       ]
     }

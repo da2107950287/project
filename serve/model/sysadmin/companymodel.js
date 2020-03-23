@@ -1,12 +1,38 @@
 const dbBase=require('../../config/dbBase.config');
 
-class userModel extends dbBase{   
+class companyModel extends dbBase{   
     constructor(){
         super();
-        this.table='';
+        this.table='company';
     }
-    Login(loginInfo,callback){  
-      
+    getCoList(callback){
+        console.log(999)
+        this.table='company'
+        let sql =`select * from ${this.table} where 1 `;
+        this.mydb.query(sql,(err,result)=>{
+          callback(result)       
+        })
+    }
+    editCoInfo(data,callback){
+          // UPDATE 表名称 SET 列名称 = 新值 WHERE 列名称 = 某值
+          let string1 = [];
+          let string2 = [];
+          for (const key in data) {
+              if (data.hasOwnProperty(key)) {
+                  let value = key + "=?"
+                  string1.push(value);
+                  string2.push(data[key]);
+  
+              }
+          }
+          string2.push(data.cid);
+          let sql = `update ${this.table} set ${string1.join(",")} where cid=?`;
+          this.mydb.query(sql, string2, function (err, result) {
+              callback(result);
+          })
+  
+    }
+    Login(loginInfo,callback){      
         if(loginInfo.radio==1){
             this.table='student'
         }else if(loginInfo.radio==2){
@@ -23,7 +49,6 @@ class userModel extends dbBase{
                 if(loginInfo.radio==1){
                     result[0].role='student'
                 }else if(loginInfo.radio==2){
-                    console.log(888)
                     result[0].role='company'
                 }else{
                     result[0].role='admin'
@@ -67,4 +92,4 @@ class userModel extends dbBase{
     //     })
     // }    
 }
-module.exports=userModel;
+module.exports=companyModel;

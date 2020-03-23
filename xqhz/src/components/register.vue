@@ -237,6 +237,7 @@ export default {
       this.$axios
         .post("/xqhz/user/register",this.ruleForm)
         .then(res => {
+            console.log(888)
           console.log(res);
           this.$router.push({path:'/'})
         })

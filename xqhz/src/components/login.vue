@@ -74,6 +74,7 @@ export default {
       this.$refs.loginFormRef.resetFields();
     },
     login() {
+        
       this.$axios
         .post("/xqhz/user/login", this.loginForm)
         .then(res => {

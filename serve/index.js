@@ -15,9 +15,12 @@ app.use(bodyParser.json());
 // app.use('/book',require('./Controller/bookController'));
 // app.use('/upload',require('./Controller/uploadController'));
 // app.use('/uploads', express.static(__dirname+'/uploads'));
+console.log("sever")
 app.use('/admin', require('./control/admin/adminControl'));
 app.use('/xqhz/user',require('./control/xqhz/userControl'))
-app.use('/xqhz/company',require('./control/xqhz/companyControl'))
+app.use('/xqhz/company',require('./control/xqhz/companyControl'));
+app.use('/sysadmin/company',require('./control/sysadmin/companyControl'));
+
 // app.use('/',require('./control/admin'))
 app.listen(81, () => {
     console.log('正在监听81');

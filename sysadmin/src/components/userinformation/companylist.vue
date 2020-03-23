@@ -5,9 +5,10 @@
       style="width: 100%;"
       border
     >
-      <el-table-column label="ID" prop="aid" align="center"></el-table-column>
+      <el-table-column label="ID" prop="cid" align="center"></el-table-column>
       <el-table-column label="账号" prop="username" align="center"></el-table-column>
       <el-table-column label="密码" prop="password" align="center"></el-table-column>
+      <el-table-column label="密码" prop="personal_tel" align="center"></el-table-column>
       <el-table-column align="right">
         <template slot="header" slot-scope="scope">
           <el-input v-model="search" size="mini" placeholder="输入关键字搜索" />
@@ -32,10 +33,11 @@ export default {
     getAdminList() {
       console.log(this);
       this.$axios
-        .post("/admin/adminlist")
+        .post("/sysadmin/company/getCoList")
         .then(res => {
-          this.tableData = res.data;
-          console.log(res);
+          console.log(res.data);
+
+          this.tableData = res.data.data;
         })
         .catch(err => {
           console.log(err);
