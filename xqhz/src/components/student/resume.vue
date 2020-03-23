@@ -1,50 +1,10 @@
 <template>
-  <div class="resume">
-    <div class="container">
-      <!-- <div class="basic" id="baseInfo">
-        <div class="basic-photo" data-lg-tj-id="1jit" data-lg-tj-no="0063" data-lg-tj-cid="idnull">
-          <img
-            class="mr_headimg user-avatar"
-            id="userpic"
-            src="//www.lgstatic.com/i/image2/M01/8A/00/CgotOV13LqWAccgBAABHIKdT9NE799.png"
-            width="120"
-            height="120"
-            alt="头像"
-          />
-          <img
-            class="basic-photo_shadow"
-            src="//www.lgstatic.com/lg-www-fed/mycenter/modules/common/img/shadow_tx_a482008.png"
-            width="119"
-            height="119"
-          />
-        </div>
-        <div class="basic-info">
-          <em class="edit-btn basic-info__edit" @click="handleEdit">编辑</em>
-          <div class="basic-name-area">
-            <p class="basic-name female">达荣春</p>
-            <i class="icon-sex icon-sex__female"></i>
-          </div>
-          <p class="basic-self">
-            <span class="basic-school">攀枝花学院 /</span>
-
-            <span class="basic-edu">本科 /</span>
-
-            <span class="basic-end-year">应届毕业生 /</span>
-
-            <span class="basic-age">21岁</span>
-          </p>
-          <p>
-            <span class="basic-tel">
-              <i class="basic-tel_icon"></i>
-              <span>15729839319</span>
-            </span>
-            <span class="basic-email">
-              <i class="basic-email_icon"></i>
-              <span>drc9839319@163.com</span>
-            </span>
-          </p>
-        </div>
-      </div>-->
+  <div class="continer">
+    <div class="aside">
+      <div @click="show">个人简历</div>
+      <div @click="show">简历投递管理</div>
+    </div>
+    <div class="resume" v-if="!isShow">
       <div class="content">
         <div class="ownerName">达荣春</div>
         <div class="BasicWrap row">
@@ -81,7 +41,7 @@
               </div>
               <div id="picture" class>
                 <div class="pic-wrap">
-                  <img :src="avatar" alt />
+                  <!-- <img :src="avatar" alt /> -->
                   <!-- src="https://cdn6.haitou.cc/user/face/71/1292671_9b07.jpg?v=1567951235&amp;x-oss-process=image/resize,m_fixed,w_200,h_200" -->
 
                   <span class="edit">
@@ -419,6 +379,23 @@
         </div>
       </div>
     </div>
+    <div class="resume-list" v-if="isShow">
+      <el-table :data="tableData" style="width: 100%">
+        <el-table-column prop="date" label="日期" width="180"></el-table-column>
+        <el-table-column prop="name" label="姓名" width="180"></el-table-column>
+        <el-table-column prop="address" label="地址"></el-table-column>
+      </el-table>
+      <div class="pagination">
+        <el-pagination
+          background
+          layout="total, prev, pager, next"
+          :current-page="query.pageIndex"
+          :page-size="query.pageSize"
+          :total="pageTotal"
+          @current-change="handlePageChange"
+        ></el-pagination>
+      </div>
+    </div>
     <!-- 编辑弹出框 -->
     <el-dialog title="基本信息" :visible.sync="editVisible" width="40%" class="base-informaion">
       <el-form ref="form" :model="form" label-width="70px">
@@ -496,6 +473,36 @@ import VDistpicker from "v-distpicker";
 export default {
   data() {
     return {
+      query: {
+        address: "",
+        name: "",
+        pageIndex: 1,
+        pageSize: 10
+      },
+      pageTotal:1,
+      tableData: [
+        {
+          date: "2016-05-02",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路 1518 弄"
+        },
+        {
+          date: "2016-05-04",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路 1517 弄"
+        },
+        {
+          date: "2016-05-01",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路 1519 弄"
+        },
+        {
+          date: "2016-05-03",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路 1516 弄"
+        }
+      ],
+      isShow: false,
       form: {
         name: "",
         sex: "",
@@ -550,6 +557,13 @@ export default {
     };
   },
   methods: {
+    show() {
+      this.isShow = !this.isShow;
+    },
+    handlePageChange(val) {
+      this.$set(this.query, "pageIndex", val);
+      this.getData();
+    },
     getProvince(data) {
       this.newInfo.province = data.value;
     },
@@ -571,6 +585,9 @@ export default {
       reader.readAsDataURL(file);
     }
   },
+  created() {
+    console.log(this.isShow);
+  },
   components: {
     VDistpicker
   }
@@ -582,9 +599,25 @@ ul,
 li {
   list-style: none;
 }
-.resume {
+.continer {
   margin: 30px 50px;
-  .container {
+  display: flex;
+  .aside {
+    margin-right: 20px;
+    background-color: #fff;
+    div {
+      padding: 5px;
+      padding-left: 1rem;
+      height: 30px;
+      line-height: 30px;
+      margin-top: 4px;
+      background-color: #e9e9e9;
+      min-width: 150px;
+      cursor: pointer;
+      color: #505459;
+    }
+  }
+  .resume {
     background: #fafafa;
     border: 1px solid #e3ebe9;
     border-radius: 5px;
@@ -880,6 +913,11 @@ li {
       white-space: nowrap;
       max-height: 400px;
     }
+  }
+  .resume-list {
+    margin: 0 10px;
+    width: 100%;
+    border: 1px solid #ccc;
   }
 }
 .el-dialog {

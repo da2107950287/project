@@ -8,7 +8,9 @@
 </template>
 
 <script>
+
   import E from 'wangeditor'
+  import 'wangeditor/release/wangEditor.min.css'  
   export default {
     name: 'editoritem',
     data() {

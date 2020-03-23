@@ -8,6 +8,7 @@ export default new Router({
   routes: [
 
     { path: '/', name: 'login', meta: { title: "登录" }, component: () => import('@/components/login') },
+    { path: '/test', name: 'test', meta: { title: "登录" }, component: () => import('@/components/test') },
     {
       path: '/home', name: 'home', meta: { title: "主页" }, component: () => import('@/components/home'),
       children: [

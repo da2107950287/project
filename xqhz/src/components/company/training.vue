@@ -2,31 +2,27 @@
   <div class="register">
     <div class="page">
       <div class="header">
-        <h3 class="title">招聘信息</h3>
+        <h3 class="title">培训信息</h3>
       </div>
-      <hr>
+      <hr />
       <div class="set-note">
         <el-form :model="ruleForm" ref="ruleForm" label-width="110px" class="demo-ruleForm">
           <!-- :rules="rules" -->
-          <el-form-item label="招聘职位：" prop="rec_title">
-            <el-input  clearable v-model="ruleForm.rec_title"></el-input>
+          <el-form-item label="课程名：" prop="class_title">
+            <el-input clearable v-model="ruleForm.class_title"></el-input>
           </el-form-item>
-          <el-form-item label="学历要求：" prop="rec_degree">
-            <el-input  clearable v-model="ruleForm.rec_degree"></el-input>
+          <el-form-item label="培训讲师：" prop="class_teacher">
+            <el-input clearable v-model="ruleForm.class_teacher"></el-input>
           </el-form-item>
-          <el-form-item label="招聘时间：" prop="rec_time">
-            <el-input  clearable v-model="ruleForm.rec_time"></el-input>
+          <el-form-item label="培训时间：" prop="class_time">
+            <el-input clearable v-model="ruleForm.class_time"></el-input>
           </el-form-item>
-          <el-form-item label="招聘地点：" prop="rec_place_name">
-            <el-input  clearable v-model="ruleForm.rec_place_name"></el-input>
+          <el-form-item label="培训地点：" prop="class_place_name">
+            <el-input clearable v-model="ruleForm.class_place_name"></el-input>
           </el-form-item>
-            <el-form-item label="工作地点" prop="rec_work_place">
-            <el-input  clearable v-model="ruleForm.rec_work_place"></el-input>
-          </el-form-item>
-            <el-form-item label="职位描述：" prop="rec_content">
-            <!-- <el-input  clearable v-model="ruleForm.rec_content"></el-input> -->
-<editor-bar v-model="detail" :isClear="isClear" @change="change"></editor-bar>  
-
+          <el-form-item label="培训内容：" prop="class_content">
+            <!-- <el-input  clearable v-model="ruleForm.class_content"></el-input> -->
+            <editor-bar v-model="detail" :isClear="isClear" @change="change"></editor-bar>
           </el-form-item>
           <el-form-item class="btns">
             <el-button type="primary" @click="edit">编辑</el-button>
@@ -38,28 +34,25 @@
   </div>
 </template>
 <script>
-import EditorBar from '../wangEditor/wangEditor'  
+import EditorBar from "../wangEditor/wangEditor";
 export default {
   data() {
     return {
-      ruleForm:{
-        rec_title:'',//职位
-        rec_degree:'',//学历要求
-        rec_time:'',//招聘时间
-        rec_work_place:'',//工作地点
-        rec_place_name:'',//招聘地点
-        rec_content:'',//职位描述
-        
+      ruleForm: {
+        class_title: "", //课程名
+        class_teacher: "", //培训讲师
+        class_time: "", //培训时间
+        class_work_place: "", //培训地点
+        class_content: "" //课程建设
       },
-        test:'',  
-            isClear: false,  
-            detail:""  
-
+      test: "",
+      isClear: false,
+      detail: ""
     };
   },
   methods: {
-    change(val){
-      console.log(val)
+    change(val) {
+      console.log(val);
     },
     edit() {
       this.disabled = false;
@@ -80,14 +73,15 @@ export default {
       this.ruleForm = res.data;
       console.log(res.data);
     });
-  },components:{
+  },
+  components: {
     EditorBar
   }
 };
 </script>
 <style lang='scss' scoped>
 .register {
-  padding: 50px 150px;
+  margin: 50px 150px;
   // margin:0 auto;
   // border-radius: 1px solid #000;
   .page {

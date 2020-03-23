@@ -16,23 +16,23 @@ Vue.use(vueSwiper)//使用插件
 
 axios.defaults.baseURL = "http://localhost:81";
 /* eslint-disable no-new */
-axios.interceptors.request.use(
-  config => {
-    if (localStorage.getItem("token")) {
-      config.headers.authorization = localStorage.getItem("token");
-      console.log(localStorage.getItem("token"))
-    }
-    return config
-  },
-  err => {
-    return Promise.reject(err)
-  })
-// axios 响应拦截器
-axios.interceptors.response.use(response => {
-  return response.data;
-}, function (error) {
-  return Promise.reject(error);
-});
+// axios.interceptors.request.use(
+//   config => {
+//     if (localStorage.getItem("token")) {
+//       config.headers.authorization = localStorage.getItem("token");
+//       console.log(localStorage.getItem("token"))
+//     }
+//     return config
+//   },
+//   err => {
+//     return Promise.reject(err)
+//   })
+// // axios 响应拦截器
+// axios.interceptors.response.use(response => {
+//   return response.data;
+// }, function (error) {
+//   return Promise.reject(error);
+// });
 new Vue({
   el: '#app',
   router,
