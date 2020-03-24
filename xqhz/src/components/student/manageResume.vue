@@ -604,14 +604,14 @@ li {
   display: flex;
   .aside {
     margin-right: 20px;
-    background-color: #fff;
+    // background-color: #fff;
     div {
       padding: 5px;
       padding-left: 1rem;
       height: 30px;
       line-height: 30px;
       margin-top: 4px;
-      background-color: #e9e9e9;
+      background-color: #fff;
       min-width: 150px;
       cursor: pointer;
       color: #505459;

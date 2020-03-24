@@ -14,7 +14,8 @@ Vue.prototype.$axios = axios;
 Vue.use(ElementUI);
 Vue.use(vueSwiper)//使用插件
 
-axios.defaults.baseURL = "http://localhost:81";
+// axios.defaults.baseURL = "http://localhost:81";
+axios.defaults.baseURL='https://mock.yonyoucloud.com/mock/4628/localhost'
 /* eslint-disable no-new */
 // axios.interceptors.request.use(
 //   config => {

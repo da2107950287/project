@@ -19,6 +19,8 @@ console.log("sever")
 app.use('/admin', require('./control/admin/adminControl'));
 app.use('/xqhz/user',require('./control/xqhz/userControl'))
 app.use('/xqhz/company',require('./control/xqhz/companyControl'));
+app.use('/xqhz/student',require('./control/xqhz/studentControl'));
+
 app.use('/sysadmin/company',require('./control/sysadmin/companyControl'));
 
 // app.use('/',require('./control/admin'))

@@ -84,6 +84,7 @@ export default {
   margin: 50px 150px;
   // margin:0 auto;
   // border-radius: 1px solid #000;
+  background-color: #fff;
   .page {
     margin: 0 auto;
     padding: 10px 50px;

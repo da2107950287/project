@@ -1,6 +1,5 @@
 <template>
   <div id="app">
- 
     <router-view/>
   </div>
 </template>
@@ -17,8 +16,12 @@ html,body{
   margin:0;
   width: 100%;
   height:100%;
+   background-image: url('../src/assets/img/bgc.jpg');
+  background-size: cover;
+  background-attachment: fixed;
 }
 #app{
   height: 100%;
+ 
 }
 </style>
