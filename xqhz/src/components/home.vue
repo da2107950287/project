@@ -2,11 +2,9 @@
   <div class="home">
     <div>
       <swiper :options="swiperOption">
-        <swiper-slide
-          class="swiper-slide"
-          v-for="(item,index) in slide"
-          :key="index"
-        >我是第{{item}}个轮播图</swiper-slide>
+        <swiper-slide class="swiper-slide" v-for="(item,index) in slide" :key="index">
+          <img :src="item" class="swiper-img" />
+        </swiper-slide>
         <div class="swiper-pagination" slot="pagination"></div>
         <!-- 分页 -->
         <div class="swiper-button-prev" slot="button-prev"></div>
@@ -15,19 +13,19 @@
         <!-- 箭头右 -->
       </swiper>
     </div>
-    <ul class="tab">
+    <!-- <ul class="tab">
       <li v-for="(item,index) in list" :key="index">
         <div>{{item.identity}}</div>
         <div>
           <span @click="go(item.path)" v-for="(item,index) in item.arr" :key="index">{{item.name}}</span>
         </div>
       </li>
-    </ul>
-    <el-tabs type="border-card">
+    </ul>-->
+    <!-- <el-tabs type="border-card">
       <el-tab-pane label="培训信息">
         <ul class="recruitment-list">
           <li
-            @click="getRecruitmentInfo"
+            @click="goInfo('showTrainingInfo')"
             v-for="(item,index) in dataList"
             :key="index"
           >{{item.title}}</li>
@@ -36,13 +34,23 @@
       <el-tab-pane label="招聘信息">
         <ul class="recruitment-list">
           <li
-            @click="getRecruitmentInfo"
+            @click="goInfo('showRecruitmentInfo')"
             v-for="(item,index) in dataList"
             :key="index"
           >{{item.title}}</li>
         </ul>
       </el-tab-pane>
-    </el-tabs>
+    </el-tabs>-->
+    <div class>
+      <h3>培训信息</h3>
+      <ul>
+        <li>
+          <div></div>
+          <div></div>
+        </li>
+      </ul>
+    </div>
+    <img src alt />
     <footer></footer>
   </div>
 </template>
@@ -52,7 +60,12 @@ export default {
   name: "App",
   data() {
     return {
-      slide: [1, 2, 3, 4, 5],
+      // slide: [
+      //  require( "../assets/img/swiper_1.jpg"),
+      //   require("../assets/img/swiper_2.jpg"),
+      //   require("../assets/img/swiper_3.jpg"),
+      //   require("../assets/img/swiper_4.jpg")
+      // ],
       //设置属性
       swiperOption: {
         //显示分页
@@ -66,13 +79,12 @@ export default {
           prevEl: ".swiper-button-prev"
         },
         //自动轮播
-        autoplay: {
-          delay: 2000
-        },
+        // autoplay: {
+        //   delay: 2000
+        // },
         //开启循环模式
-        loop: true,
+        loop: true
         //开启鼠标滚轮控制Swiper切换
-        mousewheel: true
       },
       list: [
         { identity: "学生", arr: [{ name: "登录", path: "/login" }] },
@@ -97,8 +109,8 @@ export default {
       this.$router.push({ path: keypath });
       console.log(keypath);
     },
-    getRecruitmentInfo() {
-      this.$router.push({path:'/showRecruitmentInfo'});
+    goInfo(keypath) {
+      this.$router.push({ path: keypath });
     }
   }
 };
@@ -118,7 +130,11 @@ li {
   line-height: 500px;
   font-size: 50px;
   text-align: center;
-  background-color: rosybrown;
+  // background-color: rosybrown;
+  .swiper-img {
+    width: 100%;
+    height: 100%;
+  }
 }
 .home {
   margin: 0 150px;
@@ -152,8 +168,8 @@ li {
       margin-bottom: 10px;
       padding-bottom: 10px;
       font-size: 16px;
-     color: #34495e;
-     cursor: pointer;
+      color: #34495e;
+      cursor: pointer;
     }
   }
   .el-tabs__item {

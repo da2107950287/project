@@ -18,7 +18,7 @@
       </el-submenu>
       <el-submenu index="3">
         <template slot="title">企业</template>
-        <el-menu-item index="m">管理企业信息</el-menu-item>
+        <el-menu-item index="companyInfo">管理企业信息</el-menu-item>
         <el-menu-item index="recruitment">管理招聘信息</el-menu-item>
         <el-menu-item index="training">管理培训信息</el-menu-item>
         <el-menu-item index="resumelist">管理简历信息</el-menu-item>

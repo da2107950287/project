@@ -83,7 +83,7 @@ export default {
 }
 .el-col-12 {
   width: 200px;
-  background-color: #ccc;
+  // background-color: #ccc;
  
 }
 

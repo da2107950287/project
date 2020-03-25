@@ -2,12 +2,10 @@
   <div class="register">
     <div class="page">
       <div class="header">
-        <h3 class="title">产品经理/运营经理/技术经理/开发工程师/运维工程师
-</h3>
+        <h3 class="title">产品经理/运营经理/技术经理/开发工程师/运维工程师</h3>
         <hr>
       </div>
-    
-        <ul class="cotainer">
+        <ul class="container">
           <li>
             <div>单位名称：</div>
             <div><a href="">联通智网科技有限公司</a></div>
@@ -46,9 +44,11 @@
             <div>一教405</div>
           </li>
 
-          <el-tabs type="border-card" class="content">
-            <el-tab-pane label="培训信息"></el-tab-pane>
-            <el-tab-pane label="招聘信息"></el-tab-pane>
+          <el-tabs type="border-card" class="bottom-box">
+            <el-tab-pane label="职位描述">
+            </el-tab-pane>
+            <el-tab-pane label="公司简介">
+            </el-tab-pane>
           </el-tabs>
         </ul>
       </div>
@@ -89,11 +89,13 @@ export default {
 <style lang='scss' scoped>
 .register {
   margin: 50px 150px;
+  background-color: #fff;
+  min-width: 800px;
   .page {
     margin: 0 auto;
     padding: 10px 50px;
     box-shadow: 2px 2px 5px 0 #666;
-    ul.cotainer {
+    ul.container {
       li{
           display:flex;
           justify-content: flex-start;
@@ -115,8 +117,9 @@ export default {
               }
           }
       }
-      .content{
+      .bottom-box{
           margin-top:10px;
+          
       }
     }
   }

@@ -10,21 +10,23 @@ let router = new Router({
     { path: '/login', name: 'login', meta: { title: '登录' }, component: () => import('@/components/login') },
     { path: '/register', name: 'register', meta: { title: '注册' }, component: () => import('@/components/register') },
     { path: '/showRecruitmentInfo', name: 'showRecruitmentInfo', meta: { title: '招聘信息详情' }, component: () => import('@/components/showRecruitmentInfo') },
-    { path: '/showTraining', name: 'showTraining', meta: { title: '培训信息详情' }, component: () => import('@/components/showTraining') },
-
+    { path: '/showTrainingInfo', name: 'showTrainingInfo', meta: { title: '培训信息详情' }, component: () => import('@/components/showTrainingInfo') },
     {
-      path: '/', redirect: '/home', name: 'index', meta: { title: '' }, component: () => import('@/components/index'), children: [
+      path: '/', redirect: '/home', name: 'index', meta: { title: '' }, component: () => import('@/components/index'),
+       children: [
         { path: '/home', name: 'home', meta: { title: '首页' }, component: () => import('@/components/home') },
+        //学生
         { path: '/manageResume', name: 'manageResume', meta: { title: '简历管理', role: ['student'] }, component: () => import('@/components/student/manageResume') },
         // { path: '/resume', name: 'resume', meta: { title: '简历',roles:['0'] },component: () => import('@/components/student/resume') },
-        { path: '/personalInfo', name: 'personalInfo', meta: { title: '个人信息管理', role: ['student'] }, component: () => import('@/components/student/personalInfo') },
+        { path: '/personalInfo', name: 'personalInfo', meta: { title: '个人信息', role: ['student'] }, component: () => import('@/components/student/personalInfo') },
         { path: '/manageTrain', name: 'manageTrain', meta: { title: '培训管理', role: ['student'] }, component: () => import('@/components/student/manageTrain') },
 
-
-        { path: '/m', name: 'm', meta: { title: '简历', role: ['company'] }, component: () => import('@/components/m') },
+        //企业
+        { path: '/companyInfo', name: 'companyInfo', meta: { title: '企业信息', role: ['company'] }, component: () => import('@/components/company/companyInfo') },
         { path: '/recruitment', name: 'recruitment', meta: { title: '招聘信息', role: ['company'] }, component: () => import('@/components/company/recruitment') },
         { path: '/training', name: 'training', meta: { title: '培训信息', role: ['company'] }, component: () => import('@/components/company/training') },
         { path: '/resumelist', name: 'resumelist', meta: { title: '简历管理', role: ['company'] }, component: () => import('@/components/company/resumelist') },
+        //学校
         { path: '/profile', name: 'profile', meta: { title: '学校简介' }, component: () => import('@/components/school/profile') },
         //咨询
         { path: '/consult', name: 'consult', meta: { title: '咨询' }, component: () => import('@/components/consult') },

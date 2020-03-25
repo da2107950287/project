@@ -8,8 +8,8 @@
       <div class="set-note">
         <el-form :model="ruleForm" ref="ruleForm" label-width="110px" class="demo-ruleForm">
           <!-- :rules="rules" -->
-          <el-form-item label="招聘职位：" prop="rec_title">
-            <el-input clearable v-model="ruleForm.rec_title"></el-input>
+          <el-form-item label="招聘职位：" prop="rec_position">
+            <el-input clearable v-model="ruleForm.rec_position"></el-input>
           </el-form-item>
           <el-form-item label="学历要求：" prop="rec_degree">
             <el-input clearable v-model="ruleForm.rec_degree"></el-input>
@@ -42,7 +42,7 @@ export default {
   data() {
     return {
       ruleForm: {
-        rec_title: "", //职位
+        rec_position: "", //职位
         rec_degree: "", //学历要求
         rec_time: "", //招聘时间
         rec_work_place: "", //工作地点

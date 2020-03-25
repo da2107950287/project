@@ -1,10 +1,10 @@
 <template>
   <div class="continer">
     <div class="aside">
-      <div @click="show">个人简历</div>
-      <div @click="show">简历投递管理</div>
+      <div @click="show(1)" >个人简历</div>
+      <div @click="show(2)">简历投递管理</div>
     </div>
-    <div class="resume" v-if="!isShow">
+    <div class="resume" v-if="isShow==1">
       <div class="content">
         <div class="ownerName">达荣春</div>
         <div class="BasicWrap row">
@@ -379,7 +379,7 @@
         </div>
       </div>
     </div>
-    <div class="resume-list" v-if="isShow">
+    <div class="resume-list" v-if="isShow==2">
       <el-table :data="tableData" style="width: 100%">
         <el-table-column prop="date" label="日期" width="180"></el-table-column>
         <el-table-column prop="name" label="姓名" width="180"></el-table-column>
@@ -502,7 +502,7 @@ export default {
           address: "上海市普陀区金沙江路 1516 弄"
         }
       ],
-      isShow: false,
+      isShow: 1,
       form: {
         name: "",
         sex: "",
@@ -557,8 +557,9 @@ export default {
     };
   },
   methods: {
-    show() {
-      this.isShow = !this.isShow;
+    show(type) {
+      console.log(type)
+      this.isShow = type;
     },
     handlePageChange(val) {
       this.$set(this.query, "pageIndex", val);
@@ -600,25 +601,25 @@ li {
   list-style: none;
 }
 .continer {
-  margin: 30px 50px;
+  margin: 50px 150px;
   display: flex;
   .aside {
-    margin-right: 20px;
-    // background-color: #fff;
+    margin-right: 30px;
+    // background-color: #fafafa;
     div {
       padding: 5px;
       padding-left: 1rem;
       height: 30px;
       line-height: 30px;
       margin-top: 4px;
-      background-color: #fff;
+      background-color: #fafafa;
       min-width: 150px;
       cursor: pointer;
       color: #505459;
     }
   }
   .resume {
-    background: #fafafa;
+    background: #fff;
     border: 1px solid #e3ebe9;
     border-radius: 5px;
     .content {
@@ -918,6 +919,7 @@ li {
     margin: 0 10px;
     width: 100%;
     border: 1px solid #ccc;
+    background-color: #fff;
   }
 }
 .el-dialog {

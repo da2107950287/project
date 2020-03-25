@@ -81,9 +81,9 @@ export default {
 </script>
 <style lang='scss' scoped>
 .register {
-  padding: 50px 150px;
-  // margin:0 auto;
-  // border-radius: 1px solid #000;
+  margin: 50px 150px;
+  
+  background-color: #fff;
   .page {
     margin: 0 auto;
     padding: 10px 50px;
