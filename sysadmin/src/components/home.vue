@@ -32,9 +32,9 @@
                 <i class="el-icon-message"></i>用户信息管理
               </template>
               <el-menu-item-group>
-                <el-menu-item index="1-1" @click="go('/studentlist')">学生信息</el-menu-item>
-                <el-menu-item index="1-2" @click="go('/companylist')">企业信息</el-menu-item>
-                <el-menu-item index="1-3" @click="go('/adminlist')">管理员信息</el-menu-item>
+                <el-menu-item index="1-1" @click="go('/studentList')">学生信息</el-menu-item>
+                <el-menu-item index="1-2" @click="go('/companyList')">企业信息</el-menu-item>
+                <el-menu-item index="1-3" @click="go('/adminList')">管理员信息</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
             <el-submenu index="2">

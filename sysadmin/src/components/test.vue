@@ -4,9 +4,7 @@
       class="upload-demo"
       action
       :on-change="handleChange"
-     
       :on-remove="handleRemove"
-      
       :limit="limitUpload"
       accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
       :auto-upload="false"

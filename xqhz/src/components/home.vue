@@ -13,14 +13,8 @@
         <!-- 箭头右 -->
       </swiper>
     </div>
-    <!-- <ul class="tab">
-      <li v-for="(item,index) in list" :key="index">
-        <div>{{item.identity}}</div>
-        <div>
-          <span @click="go(item.path)" v-for="(item,index) in item.arr" :key="index">{{item.name}}</span>
-        </div>
-      </li>
-    </ul>-->
+ 
+    
     <!-- <el-tabs type="border-card">
       <el-tab-pane label="培训信息">
         <ul class="recruitment-list">

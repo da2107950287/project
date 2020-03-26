@@ -1,7 +1,7 @@
 <template>
   <div class="continer">
     <div class="aside">
-      <div @click="show(1)" >个人简历</div>
+      <div @click="show(1)">个人简历</div>
       <div @click="show(2)">简历投递管理</div>
     </div>
     <div class="resume" v-if="isShow==1">
@@ -479,7 +479,7 @@ export default {
         pageIndex: 1,
         pageSize: 10
       },
-      pageTotal:1,
+      pageTotal: 1,
       tableData: [
         {
           date: "2016-05-02",
@@ -558,7 +558,7 @@ export default {
   },
   methods: {
     show(type) {
-      console.log(type)
+      console.log(type);
       this.isShow = type;
     },
     handlePageChange(val) {
@@ -754,6 +754,10 @@ li {
             .list {
               .item-box {
                 position: relative;
+                box-sizing: border-box;
+                border: 1px dashed #fff;
+                position: relative;
+                padding: 10px 0;
                 .item-title {
                   position: relative;
                   height: 26px;
