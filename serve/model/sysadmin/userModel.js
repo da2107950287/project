@@ -1,29 +1,79 @@
 const dbBase=require('../../config/dbBase.config');
-
-class studentModel extends dbBase{   
+class userModel extends dbBase{   
     constructor(){
         super();
         this.table='';
     }
-    getStudentInfo(cid,callback){
+    getStudentList(callback){
         
         this.table='student'
-        let sql =`select * from ${this.table} where sid = ? `;
-        this.mydb.query(sql,[cid],(err,result)=>{
+        let sql =`select * from ${this.table} where 1 `;
+        this.mydb.query(sql,(err,result)=>{
           callback(result)       
         })
     }
-    getEntryTrain(info,callback){
-        this.table='entry'
-        console.log(999)
-        let sql =`select * from training where tid in (select tid from entry where sid=?)`;
-        this.mydb.query(sql,[info.sid],(err,result)=>{
-            console.log(result,9999)
-          callback(result)       
+    delStudent(data,callback){
+        this.table='student';
+        let sql = `delete from ${this.table} where sid = ?`;
+        this.mydb.query(sql,[data],(err,result)=>{
+            callback(result)
         })
     }
-    editCoInfo(data,callback){
+    editStudent(data,callback){
           // UPDATE 表名称 SET 列名称 = 新值 WHERE 列名称 = 某值
+          this.table='student'
+          let string1 = [];
+          let string2 = [];
+          for (const key in data) {
+              if (data.hasOwnProperty(key)) {
+                  let value = key + "=?"
+                  string1.push(value);
+                  string2.push(data[key]);
+  
+              }
+          }
+          string2.push(data.sid);
+          let sql = `update ${this.table} set ${string1.join(",")} where sid=?`;
+          this.mydb.query(sql, string2, function (err, result) {
+              callback(result);
+          })
+  
+    }
+    getCompanyList(callback){
+        this.table='company'
+        let sql =`select * from ${this.table} where 1 `;
+        this.mydb.query(sql,(err,result)=>{
+            if(err){
+                callback(err)
+            }else{
+                callback(result)
+            }     
+        })
+    }
+    getCompanyInfo(data,callback){
+        console.log(data)
+        this.table='company'
+        let sql =`select * from ${this.table} where cid=? `;
+        
+        this.mydb.query(sql,[data.cid],(err,result)=>{
+            console.log(sql)
+          callback(result)       
+        })
+    }
+    delCompany(data,callback){
+        this.table='company';
+        let sql = `delete from ${this.table} where cid = ?`;
+        this.mydb.query(sql,[data.cid],(err,result)=>{
+            if(err){
+                callback(err)
+            }else{
+                callback(result)
+            }
+        })
+    }
+    editCompany(data,callback){
+          // UPDATE 表名称 SET 列名称 = 新值 WHERE 列名称 = 某值
+          this.table='company'
           let string1 = [];
           let string2 = [];
           for (const key in data) {
@@ -41,11 +91,17 @@ class studentModel extends dbBase{
           })
   
     }
+
+
+
+
+
+
     Login(loginInfo,callback){      
         if(loginInfo.radio==1){
             this.table='student'
         }else if(loginInfo.radio==2){
-            this.table='company'
+            this.table='user'
         }else{
             this.table='admin'
         }
@@ -58,7 +114,7 @@ class studentModel extends dbBase{
                 if(loginInfo.radio==1){
                     result[0].role='student'
                 }else if(loginInfo.radio==2){
-                    result[0].role='company'
+                    result[0].role='user'
                 }else{
                     result[0].role='admin'
                 }
@@ -80,51 +136,13 @@ class studentModel extends dbBase{
                 fieldstring.push(key);
             }
         }
-        let sql = `insert into company (${fieldstring.join(",")}) values (${field.join(",")})`;
+        let sql = `insert into user (${fieldstring.join(",")}) values (${field.join(",")})`;
         // this.test();
         this.mydb.query(sql, data, (error, result) => {
             console.log(result,"jjjjj")
             callback(result);
             // this.end();
         })
-    }
-    postTraining(traininginfo,callback){
-        this.table='training'
-        let data = [];
-        let fieldstring = [];
-        let field = [];
-        for (const key in traininginfo) {
-            if (traininginfo.hasOwnProperty(key)) {
-                field.push("?");
-                data.push(traininginfo[key]);
-                fieldstring.push(key);
-            }
-        }
-        let sql = `insert into ${this.table} (${fieldstring.join(",")}) values (${field.join(",")})`;
-        // this.test();
-        this.mydb.query(sql, data, (err, result) => {
-            if(err){
-                console.log(err)
-                callback(err)
-            }else{
-                console.log(sql)
-                callback(result);
-            }
-            // this.end();
-        })
-    }
-    getTrainingList(callback){
-        this.table='training'
-        let sql =`select * from ${this.table} where 1 `;
-        this.mydb.query(sql,(err,result)=>{
-            if(err){
-                callback(err)
-            }else{
-                callback(result) 
-            }
-                
-        })
-    }
-    
+    }  
 }
-module.exports=studentModel;
+module.exports=userModel;

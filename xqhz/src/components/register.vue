@@ -13,10 +13,10 @@
             <el-input v-model="ruleForm.username"></el-input>
           </el-form-item>
           <el-form-item label="密码：" prop="password">
-            <el-input v-model="ruleForm.password" type="password"></el-input>
+            <el-input v-model="ruleForm.password" type="password" show-password></el-input>
           </el-form-item>
           <el-form-item label="确认密码：" prop="verify_password">
-            <el-input v-model="verify_password" type="password"></el-input>
+            <el-input v-model="verify_password" type="password" show-password></el-input>
           </el-form-item>
           <h4>联系人信息</h4>
           <hr style="margin-bottom:25px" />
@@ -88,85 +88,7 @@
       </div>
     </div>
 
-    <!-- <ul>
-      <li>
-        <span>企业名称：</span>
-        <input type="text" v-model="rec_name" />
-      </li>
-      <li>
-        <span>用户名：</span>
-        <input type="text" v-model="personal_username" />
-      </li>
-      <li>
-        <span>密码：</span>
-        <input type="text" v-model="personal_password" />
-      </li>
-      <li>
-        <span>确认密码：</span>
-        <input type="text" v-model="personal_password" />
-      </li>
-      <li>
-        <span>职务：</span>
-        <input type="text" v-model="personal_position" />
-      </li>
-      <li>
-        <span>联系电话：</span>
-        <input type="text" v-model="personal_tel" />
-      </li>
-      <li>
-        <span>个人邮箱：</span>
-        <input type="text" v-model="personal_email" />
-      </li>
-      <li>
-        <span>营业执照：</span>
-        <el-upload
-          class="upload-demo"
-          action="https://jsonplaceholder.typicode.com/posts/"
-          :on-preview="handlePreview"
-          :on-remove="handleRemove"
-          :before-remove="beforeRemove"
-          multiple
-          :limit="1"
-          :on-exceed="handleExceed"
-          :file-list="fileList"
-        >
-          <el-button size="small" type="primary">点击上传</el-button>
-          <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-        </el-upload>
-      </li>
-    </ul>-->
-
-    <!-- <ul>
-      <li>
-        <span>企业性质：</span>
-        <input type="text" v-model />
-      </li>
-      <li>
-        <span>企业地址：</span>
-        <input type="text" v-model />
-      </li>
-      <li>
-        <span>联系电话</span>
-        <input type="text" v-model />
-      </li>
-      <li>
-        <span>简历投递邮箱：</span>
-        <input type="text" v-model />
-      </li>
-      <li>
-        <span>企业所在行业：</span>
-        <input type="text" v-model />
-      </li>
-      <li>
-        <span>企业规模：</span>
-        <input type="text" v-model />
-      </li>
-      <li>
-        <span>企业网站主页：</span>
-        <input type="text" v-model />
-      </li>
-    </ul>
-    <ul>企业简介:</ul>-->
+    
   </div>
 </template>
 <script>
@@ -180,16 +102,16 @@ export default {
         personal_tel: "", //联系人电话
         personal_email: "", //联系人邮箱
         rec_name: "", //企业名称
-        rec_kind: "",//企业性质
-        rec_class: "",//企业所在行业
-        rec_scale: "",//企业规模
+        rec_kind: "", //企业性质
+        rec_class: "", //企业所在行业
+        rec_scale: "", //企业规模
         rec_page: "", //企业网站首页
         rec_intro: "", //企业简介
         rec_tel: "", //企业联系电话
         rec_address: "", //企业地址
         rec_email: "" //简历投递邮箱
       },
-       verify_password: "", //确认密码
+      verify_password: "", //确认密码
       arr1: [
         { value: "机关单位", label: "机关单位" },
         { value: "科研设计单位", label: "科研设计单位" },
@@ -204,7 +126,7 @@ export default {
         { value: "农村建制村", label: "农村建制村" },
         { value: "城镇社区", label: "城镇社区" },
         { value: "其他", label: "其他" }
-      ], 
+      ],
       arr2: [
         { value: "10人以下", label: "10人以下" },
         { value: "10人-50人", label: "10人-50人" },
@@ -212,7 +134,7 @@ export default {
         { value: "100人-200人", label: "100人-200人" },
         { value: "200人-500人", label: "200人-500人" },
         { value: "500人以上", label: "500人以上" }
-      ], 
+      ],
       arr3: [
         { value: "机关单位", label: "机关单位" },
         { value: "科研设计单位", label: "科研设计单位" },
@@ -227,23 +149,26 @@ export default {
         { value: "农村建制村", label: "农村建制村" },
         { value: "城镇社区", label: "城镇社区" },
         { value: "其他", label: "其他" }
-      ], 
+      ],
       fileList: []
     };
   },
   methods: {
     register() {
+      if (this.ruleForm.password !== this.verify_password) {
+        this.$message("密码不一致");
+      } else {
+        this.$axios
+          .post("/xqhz/user/register", this.ruleForm)
+          .then(res => {
+            console.log(res);
+            this.$router.push({ path: "/login" });
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
       console.log(this.ruleForm);
-      this.$axios
-        .post("/xqhz/user/register",this.ruleForm)
-        .then(res => {
-            console.log(888)
-          console.log(res);
-          this.$router.push({path:'/'})
-        })
-        .catch(err => {
-          console.log(err);
-        });
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
@@ -266,9 +191,10 @@ export default {
 </script>
 <style lang='scss' scoped>
 .register {
-  padding: 50px 100px;
+  margin: 50px 150px;
   // margin:0 auto;
   // border-radius: 1px solid #000;
+  background-color: #fff;
   .page {
     margin: 0 auto;
     padding: 10px 20px;

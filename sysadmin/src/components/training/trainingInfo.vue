@@ -3,24 +3,24 @@
     <div class="container">
       <ul class="content">
         <li>
-          <div>学号:</div>
-          <div>{{this.info.sno}}</div>
+          <div>课程名:</div>
+          <div>{{this.info.class_name}}</div>
         </li>
         <li>
-          <div>姓名:</div>
-          <div>{{this.info.username}}</div>
+          <div>培训讲师:</div>
+          <div>{{this.info.class_teacher}}</div>
         </li>
         <li>
-          <div>密码:</div>
-          <div>{{this.info.password}}</div>
+          <div>培训时间:</div>
+          <div>{{this.info.class_time}}</div>
         </li>
         <li>
-          <div>学院:</div>
-          <div>{{this.info.academy}}</div>
+          <div>培训地点:</div>
+          <div>{{this.info.class_place}}</div>
         </li>
         <li>
-          <div>专业:</div>
-          <div>{{this.info.major}}</div>
+          <div>培训内容:</div>
+          <div v-html="this.info.class_content"></div>
         </li>
       </ul>
     </div>

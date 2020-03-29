@@ -28,7 +28,11 @@
         <el-menu-item index="profile">学校简介</el-menu-item>
       </el-submenu>
       <el-menu-item index="consult">咨询</el-menu-item>
+      
+      <el-menu-item index="register" class="right">注册</el-menu-item>
+      <el-menu-item index="login" class="right">登录</el-menu-item>
     </el-menu>
+    <div class="blank-box"></div>
     <router-view></router-view>
   </div>
 </template>
@@ -49,7 +53,19 @@ export default {
 };
 </script>
 <style scoped>
+.el-menu-demo{
+  position: fixed;
+  top:0;
+  width: 100%;
+  z-index: 2000;
+}
+.blank-box{
+  height:60px;
+}
 .el-menu.el-menu--horizontal {
-  padding-left: 100px;
+  padding:0 150px;
+}
+.right{
+  
 }
 </style>

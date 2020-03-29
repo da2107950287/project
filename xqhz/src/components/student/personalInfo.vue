@@ -8,20 +8,20 @@
       <div class="set-note">
         <el-form :model="ruleForm" ref="ruleForm" label-width="60px" class="demo-ruleForm">
           <!-- :rules="rules" -->
-          <el-form-item label="学号：" prop="rec_time">
-            <el-input clearable v-model="ruleForm.rec_time"></el-input>
+          <el-form-item label="学号：" prop="sno">
+            <el-input clearable v-model="ruleForm.sno"></el-input>
           </el-form-item>
-          <el-form-item label="姓名：" prop="rec_title">
-            <el-input clearable v-model="ruleForm.rec_title"></el-input>
+          <el-form-item label="姓名：" prop="username">
+            <el-input clearable v-model="ruleForm.username"></el-input>
           </el-form-item>
-          <el-form-item label="密码：" prop="rec_degree">
-            <el-input clearable v-model="ruleForm.rec_degree"></el-input>
+          <el-form-item label="密码：" prop="password">
+            <el-input clearable v-model="ruleForm.password"></el-input>
           </el-form-item>
-          <el-form-item label="学院：" prop="rec_place_name">
-            <el-input clearable v-model="ruleForm.rec_place_name"></el-input>
+          <el-form-item label="学院：" prop="academy">
+            <el-input clearable v-model="ruleForm.academy"></el-input>
           </el-form-item>
-          <el-form-item label="专业：" prop="rec_place_name">
-            <el-input clearable v-model="ruleForm.rec_place_name"></el-input>
+          <el-form-item label="专业：" prop="major">
+            <el-input clearable v-model="ruleForm.major"></el-input>
           </el-form-item>
           <el-form-item class="btns">
             <el-button type="primary" @click="edit">编辑</el-button>
@@ -38,12 +38,12 @@ export default {
   data() {
     return {
       ruleForm: {
-        rec_title: "", //职位
-        rec_degree: "", //学历要求
-        rec_time: "", //招聘时间
-        rec_work_place: "", //工作地点
-        rec_place_name: "", //招聘地点
-        rec_content: "" //职位描述
+        sno: "", //职位
+        username: "", //学历要求
+        password: "", //招聘时间
+        academy: "", //工作地点
+        major: "", //招聘地点
+        
       },
       test: "",
       isClear: false,
@@ -59,7 +59,7 @@ export default {
     },
     submit() {
       this.$axios
-        .post("/xqhz/company/editCoInfo", this.ruleForm)
+        .post("/xqhz/student/getStudentInfo", this.ruleForm)
         .then(res => {
           this.$message(res.msg);
         })
@@ -69,7 +69,7 @@ export default {
     }
   },
   created() {
-    this.$axios.post("/xqhz/company/getCoInfo").then(res => {
+    this.$axios.post("/xqhz/student/getStudentInfo").then(res => {
       this.ruleForm = res.data;
       console.log(res.data);
     });

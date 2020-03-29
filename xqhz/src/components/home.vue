@@ -13,36 +13,80 @@
         <!-- 箭头右 -->
       </swiper>
     </div>
- 
-    
-    <!-- <el-tabs type="border-card">
-      <el-tab-pane label="培训信息">
-        <ul class="recruitment-list">
-          <li
-            @click="goInfo('showTrainingInfo')"
-            v-for="(item,index) in dataList"
-            :key="index"
-          >{{item.title}}</li>
-        </ul>
-      </el-tab-pane>
-      <el-tab-pane label="招聘信息">
-        <ul class="recruitment-list">
-          <li
-            @click="goInfo('showRecruitmentInfo')"
-            v-for="(item,index) in dataList"
-            :key="index"
-          >{{item.title}}</li>
-        </ul>
-      </el-tab-pane>
-    </el-tabs>-->
-    <div class>
-      <h3>培训信息</h3>
-      <ul>
-        <li>
-          <div></div>
-          <div></div>
-        </li>
-      </ul>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <div class="panel-title">培训信息</div>
+      </div>
+      <div class="panel-body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>课程名</th>
+              <th>培训讲师</th>
+              <th>培训时间</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item,index) in trainingList" :key="index">
+              <td class="post-sort" @click="getTrainingInfo(item)">{{item.class_name}}</td>
+              <td class="post-intro">{{item.class_teacher}}</td>
+              <td class="post-time">{{item.class_time}}</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td class="see_more" @click="seeMore('/trainingList')">查看更多</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <div class="panel-title">招聘信息</div>
+      </div>
+      <div class="panel-body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>职位名称</th>
+              <th>企业名称</th>
+              <th>招聘日期</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item,index) in recruitmentList" :key="index">
+              <td class="post-sort" @click="getRecruitmentInfo(item)">{{item.rec_position}}</td>
+              <td class="post-intro">{{item.rec_name}}</td>
+              <td class="post-time">{{item.rec_time}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <div class="panel-title">企业展示</div>
+      </div>
+      <div class="panel-body">
+        <table class="table">
+          <!-- <thead>
+            <tr>
+              <th>课程名</th>
+              <th>讲师</th>
+              <th>培训时间</th>
+            </tr>
+          </thead> -->
+          <tbody>
+            <tr>
+              <!-- <td class="post-sort" style="width:33%" v-for="">{{}}</td> -->
+              
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
     <img src alt />
     <footer></footer>
@@ -54,12 +98,12 @@ export default {
   name: "App",
   data() {
     return {
-      // slide: [
-      //  require( "../assets/img/swiper_1.jpg"),
-      //   require("../assets/img/swiper_2.jpg"),
-      //   require("../assets/img/swiper_3.jpg"),
-      //   require("../assets/img/swiper_4.jpg")
-      // ],
+      slide: [
+        require("../assets/img/swiper_1.jpg"),
+        require("../assets/img/swiper_2.jpg"),
+        require("../assets/img/swiper_3.jpg"),
+        require("../assets/img/swiper_4.jpg")
+      ],
       //设置属性
       swiperOption: {
         //显示分页
@@ -95,17 +139,50 @@ export default {
         { title: "【军队文职专栏】军队文职招聘信息汇总 3月16日更新", id: 1 },
         { title: "【军队文职专栏】军队文职招聘信息汇总 3月16日更新", id: 2 },
         { title: "【军队文职专栏】军队文职招聘信息汇总 3月16日更新", id: 3 }
-      ]
+      ],
+      trainingList: [],
+      recruitmentList:[]
     };
   },
   methods: {
-    go(keypath) {
+ 
+    seeMore(keypath) {
       this.$router.push({ path: keypath });
-      console.log(keypath);
     },
-    goInfo(keypath) {
-      this.$router.push({ path: keypath });
+    getTrainingList() {
+      this.$axios
+        .post("/xqhz/company/getTrainingList", {})
+        .then(res => {
+          console.log(res);
+          this.trainingList = res.data;
+          console.log(this.trainingList);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    getTrainingInfo(data) {
+      console.log(data);
+      this.$router.push({
+        path: "/trainingInfo",
+        query: { data: JSON.stringify(data) }
+      });
+    },
+    getRecruitmentInfo(data){
+this.$router.push({path:'/recruitmentInfo',query:{data:JSON.stringify(data)}})
+    },
+    getRecruitmentList(){
+      this.$axios.post('/xqhz/company/getRecruitmentList',{}).then(res=>{
+        this.recruitmentList=res.data;
+        console.log(res)
+      }).catch(err=>{
+        console.log(err)
+      })
     }
+  },
+  created() {
+    this.getTrainingList();
+    this.getRecruitmentList()
   }
 };
 </script>
@@ -153,6 +230,88 @@ li {
         display: flex;
         flex-direction: column;
         cursor: pointer;
+      }
+    }
+  }
+  .panel {
+    margin-top: 20px;
+    background-color: #ffffff;
+    border: 1px solid #efefef;
+    border-radius: 4px;
+    .panel-heading {
+      color: #333333;
+      background-color: #ccc;
+      border-color: #dddddd;
+      padding-left: 20px;
+      height: 50px;
+      line-height: 50px;
+    }
+    .panel-body {
+      padding: 0 20px;
+      .table {
+        width: 100%;
+        max-width: 100%;
+        color: #333333;
+        background-color: transparent;
+        table-layout: fixed;
+        border-collapse: collapse;
+        th {
+          text-align: left;
+          border-bottom: 2px solid #f6f6f6;
+        }
+        th,
+        td {
+          padding: 8px;
+          overflow: hidden;
+          padding-right: 10px !important;
+          padding-left: 10px !important;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          font-size: 14px;
+        }
+        tr {
+          td {
+            line-height: 1.42857143;
+            vertical-align: top;
+            border-bottom: 2px dotted #f6f6f6;
+          }
+          .post-sort {
+            color: #4a90e6;
+            cursor: pointer;
+          }
+          .see_more {
+            border: none;
+            font-size: 12px;
+            color:#ccc;
+            text-align: center;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+  .informaton_box {
+    background-color: #fff;
+    box-shadow: 2px 2px 5px 0 #666;
+    margin-top: 20px;
+    padding: 10px;
+    div.title {
+      font-weight: bold;
+      font-size: 18px;
+    }
+    ul {
+      margin-top: 10px;
+      li {
+        display: flex;
+        justify-content: space-between;
+        line-height: 25px;
+        border-bottom: 1px solid #777;
+        div {
+        }
+      }
+      li:first-child {
+        font-weight: bold;
+        border-top: 1px solid #777;
       }
     }
   }

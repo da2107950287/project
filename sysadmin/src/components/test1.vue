@@ -59,6 +59,7 @@
                 let list = this.data.filter((item, index) =>
                     item.name.includes(this.searchData)
                 )
+                console.log(list)
                 this.list = list.filter((item, index) =>
                     index < this.page * this.limit && index >= this.limit * (this.page - 1)
                 )

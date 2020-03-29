@@ -46,11 +46,11 @@
               </el-menu-item-group>
             </el-submenu>
             <el-submenu index="3">
-              <template slot="title">
+              <template slot="title" >
                 <i class="el-icon-menu"></i>培训信息管理
               </template>
               <el-menu-item-group>
-                <el-menu-item index="3-1">培训信息</el-menu-item>
+                <el-menu-item index="3-1"  @click="go('/trainingList')">培训信息</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
 
@@ -127,17 +127,26 @@ export default {
   height: 100%;
   .main {
     height: 100%;
-  }
-}
-.content {
-  height: 100%;
-  .el-aside {
-    ul {
-      height: 100%;
-
+    
+    .content {
+    
+      .el-aside {
+        ul {
+          height: 100%;
+        }
+      }
     }
   }
 }
+// .content {
+//   height: 100%;
+//   .el-aside {
+//     ul {
+//       height: 100%;
+
+//     }
+//   }
+// }
 </style>
 <style lang="scss" scoped>
 .el-header {
@@ -181,7 +190,6 @@ export default {
 }
 
 .el-aside {
-
   text-align: center;
   line-height: 200px;
 }

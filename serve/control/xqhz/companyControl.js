@@ -4,77 +4,97 @@ const companyModel = require('../../model/xqhz/companyModel');
 const JwtUtil = require('../../tool/jwt');
 let companymodel = new companyModel();
 let jwt = new JwtUtil();
-// router.post('/login', (req, res) => {
-//     let data = req.body;
-//     companymodel.Login(data, (result) => {
-//         if (result.length == 0) {
-//             res.json({ msg: "用户名不存在！" })
-//         } else if (result[0].password != data.password) {
-//             res.json({ msg: "密码错误！" })
-//         } else {
-//             console.log(result)
-
-            
-//             let token;
-//             if(data.radio==1){
-//                 token = jwt.createToken({ uid: result[0].uid })
-//             }else if(data.radio==2){
-//                 token = jwt.createToken({ cid: result[0].cid })
-//             }else{
-//                 token = jwt.createToken({ aid: result[0].aid })
-//             }
-//             // let token = jwt.createToken({ uid: result[0].uid })
-//             res.json({ msg: "登录成功！", data:{token: token,role: result[0].role} })
-//         }
-//     })
-// })
 //获取企业信息
-router.post('/getCoInfo',(req,res)=>{
-    jwt.checkToken(req.headers.authorization).then(res1=>{
+router.post('/getCoInfo', (req, res) => {
+    jwt.checkToken(req.headers.authorization).then(res1 => {
         //token验证成功
-     
-        companymodel.getCoInfo(res1.cid,(result)=>{
-           
-            res.json({data:result[0]})
+        companymodel.getCoInfo(res1.cid, (result) => {
+            res.json({ data: result[0] })
         })
-     
-    }).catch(err=>{
-        res.json({err:-1,msg:'token非法'});
+    }).catch(err => {
+        res.json({ err: -1, msg: 'token非法' });
     }
     )
 })
-router.post('/editCoInfo',(req,res)=>{
-    
-    jwt.checkToken(req.headers.authorization).then(res1=>{
+router.post('/editCoInfo', (req, res) => {
+    jwt.checkToken(req.headers.authorization).then(res1 => {
         //token验证成功
-        let data=req.body;
-        data.cid=res1.cid;
-        companymodel.editCoInfo(data,(result)=>{
-            res.json({msg:'编辑成功'})
-         
+        let data = req.body;
+        data.cid = res1.cid;
+        companymodel.editCoInfo(data, (result) => {
+            res.json({ msg: '编辑成功' })
         })
-     
-    }).catch(err=>{
-        res.json({err:-1,msg:'token非法'});
+    }).catch(err => {
+        res.json({ err: -1, msg: 'token非法' });
         console.log(err)
     }
     )
 })
+router.post('/postTraining', (req, res) => {
+    console.log('postTraining')
+    jwt.checkToken(req.headers.authorization).then(res1 => {
+        //token验证成功
+        let data = req.body;
+        data.cid = res1.cid;
+        companymodel.postTraining(data, (result) => {
+            res.json({ msg: '添加培训信息成功，等待管理员审核' })
+        })
+    }).catch(err => {
+        res.json({ err: -1, msg: 'token非法' });
+        console.log(err)
+    })
+})
+router.post('/postRecruitment', (req, res) => {
+    console.log('postRecruitment')
+    jwt.checkToken(req.headers.authorization).then(res1 => {
+        //token验证成功
+        let data = req.body;
+        data.cid = res1.cid;
+        console.log(data)
+        companymodel.postRecruitment(data, (result) => {
+            res.json({ msg: '添加招聘信息成功，等待管理员审核' })
+        })
+    }).catch(err => {
+        res.json({ err: -1, msg: 'token非法' });
+        console.log(err)
+    }
+    )
+})
+router.post('/getTrainingList', (req, res) => {
+    companymodel.getTrainingList((result) => {
+        console.log(result)
+        res.json({ code: 0, data: result, msg: '获取数据成功' })
+    })
+})
 
+router.post('/getRecruitmentList', (req, res) => {
 
-// checkToken(req.headers.Authorization).then(res=>{
-//     //token验证成功
-//     //判断过期时间
-// }).catch(err=>{
-//     res.json({{err:-1,msg:'token非法'}})
-// }
-// router.post('/adminlist', (req, res) => {
-
-//     adminmodel.adminList((result) => {
-
-//         console.log(result)
-//         res.json(result)
-
-//     })
-// })
+    companymodel.getRecruitmentList((result) => {
+        console.log(result)
+        res.json({ code: 0, data: result, msg: '获取数据成功' })
+    })
+})
+router.post('/getSelfRecruitmentList', (req, res) => {
+    jwt.checkToken(req.headers.authorization).then(res1 => {
+        console.log(res1.cid)
+        companymodel.getSelfRecruitmentList(res1.cid,(result) => {
+            console.log(result)
+            res.json({ code: 0, data: result, msg: '获取数据成功' })
+        })
+    }).catch(err => {
+        res.json({ err: -1, msg: 'token非法' });
+    })
+})
+router.post('/getDeliveryRecordList', (req, res) => {
+    jwt.checkToken(req.headers.authorization).then(res1 => {
+        console.log(res1.cid)
+        companymodel.getDeliveryRecordList(res1.cid,(result) => {
+            console.log(result)
+            res.json({ code: 0, data: result, msg: '获取数据成功' })
+        })
+    }).catch(err => {
+        res.json({ err: -1, msg: 'token非法' });
+    })
+})
+// postRecruitment
 module.exports = router;

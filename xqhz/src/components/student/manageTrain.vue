@@ -11,21 +11,26 @@
           ref="multipleTable"
           header-cell-class-name="table-header"
         >
-          <el-table-column prop="id" label="ID" align="center"></el-table-column>
-          <el-table-column prop="class_name" label="课程名" align="center"></el-table-column>
+          <!-- <el-table-column prop="id" label="ID" align="center"></el-table-column> -->
+          <!-- <el-table-column prop="class_name" label="课程名" align="center"></el-table-column> -->
+          <el-table-column label="课程名" align="center">
+            <template slot-scope="scope">
+              <div @click="getTrainingInfo(scope.row)" class="active">{{scope.row.class_name}}</div>
+            </template>
+          </el-table-column>
           <el-table-column prop="class_teacher" label="讲师" align="center"></el-table-column>
           <el-table-column prop="class_time" label="培训时间" align="center"></el-table-column>
-          <el-table-column prop="class_address" label="培训地址" align="center"></el-table-column>
+          <el-table-column prop="class_place" label="培训地址" align="center"></el-table-column>
           <el-table-column prop="apply_time" label="报名时间" align="center"></el-table-column>
           <!-- <el-table-column prop="class_introduce" label="课程介绍" align="center"></el-table-column> -->
-          <el-table-column prop="status" label="状态" align="center"></el-table-column>
+          <!-- <el-table-column prop="status" label="状态" align="center"></el-table-column> -->
         </el-table>
         <div class="pagination">
           <el-pagination
             background
             layout="total, prev, pager, next"
-            :current-page="query.pageIndex"
-            :page-size="query.pageSize"
+            :current-page="pageIndex"
+            :page-size="pageSize"
             :total="pageTotal"
             @current-change="handlePageChange"
           ></el-pagination>
@@ -38,22 +43,12 @@
 export default {
   data() {
     return {
-      query: {
-        id: 0,
-        class_name: "",
-        class_teacher: "",
-        class_time: "",
-        class_address: "",
-        class_introduce: "",
-        apply_time: "",
-        pageIndex: 1, //默认显示第一页
-        pageSize: 10 //默认每页数据量
-      },
       tableData: [],
-      multipleSelection: [],
-      delList: [],
+      pageIndex: 1, //默认显示第一页
+      pageSize: 10, //默认每页数据量
+      class_name: "",
       editVisible: false,
-      pageTotal: 0, //总条数
+      pageTotal: null, //总条数
       form: {},
       idx: -1,
       id: -1
@@ -63,25 +58,41 @@ export default {
     this.getData();
   },
   methods: {
-    // 获取 easy-mock 的模拟数据
     getData() {
       this.$axios
-        .post("/xqhz/student/getTrainList", {
-          pageIndex: this.query.pageIndex,
-          pageSize: this.query.pageSize
-        })
+        .post("/xqhz/student/getEntryTrain", {})
         .then(res => {
-          console.log(res);
+          this.data = res.data;
+          this.getList();
         })
         .catch(err => {
           console.log(err);
         });
     },
+    getList() {
+      // es6过滤得到满足搜索条件的展示数据list
+      let list = this.data.filter((item, index) =>
+        item.class_name.includes(this.class_name)
+      );
 
+      this.tableData = list.filter(
+        (item, index) =>
+          index < this.pageIndex * this.pageSize &&
+          index >= this.pageSize * (this.pageIndex - 1)
+      );
+      this.pageTotal = list.length;
+    },
+    getTrainingInfo(data) {
+      console.log(9999);
+      this.$router.push({
+        path: "/trainingInfo",
+        query: { data: JSON.stringify(data) }
+      });
+    },
     // 分页导航
     handlePageChange(val) {
-      this.$set(this.query, "pageIndex", val);
-      this.getData();
+      // this.$set(this.query, "pageIndex", val);
+      // this.getData();
     }
   }
 };
@@ -91,6 +102,7 @@ export default {
 .resumelist {
   margin: 50px 150px;
   box-shadow: 2px 2px 5px 0 #666;
+  background-color: #fff;
   > div {
     padding: 10px 50px;
   }
@@ -123,5 +135,9 @@ export default {
 }
 .pagination {
   margin-top: 10px;
+}
+.active{
+  color:red;
+  cursor: pointer;
 }
 </style>

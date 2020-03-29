@@ -2,55 +2,58 @@
   <div class="register">
     <div class="page">
       <div class="header">
-        <h3 class="title">产品经理/运营经理/技术经理/开发工程师/运维工程师</h3>
+        <h3 class="title">{{info.rec_position}}</h3>
         <hr>
       </div>
         <ul class="container">
           <li>
             <div>单位名称：</div>
-            <div><a href="">联通智网科技有限公司</a></div>
+            <div><a href="">{{info.rec_name}}</a></div>
           </li>
           <li>
             <div>单位性质：</div>
-            <div>其他企业</div>
+            <div>{{info.rec_kind}}</div>
           </li>
           <li>
             <div>单位主页：</div>
-            <div>http://baidu.com</div>
+            <div>{{info.rec_page}}</div>
           </li>
           <li>
             <div>所在行业：</div>
-            <div>信息传输、软件和信息技术服务业</div>
+            <div>{{info.rec_class}}</div>
           </li>
           <li>
             <div>单位规模：</div>
-            <div>500人</div>
+            <div>{{info.rec_scale}}人</div>
           </li>
 
           <li>
             <div>工作地点：</div>
-            <div>北京市</div>
+            <div>{{info.rec_work_place}}</div>
           </li>
           <li>
             <div>学历要求：</div>
-            <div>本科</div>
+            <div>{{info.rec_degree}}</div>
           </li>
           <li>
             <div>招聘时间：</div>
-            <div>2019-12-19 19：00</div>
+            <div>{{info.rec_time}}</div>
           </li>
           <li>
             <div>招聘地点：</div>
-            <div>一教405</div>
+            <div>{{info.rec_place_name}}</div>
           </li>
 
           <el-tabs type="border-card" class="bottom-box">
             <el-tab-pane label="职位描述">
+              <div>{{info.rec_content}}</div>
             </el-tab-pane>
             <el-tab-pane label="公司简介">
+              <div>{{info.rec_intro}}</div>
             </el-tab-pane>
           </el-tabs>
         </ul>
+         <el-button type="primary" @click="apply" class="submit_btn">立即投递</el-button>
       </div>
    
   </div>
@@ -60,29 +63,31 @@ export default {
   data() {
     return {
       fileList: [],
-      disabled: true
+      disabled: true,
+      info:[],
     };
   },
   methods: {
     edit() {
       this.disabled = false;
     },
-    submit() {
-      this.$axios
-        .post("/xqhz/company/editCoInfo", this.ruleForm)
-        .then(res => {
-          this.$message(res.msg);
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    }
+    // submit() {
+    //   this.$axios
+    //     .post("/xqhz/company/editCoInfo", this.ruleForm)
+    //     .then(res => {
+    //       this.$message(res.msg);
+    //     })
+    //     .catch(err => {
+    //       console.log(err);
+    //     });
+    // }
   },
   created() {
-    this.$axios.post("/xqhz/company/getCoInfo").then(res => {
-      this.ruleForm = res.data;
-      console.log(res.data);
-    });
+     this.info = JSON.parse(this.$route.query.data);
+    // this.$axios.post("/xqhz/company/getCoInfo").then(res => {
+    //   this.ruleForm = res.data;
+    //   console.log(res.data);
+    // });
   }
 };
 </script>

@@ -132,6 +132,7 @@
     width: 100%;
     margin: 0 auto;
     position: relative;
+    /* max-width: 300px; */
     z-index: 0;
   }
   .toolbar {

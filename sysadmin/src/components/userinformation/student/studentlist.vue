@@ -20,7 +20,7 @@
           class="handle-del mr10"
           @click="delAllSelection"
         >批量删除</el-button>
-        <el-input v-model="query.sno" placeholder="学号" class="handle-input mr10"></el-input>
+        <el-input v-model="sno" placeholder="学号" class="handle-input mr10"></el-input>
         <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
       </div>
       <el-table
@@ -32,14 +32,18 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="60" align="center"></el-table-column>
-        <el-table-column prop="id" label="ID"  align="center"></el-table-column>
+        <el-table-column prop="sid" label="ID" align="center"></el-table-column>
         <el-table-column prop="sno" label="学号" align="center"></el-table-column>
         <el-table-column prop="password" label="密码" align="center"></el-table-column>
         <el-table-column prop="academy" label="学院" align="center"></el-table-column>
         <el-table-column prop="major" label="专业" align="center"></el-table-column>
         <el-table-column label="操作" width="200" align="center">
           <template slot-scope="scope">
-            <el-button type="text" icon="el-icon-view" @click="handleSee(scope.$index, scope.row)">查看</el-button>
+            <el-button
+              type="text"
+              icon="el-icon-view"
+              @click="handleSee(scope.$index, scope.row)"
+            >查看</el-button>
             <el-button
               type="text"
               icon="el-icon-edit"
@@ -58,8 +62,8 @@
         <el-pagination
           background
           layout="total, prev, pager, next"
-          :current-page="query.pageIndex"
-          :page-size="query.pageSize"
+          :current-page="pageIndex"
+          :page-size="pageSize"
           :total="pageTotal"
           @current-change="handlePageChange"
         ></el-pagination>
@@ -68,7 +72,7 @@
 
     <!-- 编辑弹出框 -->
     <el-dialog title="编辑" :visible.sync="editVisible" width="30%">
-      <el-form ref="form" :model="form" label-width="70px">
+      <el-form :model="form" label-width="70px">
         <el-form-item label="密码">
           <el-input v-model="form.password"></el-input>
         </el-form-item>
@@ -85,39 +89,21 @@
 export default {
   data() {
     return {
-      query: {
-        sno: "",
-        pageIndex: 1, //当前页码
-        pageSize: 10, //每页的条数
-        total:null, //总的条数
-      },
-
+      data: [],
+      sno: "",
+      pageIndex: 1, //当前页码
+      pageSize: 10, //每页的条数
       limitUpload: 1,
-      tableData: [
-        { id: 0, sno: 11, name: 11, password: 11, academy: 11, major: 11 },
-        { id: 1, sno: 11, name: 11, password: 11, academy: 11, major: 11 },
-        { id: 2, sno: 11, name: 11, password: 11, academy: 11, major: 11 },
-        { id: 3, sno: 11, name: 11, password: 11, academy: 11, major: 11 },
-        { id: 4, sno: 11, name: 11, password: 11, academy: 11, major: 11 },
-        { id: 5, sno: 11, name: 11, password: 11, academy: 11, major: 11 },
-        { id: 6, sno: 11, name: 11, password: 11, academy: 11, major: 11 },
-        { id: 7, sno: 11, name: 11, password: 11, academy: 11, major: 11 },
-        { id: 8, sno: 11, name: 11, password: 11, academy: 11, major: 11 },
-        { id: 9, sno: 11, name: 11, password: 11, academy: 11, major: 11 },
-        { id: 10, sno: 11, name: 11, password: 11, academy: 11, major: 11 },
-        { id: 11, sno: 11, name: 11, password: 11, academy: 11, major: 11 },
-        { id: 12, sno: 11, name: 11, password: 11, academy: 11, major: 11 }
-      ],
+      tableData: [],
       multipleSelection: [],
       delList: [],
       editVisible: false,
-      pageTotal: 0,
+      pageTotal: null,
       form: {},
       idx: -1,
       id: -1
     };
   },
-  created() {},
   methods: {
     //导入列表
     handleChange(file, fileList) {
@@ -206,9 +192,8 @@ export default {
     },
     // 触发搜索按钮
     handleSearch() {
-      this.$set(this.query, "pageIndex", 1);
-        this.getData();
-    
+      this.pageIndex = 1;
+      this.getList();
     },
     // 删除操作
     handleDelete(index, row) {
@@ -217,23 +202,32 @@ export default {
         type: "warning"
       })
         .then(() => {
-          this.$message.success("删除成功");
-          this.tableData.splice(index, 1);
+    
+          this.$axios
+            .post("/sysadmin/user/delStudent", { sid: row.sid })
+            .then(res => {
+              console.log(res);
+                    this.tableData.splice(index, 1);
+              this.$message.success("删除成功");
+            })
+            .catch(err => {
+              console.log(err);
+            });
         })
         .catch(() => {});
     },
     // 多选操作
     handleSelectionChange(val) {
       this.multipleSelection = val;
-      console.log(this.multipleSelection);
+      console.log(val)
     },
     //批量删除
     delAllSelection() {
       const length = this.multipleSelection.length;
       let str = "";
       this.delList = this.delList.concat(this.multipleSelection);
-      console.log(this.delList);
       for (let i = 0; i < length; i++) {
+          // this.tableData.splice(index, 1);
         str += this.multipleSelection[i].sno + " ";
       }
       this.$message.error(`删除了${str}`);
@@ -241,41 +235,57 @@ export default {
     },
     // 编辑操作
     handleEdit(index, row) {
-      this.idx = index;
       this.form = row;
       this.editVisible = true;
     },
     // 保存编辑
     saveEdit() {
       this.editVisible = false;
-      this.$message.success(`修改第 ${this.idx + 1} 行成功`);
-      this.$set(this.tableData, this.idx, this.form);
-    },
-    // 查看个人信息详情
-    handlSee(index, row) {
-      this.idx = index;
-      this.form = row;
-      this.editVisible = true;
-    },
-    // 分页导航
-    handlePageChange(val) {
-    
-      //   this.$set(this.query, "pageIndex", val);
-        this.getData();
-    },
-    //获取数据
-    getData() {
+      console.log(this.form);
       this.$axios
-        .post("/sysadmin/user/getStudentList", {
-          pageIndex: this.pageIndex,
-          pageSize: this.pageSize
-        })
+        .post("/sysadmin/user/editStudent", this.form)
         .then(res => {
-          console.log(res);
+          if (res.code == 0) {
+            this.$message.success(res.msg);
+          }
         })
         .catch(err => {
           console.log(err);
         });
+    },
+    // 查看个人信息详情
+    handleSee(index, row) {
+      console.log(row);
+    this.$router.push({path:'/studentInfo',query:{row}})
+    },
+    // 分页导航
+    handlePageChange(val) {
+      this.pageIndex = val;
+      this.getList();
+    },
+    //获取数据
+    getData() {
+      this.$axios
+        .post("/sysadmin/user/getStudentList", {})
+        .then(res => {
+          this.data = res.data;
+          this.getList();
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    // 处理数据
+    getList() {
+      // es6过滤得到满足搜索条件的展示数据list
+      let list = this.data.filter((item, index) => item.sno.includes(this.sno));
+
+      this.tableData = list.filter(
+        (item, index) =>
+          index < this.pageIndex * this.pageSize &&
+          index >= this.pageSize * (this.pageIndex - 1)
+      );
+      this.pageTotal = list.length;
     }
   },
   created() {

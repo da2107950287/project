@@ -2,17 +2,17 @@
   <div class="register">
     <div class="page">
       <div class="header">
-        <h1 class="title">数据结构</h1>
+        <h1 class="title">{{info.class_name}}</h1>
         <hr />
       </div>
       <ul class="cotainer">
         <li>
           <div>培训时间：</div>
-          <div>2020-10-19 20:00</div>
+          <div>{{info.class_time}}</div>
         </li>
         <li>
           <div>培训地点：</div>
-          <div>一教405</div>
+          <div>{{info.class_place}}</div>
         </li>
 
         <li class="content">
@@ -21,11 +21,10 @@
         </li>
         <li class="content">
           <div>课程简介</div>
-          <div>ID放假回家后进行检查不能自拔纯牛奶不能自拔不能比年初</div>
+          <div v-html="info.class_content"></div>
         </li>
 
         <el-button type="primary" @click="apply" class="submit_btn">立即报名</el-button>
-     
       </ul>
     </div>
   </div>
@@ -33,21 +32,41 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      info: []
+    };
   },
   methods: {
     apply() {
       this.$axios
-        .post("/xqhz/training/apply")
+        .post("/xqhz/training/selectIsApply",{tid:this.info.tid})
         .then(res => {
-          console.log(res);
+          console.log(res)
+          if (res.code == 0) {
+            this.$message(res.msg);
+          } else {
+           
+            this.$axios
+              .post("/xqhz/training/applyTraining",{tid:this.info.tid})
+              .then(res => {
+                if(res.code==0){
+                  this.$message.success(res.msg)
+                }
+                console.log(res);
+              })
+              .catch(err => {
+                console.log(err);
+              });
+          }
         })
         .catch(err => {
           console.log(err);
         });
     }
   },
-  created() {}
+  created() {
+    this.info = JSON.parse(this.$route.query.data);
+  }
 };
 </script>
 <style lang='scss' scoped>
@@ -74,7 +93,7 @@ li {
 
         div:first-child {
           font-weight: bold;
-      
+
           color: #333;
           white-space: nowrap;
           font-size: 18px;
@@ -105,9 +124,8 @@ li {
           padding: 5px 10px;
         }
       }
-      .submit_btn{
+      .submit_btn {
         margin: 0 auto;
-        
       }
     }
   }

@@ -14,8 +14,10 @@ class Jwt {
         return new Promise((resolve, reject) => {
             jwt.verify(token, secret, (err, res) => {
                 if (!err) {
+                    console.log(res,"tokenres")
                     resolve(res)
                 } else {
+                    console.log(err,"tokenerr")
                     reject("token验证失败");
                 }
             })

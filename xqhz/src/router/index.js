@@ -9,8 +9,10 @@ let router = new Router({
   routes: [
     { path: '/login', name: 'login', meta: { title: '登录' }, component: () => import('@/components/login') },
     { path: '/register', name: 'register', meta: { title: '注册' }, component: () => import('@/components/register') },
-    { path: '/showRecruitmentInfo', name: 'showRecruitmentInfo', meta: { title: '招聘信息详情' }, component: () => import('@/components/showRecruitmentInfo') },
-    { path: '/showTrainingInfo', name: 'showTrainingInfo', meta: { title: '培训信息详情' }, component: () => import('@/components/showTrainingInfo') },
+    { path: '/recruitmentInfo', name: 'recruitmentInfo', meta: { title: '招聘信息详情' }, component: () => import('@/components/recruitmentInfo') },
+    { path: '/trainingInfo', name: 'trainingInfo', meta: { title: '培训信息详情' }, component: () => import('@/components/trainingInfo') },
+    { path: '/trainingList', name: 'trainingList', meta: { title: '培训信息详情' }, component: () => import('@/components/trainingList') },
+   
     {
       path: '/', redirect: '/home', name: 'index', meta: { title: '' }, component: () => import('@/components/index'),
        children: [

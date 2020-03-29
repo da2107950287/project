@@ -48,7 +48,7 @@
 export default {
   data() {
     return {
-        radio:1,
+    
       // 这是登录表单的数据绑定对象
       loginForm: {
         username: "admin",
@@ -76,14 +76,13 @@ export default {
       this.$refs.loginFormRef.resetFields();
     },
     login() {
-        
       this.$axios
         .post("/xqhz/user/login", this.loginForm)
         .then(res => {
           this.$message(res.msg);
           localStorage.setItem("token", res.data.token);
           localStorage.setItem("role", res.data.role);
-          // console.log(9999)
+          console.log(9999)
           this.$router.push({ path: "/home" });
         })
         .catch(err => {

@@ -8,7 +8,7 @@
           class="handle-del mr10"
           @click="delAllSelection"
         >批量删除</el-button>
-        <el-input v-model="rec_name" placeholder="企业名称" class="handle-input mr10"></el-input>
+        <el-input v-model="class_name" placeholder="课程名" class="handle-input mr10"></el-input>
         <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
       </div>
       <el-table
@@ -20,11 +20,11 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="60" align="center"></el-table-column>
-        <el-table-column prop="cid" label="ID" align="center"></el-table-column>
-        <el-table-column prop="rec_name" label="企业名称" align="center"></el-table-column>
-        <el-table-column prop="rec_tel" label="企业联系电话" align="center"></el-table-column>
-        <el-table-column prop="rec_address" label="企业地址" align="center"></el-table-column>
-        <el-table-column prop="rec_page" label="企业网站首页" align="center"></el-table-column>  
+        <el-table-column prop="tid" label="ID" align="center"></el-table-column>
+        <el-table-column prop="class_name" label="课程名" align="center"></el-table-column>
+        <el-table-column prop="class_teacher" label="培训讲师" align="center"></el-table-column>
+        <el-table-column prop="class_time" label="培训时间" align="center"></el-table-column>
+        <el-table-column prop="class_place" label="培训地点" align="center"></el-table-column>
         <el-table-column prop="status" label="状态" align="center"></el-table-column>
         <el-table-column label="操作" width="200" align="center">
           <template slot-scope="scope">
@@ -79,7 +79,7 @@ export default {
   data() {
     return {
       data: [],
-      rec_name: "",
+      class_name: "",
       pageIndex: 1, //当前页码
       pageSize: 10, //每页的条数
       limitUpload: 1,
@@ -107,11 +107,13 @@ export default {
       })
         .then(() => {
           this.$axios
-            .post("/sysadmin/user/delCompany", { cid:row.cid })
+            .post("/sysadmin/training/delTraining", { tid: row.tid })
             .then(res => {
-             
-              this.tableData.splice(index, 1);
-              this.$message.success("删除成功");
+              if(res.data.code==0){
+                  this.tableData.splice(index, 1);
+              this.$message.success(res.data.msg);
+              }
+              
             })
             .catch(err => {
               console.log(err);
@@ -131,7 +133,7 @@ export default {
       this.delList = this.delList.concat(this.multipleSelection);
       for (let i = 0; i < length; i++) {
         // this.tableData.splice(index, 1);
-        str += this.multipleSelection[i].rec_name + " ";
+        str += this.multipleSelection[i].class_name + " ";
       }
       this.$message.error(`删除了${str}`);
       this.multipleSelection = [];
@@ -144,12 +146,11 @@ export default {
     // 保存编辑
     saveEdit() {
       this.editVisible = false;
-      console.log(this.form);
       this.$axios
-        .post("/sysadmin/user/editCompany", this.form)
+        .post("/sysadmin/training/editTraining", this.form)
         .then(res => {
-          if (res.code == 0) {
-            this.$message.success(res.msg);
+          if (res.data.code == 0) {
+            this.$message(res.data.msg);
           }
         })
         .catch(err => {
@@ -159,7 +160,7 @@ export default {
     // 查看个人信息详情
     handleSee(index, row) {
       console.log(row);
-      this.$router.push({ path: "/companyInfo", query: {cid:row.cid } });
+      this.$router.push({ path: "/trainingInfo", query: { row } });
     },
     // 分页导航
     handlePageChange(val) {
@@ -169,7 +170,7 @@ export default {
     //获取数据
     getData() {
       this.$axios
-        .post("/sysadmin/user/getCompanyList", {})
+        .post("/sysadmin/training/getTrainingList", {})
         .then(res => {
           this.data = res.data;
           this.getList();
@@ -181,7 +182,9 @@ export default {
     // 处理数据
     getList() {
       // es6过滤得到满足搜索条件的展示数据list
-      let list = this.data.filter((item, index) => item.rec_name.includes(this.rec_name));
+      let list = this.data.filter((item, index) =>
+        item.class_name.includes(this.class_name)
+      );
 
       this.tableData = list.filter(
         (item, index) =>

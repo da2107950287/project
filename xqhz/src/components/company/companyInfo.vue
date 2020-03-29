@@ -125,7 +125,7 @@ export default {
         { value: "城镇社区", label: "城镇社区" },
         { value: "其他", label: "其他" }
       ],
-      arr2: [
+      arr3: [
         { value: "10人以下", label: "10人以下" },
         { value: "10人-50人", label: "10人-50人" },
         { value: "50人-100人", label: "50人-100人" },
@@ -133,7 +133,7 @@ export default {
         { value: "200人-500人", label: "200人-500人" },
         { value: "500人以上", label: "500人以上" }
       ],
-      arr3: [
+      arr2: [
         { value: "机关单位", label: "机关单位" },
         { value: "科研设计单位", label: "科研设计单位" },
         { value: "高等教育单位", label: "高等教育单位" },

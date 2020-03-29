@@ -6,26 +6,27 @@ let usermodel = new userModel();
 router.post('/login', (req, res) => {
     let data = req.body;
     usermodel.Login(data, (result) => {
-
         if (result.length == 0) {
             res.json({ msg: "用户名不存在！" })
         } else if (result[0].password != data.password) {
             res.json({ msg: "密码错误！" })
         } else {
-            console.log(result)
             let jwt = new JwtUtil();
             let token;
             if (data.radio == 1) {
-                token = jwt.createToken({ uid: result[0].uid })
+                result[0].role = 'student'
+                token = jwt.createToken({ sid: result[0].sid })
             } else if (data.radio == 2) {
                 if (result[0].status == 1) {
+                    result[0].role = 'company'
                     token = jwt.createToken({ cid: result[0].cid })
                 } else if (result[0].status == 0) {
-                    res.json({ msg: '待审核' })
+                    res.json({ msg: '公司待审核' })
                 } else {
-                    res.json({ mag: '审核不通过' })
+                    res.json({ mag: '公司审核不通过' })
                 }
             } else {
+                result[0].role = 'admin'
                 token = jwt.createToken({ aid: result[0].aid })
             }
             res.json({ msg: "登录成功！", data: { token: token, role: result[0].role } })
@@ -42,19 +43,4 @@ router.post('/register', (req, res) => {
     })
 })
 
-// checkToken(req.headers.Authorization).then(res=>{
-//     //token验证成功
-//     //判断过期时间
-// }).catch(err=>{
-//     res.json({{err:-1,msg:'token非法'}})
-// }
-// router.post('/adminlist', (req, res) => {
-
-//     adminmodel.adminList((result) => {
-
-//         console.log(result)
-//         res.json(result)
-
-//     })
-// })
 module.exports = router;

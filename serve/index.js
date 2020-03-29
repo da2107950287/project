@@ -20,8 +20,11 @@ app.use('/admin', require('./control/admin/adminControl'));
 app.use('/xqhz/user',require('./control/xqhz/userControl'))
 app.use('/xqhz/company',require('./control/xqhz/companyControl'));
 app.use('/xqhz/student',require('./control/xqhz/studentControl'));
+app.use('/xqhz/training',require('./control/xqhz/trainingControl'));
 
 app.use('/sysadmin/company',require('./control/sysadmin/companyControl'));
+app.use('/sysadmin/user',require('./control/sysadmin/userControl'));
+app.use('/sysadmin/training',require('./control/sysadmin/trainingControl'));
 
 // app.use('/',require('./control/admin'))
 app.listen(81, () => {
