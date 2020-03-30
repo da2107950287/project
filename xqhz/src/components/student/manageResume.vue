@@ -4,7 +4,7 @@
       <div @click="show(1)">个人简历</div>
       <div @click="show(2)">简历投递管理</div>
     </div>
-    <div class="resume" v-if="isShow==1">
+    <!-- <div class="resume" v-if="isShow==1">
       <div class="content">
         <div class="ownerName">达荣春</div>
         <div class="BasicWrap row">
@@ -41,8 +41,8 @@
               </div>
               <div id="picture" class>
                 <div class="pic-wrap">
-                  <!-- <img :src="avatar" alt /> -->
-                  <!-- src="https://cdn6.haitou.cc/user/face/71/1292671_9b07.jpg?v=1567951235&amp;x-oss-process=image/resize,m_fixed,w_200,h_200" -->
+                  <img :src="avatar" alt />
+                  src="https://cdn6.haitou.cc/user/face/71/1292671_9b07.jpg?v=1567951235&amp;x-oss-process=image/resize,m_fixed,w_200,h_200"
 
                   <span class="edit">
                     编辑
@@ -378,22 +378,42 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="resume-list" v-if="isShow==2">
-      <el-table :data="tableData" style="width: 100%">
-        <el-table-column prop="date" label="日期" width="180"></el-table-column>
-        <el-table-column prop="name" label="姓名" width="180"></el-table-column>
-        <el-table-column prop="address" label="地址"></el-table-column>
-      </el-table>
-      <div class="pagination">
-        <el-pagination
-          background
-          layout="total, prev, pager, next"
-          :current-page="query.pageIndex"
-          :page-size="query.pageSize"
-          :total="pageTotal"
-          @current-change="handlePageChange"
-        ></el-pagination>
+    </div> -->
+    <div class="recruitment-delivery-list" v-if="isShow==2">
+      <h3>培训成绩列表</h3>
+      <hr />
+      <div>
+        <el-table
+          :data="tableData"
+          border
+          class="table"
+          ref="multipleTable"
+          header-cell-class-name="table-header"
+        >
+          <!-- <el-table-column prop="id" label="ID" align="center"></el-table-column> -->
+          <!-- <el-table-column prop="class_name" label="课程名" align="center"></el-table-column> -->
+          <el-table-column label="课程名" align="center">
+            <template slot-scope="scope">
+              <div @click="getTrainingInfo(scope.row)" class="active">{{scope.row.class_name}}</div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="class_teacher" label="讲师" align="center"></el-table-column>
+          <el-table-column prop="class_time" label="培训时间" align="center"></el-table-column>
+          <el-table-column prop="class_place" label="培训地址" align="center"></el-table-column>
+          <el-table-column prop="apply_time" label="报名时间" align="center"></el-table-column>
+          <!-- <el-table-column prop="class_introduce" label="课程介绍" align="center"></el-table-column> -->
+          <!-- <el-table-column prop="status" label="状态" align="center"></el-table-column> -->
+        </el-table>
+        <div class="pagination">
+          <el-pagination
+            background
+            layout="total, prev, pager, next"
+            :current-page="pageIndex"
+            :page-size="pageSize"
+            :total="pageTotal"
+            @current-change="handlePageChange"
+          ></el-pagination>
+        </div>
       </div>
     </div>
     <!-- 编辑弹出框 -->
@@ -473,12 +493,9 @@ import VDistpicker from "v-distpicker";
 export default {
   data() {
     return {
-      query: {
-        address: "",
-        name: "",
-        pageIndex: 1,
-        pageSize: 10
-      },
+      
+      pageIndex: 1,
+        pageSize: 10,
       pageTotal: 1,
       tableData: [
         {
@@ -561,10 +578,7 @@ export default {
       console.log(type);
       this.isShow = type;
     },
-    handlePageChange(val) {
-      this.$set(this.query, "pageIndex", val);
-      this.getData();
-    },
+    
     getProvince(data) {
       this.newInfo.province = data.value;
     },
@@ -584,7 +598,7 @@ export default {
         this.avatar = res.result;
       };
       reader.readAsDataURL(file);
-    }
+    },
   },
   created() {
     console.log(this.isShow);
@@ -919,11 +933,12 @@ li {
       max-height: 400px;
     }
   }
-  .resume-list {
+ .recruitment-delivery-list {
     margin: 0 10px;
     width: 100%;
     border: 1px solid #ccc;
     background-color: #fff;
+    padding: 10px 50px;
   }
 }
 .el-dialog {

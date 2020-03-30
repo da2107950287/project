@@ -1,9 +1,50 @@
 <template>
-  <div class="resumelist">
-    <div>
+  <div class="container">
+    <div class="aside">
+      <div @click="show(1)" :class="[isShow==1?'active':'']">培训报名记录</div>
+      <div @click="show(2)" :class="[isShow==2?'active':'']">培训成绩列表</div>
+    </div>
+    <div class="training-entry-list" v-if="isShow==1">
       <h3>培训报名记录</h3>
       <hr />
-      <div class="container">
+      <div>
+        <el-table
+          :data="tableData"
+          border
+          class="table"
+          ref="multipleTable"
+          header-cell-class-name="table-header"
+        >
+          <!-- <el-table-column prop="id" label="ID" align="center"></el-table-column> -->
+          <!-- <el-table-column prop="class_name" label="课程名" align="center"></el-table-column> -->
+          <el-table-column label="课程名" align="center">
+            <template slot-scope="scope">
+              <div @click="getTrainingInfo(scope.row)" class="active">{{scope.row.class_name}}</div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="class_teacher" label="讲师" align="center"></el-table-column>
+          <el-table-column prop="class_time" label="培训时间" align="center"></el-table-column>
+          <el-table-column prop="class_place" label="培训地址" align="center"></el-table-column>
+          <el-table-column prop="apply_time" label="报名时间" align="center"></el-table-column>
+          <!-- <el-table-column prop="class_introduce" label="课程介绍" align="center"></el-table-column> -->
+          <!-- <el-table-column prop="status" label="状态" align="center"></el-table-column> -->
+        </el-table>
+        <div class="pagination">
+          <el-pagination
+            background
+            layout="total, prev, pager, next"
+            :current-page="pageIndex"
+            :page-size="pageSize"
+            :total="pageTotal"
+            @current-change="handlePageChange"
+          ></el-pagination>
+        </div>
+      </div>
+    </div>
+    <div class="training-entry-list" v-if="isShow==2">
+      <h3>培训成绩列表</h3>
+      <hr />
+      <div>
         <el-table
           :data="tableData"
           border
@@ -51,13 +92,17 @@ export default {
       pageTotal: null, //总条数
       form: {},
       idx: -1,
-      id: -1
+      id: -1,
+      isShow: 1
     };
   },
   created() {
     this.getData();
   },
   methods: {
+    show(type) {
+      this.isShow = type;
+    },
     getData() {
       this.$axios
         .post("/xqhz/student/getEntryTrain", {})
@@ -99,11 +144,44 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.resumelist {
+// .resumelist {
+//   margin: 50px 150px;
+//   box-shadow: 2px 2px 5px 0 #666;
+//   background-color: #fff;
+//   > div {
+//     padding: 10px 50px;
+//   }
+// }
+// .active{
+//   background-color: red;
+// }
+.container {
   margin: 50px 150px;
-  box-shadow: 2px 2px 5px 0 #666;
-  background-color: #fff;
-  > div {
+  display: flex;
+  // width:100%;
+  .aside {
+    margin-right: 30px;
+    div {
+      padding: 5px;
+      padding-left: 1rem;
+      height: 30px;
+      line-height: 30px;
+      margin-top: 6px;
+      background-color: #fff;
+      min-width: 150px;
+      cursor: pointer;
+      color: #505459;
+    }
+    .active {
+      background-color: #FF6B45;
+      color:#fff;
+    }
+  }
+  .training-entry-list {
+    margin: 0 10px;
+    width: 100%;
+    border: 1px solid #ccc;
+    background-color: #fff;
     padding: 10px 50px;
   }
 }
@@ -136,8 +214,8 @@ export default {
 .pagination {
   margin-top: 10px;
 }
-.active{
-  color:red;
-  cursor: pointer;
-}
+// .active {
+//   color: red;
+//   cursor: pointer;
+// }
 </style>
