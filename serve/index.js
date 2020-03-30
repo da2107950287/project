@@ -21,6 +21,7 @@ app.use('/xqhz/user',require('./control/xqhz/userControl'))
 app.use('/xqhz/company',require('./control/xqhz/companyControl'));
 app.use('/xqhz/student',require('./control/xqhz/studentControl'));
 app.use('/xqhz/training',require('./control/xqhz/trainingControl'));
+app.use('/xqhz/recruitment',require('./control/xqhz/recruitmentControl'));
 
 app.use('/sysadmin/company',require('./control/sysadmin/companyControl'));
 app.use('/sysadmin/user',require('./control/sysadmin/userControl'));

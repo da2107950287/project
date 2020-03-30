@@ -1,13 +1,13 @@
 const dbBase=require('../../config/dbBase.config');
 
-class companyModel extends dbBase{   
+class recruitmentModel extends dbBase{   
     constructor(){
         super();
-        this.table='training';
+        this.table='';
     }
     
-    applyTraining(info,callback){
-        this.table='entry'
+    delivery(info,callback){
+        this.table='delivery'
         let data = [];
         let fieldstring = [];
         let field = [];
@@ -20,20 +20,23 @@ class companyModel extends dbBase{
         }
         let sql = `insert into ${this.table} (${fieldstring.join(",")}) values (${field.join(",")})`;
         this.mydb.query(sql, data, (err, result) => {
+         
             if(err){
                 console.log(err)
                 callback(err)
             }else{
                 console.log(sql)
+                
                 callback(result);
             }
             
         })
     }
-    selectIsApply(info,callback){
-        this.table='entry'
-        let sql =`select * from ${this.table} where sid=? `;
-        this.mydb.query(sql,[info.sid],(err,result)=>{
+    selectIsDelivery(info,callback){
+        console.log(99)
+        this.table='delivery'
+        let sql =`select * from ${this.table} where sid=? and rid=?  `;
+        this.mydb.query(sql,[info.sid,info.rid],(err,result)=>{
             if(err){
                 callback(err)
             }else{
@@ -44,4 +47,4 @@ class companyModel extends dbBase{
     }
    
 }
-module.exports=companyModel;
+module.exports=recruitmentModel;

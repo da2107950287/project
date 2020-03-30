@@ -53,7 +53,7 @@
             </el-tab-pane>
           </el-tabs>
         </ul>
-         <el-button type="primary" @click="apply" class="submit_btn">立即投递</el-button>
+         <el-button type="primary" @click="delivery" class="submit_btn">立即投递</el-button>
       </div>
    
   </div>
@@ -62,32 +62,31 @@
 export default {
   data() {
     return {
-      fileList: [],
-      disabled: true,
       info:[],
     };
   },
-  methods: {
-    edit() {
-      this.disabled = false;
-    },
-    // submit() {
-    //   this.$axios
-    //     .post("/xqhz/company/editCoInfo", this.ruleForm)
-    //     .then(res => {
-    //       this.$message(res.msg);
-    //     })
-    //     .catch(err => {
-    //       console.log(err);
-    //     });
-    // }
+  methods: { 
+    delivery(){
+      // selectIsdelivery
+      this.$axios.post('/xqhz/recruitment/selectIsDelivery',{rid:this.info.rid}).then(res=>{
+        if(res.data!==0){
+            this.$axios.post('/xqhz/recruitment/delivery',{rid:this.info.rid}).then(res=>{
+        console.log(res)
+      }).catch(err=>{
+        console.log(err)
+      })
+        }
+        console.log(res)
+      }).catch(err=>{
+        console.log(err)
+      })
+    
+    }
+   
   },
   created() {
      this.info = JSON.parse(this.$route.query.data);
-    // this.$axios.post("/xqhz/company/getCoInfo").then(res => {
-    //   this.ruleForm = res.data;
-    //   console.log(res.data);
-    // });
+     console.log(this.info)
   }
 };
 </script>
@@ -129,7 +128,4 @@ export default {
     }
   }
 }
-</style>
-<style lang="scss">
-
 </style>

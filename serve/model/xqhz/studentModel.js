@@ -5,6 +5,7 @@ class studentModel extends dbBase{
         super();
         this.table='';
     }
+    //获取学生信息
     getStudentInfo(cid,callback){
         
         this.table='student'
@@ -13,15 +14,49 @@ class studentModel extends dbBase{
           callback(result)       
         })
     }
+    //修改学生信息
+    editStudentInfo(data,callback){
+        this.table='student';
+         // UPDATE 表名称 SET 列名称 = 新值 WHERE 列名称 = 某值
+         let string1 = [];
+         let string2 = [];
+         for (const key in data) {
+             if (data.hasOwnProperty(key)) {
+                 let value = key + "=?"
+                 string1.push(value);
+                 string2.push(data[key]);
+             }
+         }
+         string2.push(data.sid);
+         let sql = `update ${this.table} set ${string1.join(",")} where sid=?`;
+         this.mydb.query(sql, string2, function (err, result) {
+            if(err){
+                callback(err)
+            }else{
+                callback(result)
+            }
+         })
+    }
     getEntryTrain(info,callback){
         this.table='entry'
         console.log(999)
         let sql =`select * from training where tid in (select tid from entry where sid=?)`;
         this.mydb.query(sql,[info.sid],(err,result)=>{
-            console.log(result,9999)
           callback(result)       
         })
     }
+    getSelfDeliveryList(info,callback){
+        this.table='delivery'
+        console.log(999)
+        let sql =`select  recruitment.rec_position,delivery.delivery_time,
+        company.rec_name from company,delivery,recruitment 
+        where delivery.rid=recruitment.rid and 
+        company.cid in (select cid from recruitment where rid in (select rid from delivery where sid=?))`;
+        this.mydb.query(sql,[info.sid],(err,result)=>{
+          callback(result)       
+        })
+    }
+
     editCoInfo(data,callback){
           // UPDATE 表名称 SET 列名称 = 新值 WHERE 列名称 = 某值
           let string1 = [];

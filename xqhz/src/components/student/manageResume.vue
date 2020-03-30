@@ -380,20 +380,36 @@
       </div>
     </div>
     <div class="resume-list" v-if="isShow==2">
-      <el-table :data="tableData" style="width: 100%">
-        <el-table-column prop="date" label="日期" width="180"></el-table-column>
-        <el-table-column prop="name" label="姓名" width="180"></el-table-column>
-        <el-table-column prop="address" label="地址"></el-table-column>
-      </el-table>
-      <div class="pagination">
-        <el-pagination
-          background
-          layout="total, prev, pager, next"
-          :current-page="query.pageIndex"
-          :page-size="query.pageSize"
-          :total="pageTotal"
-          @current-change="handlePageChange"
-        ></el-pagination>
+      <div>
+        <h3>招聘投递记录</h3>
+        <hr />
+        <div>
+          <el-table
+            :data="tableData"
+            border
+            class="table"
+            ref="multipleTable"
+            header-cell-class-name="table-header"
+          >
+            <el-table-column label="投递职位" align="center">
+              <template slot-scope="scope">
+                <div @click="getTrainingInfo(scope.row)" class="active">{{scope.row.rec_position}}</div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="rec_name" label="投递公司" align="center"></el-table-column>
+            <el-table-column prop="delivery_time" label="投递时间" align="center"></el-table-column>
+          </el-table>
+          <div class="pagination">
+            <el-pagination
+              background
+              layout="total, prev, pager, next"
+              :current-page="pageIndex"
+              :page-size="pageSize"
+              :total="pageTotal"
+              @current-change="handlePageChange"
+            ></el-pagination>
+          </div>
+        </div>
       </div>
     </div>
     <!-- 编辑弹出框 -->
@@ -473,13 +489,10 @@ import VDistpicker from "v-distpicker";
 export default {
   data() {
     return {
-      query: {
-        address: "",
-        name: "",
-        pageIndex: 1,
-        pageSize: 10
-      },
+      pageIndex: 1,
+      pageSize: 10,
       pageTotal: 1,
+      data:[],
       tableData: [
         {
           date: "2016-05-02",
@@ -550,6 +563,7 @@ export default {
         province: "", //省
         city: "" // 市
       },
+      rec_position:'',
       editVisible: false,
       value1: "",
       avatar:
@@ -558,12 +572,38 @@ export default {
   },
   methods: {
     show(type) {
-      console.log(type);
       this.isShow = type;
     },
+    // 分页导航
     handlePageChange(val) {
-      this.$set(this.query, "pageIndex", val);
-      this.getData();
+      this.pageIndex = val;
+      this.getList();
+    },
+    //获取数据
+    getSelfDeliveryList() {
+      this.$axios
+        .post("/xqhz/student/getSelfDeliveryList", {})
+        .then(res => {
+          this.data = res.data;
+          console.log(this.data)
+          this.getList();
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    // 处理数据
+    getList() {
+      let list = this.data.filter((item, index) =>
+        item.rec_position.includes(this.rec_position)
+      );
+
+      this.tableData = list.filter(
+        (item, index) =>
+          index < this.pageIndex * this.pageSize &&
+          index >= this.pageSize * (this.pageIndex - 1)
+      );
+      this.pageTotal = list.length;
     },
     getProvince(data) {
       this.newInfo.province = data.value;
@@ -587,7 +627,7 @@ export default {
     }
   },
   created() {
-    console.log(this.isShow);
+   this.getSelfDeliveryList()
   },
   components: {
     VDistpicker
@@ -919,8 +959,11 @@ li {
       max-height: 400px;
     }
   }
-  .resume-list {
-    margin: 0 10px;
+  
+
+ .resume-list {
+    margin: 0 auto;
+    padding: 10px 50px;
     width: 100%;
     border: 1px solid #ccc;
     background-color: #fff;

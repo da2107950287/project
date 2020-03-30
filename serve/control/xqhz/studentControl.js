@@ -18,6 +18,24 @@ router.post('/getStudentInfo', (req, res) => {
     }
     )
 })
+//修改学生信息
+router.post('/editStudentInfo', (req, res) => {
+    console.log("getstudentInfo")
+    jwt.checkToken(req.headers.authorization).then(res1 => {
+        //token验证成功
+        let data=req.body;
+        data.sid=res1.sid;
+        studentmodel.editStudentInfo(data, (result) => {
+            console.log(result)
+           if(result.affectedRows){
+               res.json({code:0,msg:'修改成功'});
+           }
+        })
+    }).catch(err => {
+        res.json({ err: -1, msg: 'token非法' });
+    }
+    )
+})
 router.post('/getEntryTrain', (req, res) => {
     console.log("getEntryTrain")
     jwt.checkToken(req.headers.authorization).then(res1 => {
@@ -34,7 +52,6 @@ router.post('/getEntryTrain', (req, res) => {
     )
 })
 router.post('/editStudent', (req, res) => {
-
     jwt.checkToken(req.headers.authorization).then(res1 => {
         //token验证成功
         let data = req.body;
@@ -51,20 +68,19 @@ router.post('/editStudent', (req, res) => {
     )
 })
 
+router.post('/getSelfDeliveryList', (req, res) => {
+    jwt.checkToken(req.headers.authorization).then(res1 => {
+        //token验证成功
+        let data=req.body;
+        data.sid=res1.sid;
+        studentmodel.getSelfDeliveryList(data, (result) => {
+            
+            res.json({ code: 0, data: result,msg:'获取数据成功' })
+        })
+    }).catch(err => {
+        res.json({ err: -1, msg: 'token非法' });
+    }
+    )
+})
 
-// checkToken(req.headers.Authorization).then(res=>{
-//     //token验证成功
-//     //判断过期时间
-// }).catch(err=>{
-//     res.json({{err:-1,msg:'token非法'}})
-// }
-// router.post('/adminlist', (req, res) => {
-
-//     adminmodel.adminList((result) => {
-
-//         console.log(result)
-//         res.json(result)
-
-//     })
-// })
 module.exports = router;
