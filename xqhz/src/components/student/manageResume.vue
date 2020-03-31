@@ -41,10 +41,11 @@
               </div>
               <div id="picture" class>
                 <div class="pic-wrap">
-                  <!-- <img :src="avatar" alt /> -->
-                  <!-- src="https://cdn6.haitou.cc/user/face/71/1292671_9b07.jpg?v=1567951235&amp;x-oss-process=image/resize,m_fixed,w_200,h_200" -->
-
-                  <span class="edit">
+                  <img :src="avatar" alt />
+                  src="https://cdn6.haitou.cc/user/face/71/1292671_9b07.jpg?v=1567951235&amp;x-oss-process=image/resize,m_fixed,w_200,h_200"
+                  <span
+                    class="edit"
+                  >
                     编辑
                     <input type="file" @change="handleFile" />
                   </span>
@@ -491,8 +492,11 @@ export default {
     return {
       pageIndex: 1,
       pageSize: 10,
+
+      pageIndex: 1,
+      pageSize: 10,
       pageTotal: 1,
-      data:[],
+      data: [],
       tableData: [
         {
           date: "2016-05-02",
@@ -563,7 +567,7 @@ export default {
         province: "", //省
         city: "" // 市
       },
-      rec_position:'',
+      rec_position: "",
       editVisible: false,
       value1: "",
       avatar:
@@ -585,7 +589,7 @@ export default {
         .post("/xqhz/student/getSelfDeliveryList", {})
         .then(res => {
           this.data = res.data;
-          console.log(this.data)
+          console.log(this.data);
           this.getList();
         })
         .catch(err => {
@@ -627,7 +631,7 @@ export default {
     }
   },
   created() {
-   this.getSelfDeliveryList()
+    this.getSelfDeliveryList();
   },
   components: {
     VDistpicker
@@ -959,14 +963,20 @@ li {
       max-height: 400px;
     }
   }
-  
 
- .resume-list {
+  .resume-list {
     margin: 0 auto;
     padding: 10px 50px;
-    width: 100%;
-    border: 1px solid #ccc;
-    background-color: #fff;
+width: 100%;
+   background-color: #fff;
+    .recruitment-delivery-list {
+      margin: 0 10px;
+
+      width: 100%;
+      border: 1px solid #ccc;
+   
+      padding: 10px 50px;
+    }
   }
 }
 .el-dialog {

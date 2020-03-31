@@ -36,14 +36,14 @@ router.post('/editStudentInfo', (req, res) => {
     }
     )
 })
-router.post('/getEntryTrain', (req, res) => {
+router.post('/getEntryTrainList', (req, res) => {
     console.log("getEntryTrain")
     jwt.checkToken(req.headers.authorization).then(res1 => {
         //token验证成功
         let data=req.body;
         data.sid=res1.sid;
         console.log(data,"getEntryTrain")
-        studentmodel.getEntryTrain(data, (result) => {
+        studentmodel.getEntryTrainList(data, (result) => {
             res.json({ code: 0, data: result })
         })
     }).catch(err => {

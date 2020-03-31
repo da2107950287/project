@@ -37,13 +37,16 @@ class studentModel extends dbBase{
             }
          })
     }
-    getEntryTrain(info,callback){
+    getEntryTrainList(info,callback){
         this.table='entry'
         console.log(999)
-        let sql =`select * from training where tid in (select tid from entry where sid=?)`;
+        let sql =`select training.*,entry.entry_time from training,entry where sid = 11 and training.tid in (select tid from entry where sid=?)`;
         this.mydb.query(sql,[info.sid],(err,result)=>{
+            console.log(result)
+            // console.log(result[0].entry_time.replace(/T/g,'').replace(/\.[\d]{3}Z,''))
           callback(result)       
         })
+
     }
     getSelfDeliveryList(info,callback){
         this.table='delivery'
