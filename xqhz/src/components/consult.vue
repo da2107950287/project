@@ -11,6 +11,8 @@
               :autosize="{ minRows: 2, maxRows: 4}"
               placeholder="请输入内容"
               v-model="textarea"
+           
+              show-word-limit=100
             ></el-input>
             <div slot="footer" class="dialog-footer">
               <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -25,9 +27,9 @@
           <div @click="open(item.id)">
             <img src="../assets/img/arrow_right.png" v-if="item.id!==selected" />
             <img src="../assets/img/arrow_down.png" v-if="item.id==selected" />
-            {{item.request}}
+            {{item.question}}
           </div>
-          <div v-if="item.id==selected" class="answer">{{item.answer}}</div>
+          <div v-if="item.id==selected" class="answer"><span>管理员回复：</span>{{item.answer}}</div>
         </li>
       </ul>
     </div>
@@ -55,31 +57,25 @@ this.selected = selected_id;
     },
     postConsult() {
       this.dialogFormVisible = false;
-      // this.$axios.post('/xqhz/postConsult',{consult_content:this.textarea}).then(res=>{
-      //   console.log(res);
-      // }).catch(err=>{
-      //   console.log(err);
-      // })
+      this.$axios.post('/xqhz/consult/postConsult',{question:this.textarea}).then(res=>{
+        this.$message(res.msg)
+        this.textarea='';
+      }).catch(err=>{
+        console.log(err);
+      })
+    },
+    getConsultList(){
+        this.$axios.post('/xqhz/consult/getConsultList',{}).then(res=>{
+          this.consultContent=res.data;
+        console.log(res);
+      }).catch(err=>{
+        console.log(err);
+      })
     }
   },
   created() {
-    this.$axios.post('/xqhz/getConsult').then(res=>{
-      
-      console.log(res)
-    }).catch(err=>{
-      console.log(err)
-    })
-    // let data = [
-    //   { id: 1, request: "Karen", answer: "Linda" },
-    //   { id: 2, request: "Scott", answer: "Donna" },
-    //   { id: 3, request: "Scott", answer: "Sandra" },
-    //   { id: 4, request: "Dorothy", answer: "Barbara" },
-    //   { id: 5, request: "Ronald", answer: "Jennifer" },
-    //   { id: 6, request: "Betty", answer: "Carol" },
-    //   { id: 7, request: "Richard", answer: "Kimberly" },
-    //   { id: 8, request: "John", answer: "Robert" }
-    // ];
-    // this.consultContent = data;
+    this.getConsultList()
+
   }
 };
 </script>
@@ -118,9 +114,7 @@ li {
         border-top: 1px solid #ddd;
         font-size: 14px;
         div:first-child {
-          display: flex;
-          align-items: center;
-          padding:2px 4px;
+          
           img {
             width: 14px;
             height: 14px;
@@ -128,7 +122,11 @@ li {
           }
         }
        .answer{
-          margin-left:22px
+          margin-left:22px;
+              color: #1abc9c;
+              span{
+                font-weight: bold;
+              }
         }
       }
       li:nth-child(2n-1) {

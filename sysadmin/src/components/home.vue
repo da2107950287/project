@@ -62,6 +62,15 @@
                 <el-menu-item index="4-1">简历信息</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
+            <el-submenu index="5">
+              <template slot="title">
+                <i class="el-icon-message"></i>咨询信息管理
+              </template>
+              <el-menu-item-group>
+                <el-menu-item index="1-1" @click="go('/consultList')">咨询信息</el-menu-item>
+               
+              </el-menu-item-group>
+            </el-submenu>
           </el-menu>
         </el-aside>
         <el-container>

@@ -22,10 +22,12 @@ app.use('/xqhz/company',require('./control/xqhz/companyControl'));
 app.use('/xqhz/student',require('./control/xqhz/studentControl'));
 app.use('/xqhz/training',require('./control/xqhz/trainingControl'));
 app.use('/xqhz/recruitment',require('./control/xqhz/recruitmentControl'));
+app.use('/xqhz/consult',require('./control/xqhz/consultControl'));
 
 app.use('/sysadmin/company',require('./control/sysadmin/companyControl'));
 app.use('/sysadmin/user',require('./control/sysadmin/userControl'));
 app.use('/sysadmin/training',require('./control/sysadmin/trainingControl'));
+app.use('/sysadmin/consult',require('./control/sysadmin/consultControl'));
 
 // app.use('/',require('./control/admin'))
 app.listen(81, () => {

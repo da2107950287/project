@@ -1,0 +1,22 @@
+const express = require('express');
+const router = express.Router();
+const consultModel = require('../../model/xqhz/consultModel');
+const JwtUtil = require('../../tool/jwt');
+let consultmodel = new consultModel();
+let jwt = new JwtUtil();
+//是否报名参加该培训
+router.post('/getConsultList', (req, res) => {
+    consultmodel.getConsultList( (result) => {
+            res.json({ code: 0, data: result })
+        })
+   
+})
+router.post('/postConsult', (req, res) => {
+    let data=req.body;
+    consultmodel.postConsult(data,(result) => {
+        res.json({ code: 0, msg: '操作成功' })
+
+    })
+
+})
+    module.exports = router;

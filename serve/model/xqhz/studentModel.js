@@ -163,6 +163,16 @@ class studentModel extends dbBase{
                 
         })
     }
-    
+    getTrainScore(data,callback){
+        
+        let sql =`select score.*,training.class_name from training,score where training.tid in (select tid from entry where sid=4) and sid=4 `;
+        this.mydb.query(sql,[data.sid],(err,result)=>{
+          callback(result)       
+        })
+    }
+
+
+    //获取培训成绩
+
 }
 module.exports=studentModel;

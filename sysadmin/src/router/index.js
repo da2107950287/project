@@ -19,6 +19,8 @@ export default new Router({
         { path: '/companyInfo', name: 'companyInfo', meta: { title: "企业列表" }, component: () => import('@/components/userInformation/company/companyInfo') },
         { path: '/trainingList', name: 'trainingList', meta: { title: "企业列表" }, component: () => import('@/components/training/trainingList') },
         { path: '/trainingInfo', name: 'trainingInfo', meta: { title: "企业列表" }, component: () => import('@/components/training/trainingInfo') },
+        { path: '/consultList', name: 'consultList', meta: { title: "企业列表" }, component: () => import('@/components/consult/consultList') },
+        { path: '/consultInfo', name: 'consultInfo', meta: { title: "企业列表" }, component: () => import('@/components/consult/consultInfo') },
         
       ]
     }
