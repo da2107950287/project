@@ -24,7 +24,6 @@
               type="datetime"
               align="right"
               value-format="yyyy-MM-dd 00:00:00"
-             
             ></el-date-picker>
           </el-form-item>
           <el-form-item label="招聘地点：" prop="rec_place_name">
@@ -126,6 +125,7 @@
 </template>
 <script>
 import EditorBar from "../wangEditor/wangEditor";
+import {getList} from '../../assets/common'
 export default {
   data() {
     return {
@@ -143,9 +143,12 @@ export default {
       isShow: 1,
       pageIndex: 1,
       pageSize: 10,
-      pageTotal: null,
+      pageTotal: 0,
       tableData: [],
-      tableData1:[],
+      pageIndex1: 1,
+      pageSize1: 10,
+      pageTotal1: 0,
+      tableData1: [],
       data: []
     };
   },
@@ -159,6 +162,7 @@ export default {
     edit() {
       this.disabled = false;
     },
+    //发布招聘信息
     postRecruitment() {
       console.log(this.ruleForm);
       this.$axios
@@ -170,61 +174,61 @@ export default {
           console.log(err);
         });
     },
-    getList() {
-      // es6过滤得到满足搜索条件的展示数据list
-      // let list = this.data.filter((item, index) =>
-      //   item.class_name.includes(this.class_name)
-      // );
 
-      this.tableData = this.data.filter(
-        (item, index) =>
-          index < this.pageIndex * this.pageSize &&
-          index >= this.pageSize * (this.pageIndex - 1)
-      );
-      this.tableData.forEach(item => {
-        if (item.status == 0) {
-          item.status = "待审核";
-        } else if (item.status == 1) {
-          item.status = "已通过";
-        } else {
-          item.status = "未通过";
-        }
-      });
-      this.pageTotal = this.data.length;
-    },
+    //获取企业招聘信息列表
     getSelfRecruitmentList() {
       this.$axios
         .post("/xqhz/company/getSelfRecruitmentList", {})
         .then(res => {
-          this.data = res.data;
-          console.log(this.data);
-          this.getList();
+          getList(this.tableData, res.data, this.pageIndex, this.pageSize,this.pageTotal);
+          console.log(res.data)
         })
         .catch(err => {
           console.log(err);
         });
     },
-    getDeliveryRecordList(){
-       this.$axios
+    //获取招聘投递列表
+    getDeliveryRecordList() {
+      this.$axios
         .post("/xqhz/company/getDeliveryRecordList", {})
         .then(res => {
-          this.data = res.data;
-          console.log(this.data);
-          this.getList();
+          this.getList(
+            this.tableData1,
+            res.data,
+            this.pageIndex1,
+            this.pageSize1,
+            this.pageTotal1
+          );
         })
         .catch(err => {
           console.log(err);
         });
     },
-    // getSelfRecruitmentList
+    //处理数据
+    // getList(tableData, data, pageIndex, pageSize,pageTotal) {
+    //   console.log(this.tableData)
+    //   tableData = data.filter(
+    //     (item, index) =>
+    //       index < pageIndex * pageSize &&
+    //       index >= pageSize * (pageIndex - 1)
+    //   );
+    //   // tableData.forEach(item => {
+    //   //   if (item.status == 0) {
+    //   //     item.status = "待审核";
+    //   //   } else if (item.status == 1) {
+    //   //     item.status = "已通过";
+    //   //   } else {
+    //   //     item.status = "未通过";
+    //   //   }
+    //   // });
+    //   pageTotal = data.length;
+    //   console.log(this.tableData)
+    //   console.log(this.pageTotal)
+    // },
     // 分页导航
     handlePageChange(val) {
       this.pageIndex = val;
       this.getList();
-    },
-    handlePageChange1(val) {
-      this.pageIndex1 = val;
-      this.getList1();
     }
   },
   created() {
@@ -237,7 +241,7 @@ export default {
 </script>
 <style lang='scss' scoped>
 .continer {
-    margin: 50px 100px 50px 300px;
+  margin: 50px 100px 50px 300px;
 
   display: flex;
   // width: 100%;

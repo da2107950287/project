@@ -11,8 +11,7 @@
               :autosize="{ minRows: 2, maxRows: 4}"
               placeholder="请输入内容"
               v-model="textarea"
-           
-              show-word-limit=100
+              show-word-limit="100"
             ></el-input>
             <div slot="footer" class="dialog-footer">
               <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -24,12 +23,15 @@
       <hr />
       <ul class="set-note">
         <li v-for="(item,index) in consultContent" :key="index">
-          <div @click="open(item.id)">
-            <img src="../assets/img/arrow_right.png" v-if="item.id!==selected" />
-            <img src="../assets/img/arrow_down.png" v-if="item.id==selected" />
+          <div @click="open(item.cid)">
+            <img src="../assets/img/arrow_right.png" v-if="item.cid!==selected" />
+            <img src="../assets/img/arrow_down.png" v-if="item.cid==selected" />
             {{item.question}}
           </div>
-          <div v-if="item.id==selected" class="answer"><span>管理员回复：</span>{{item.answer}}</div>
+          <div v-if="item.cid==selected" class="answer">
+            <span>管理员回复：</span>
+            {{item.answer}}
+          </div>
         </li>
       </ul>
     </div>
@@ -47,35 +49,38 @@ export default {
   },
   methods: {
     open(selected_id) {
-      if(selected_id!=this.selected){
-this.selected = selected_id;
-      }else{
-        this.selected=false
+      if (selected_id != this.selected) {
+        this.selected = selected_id;
+      } else {
+        this.selected = false;
       }
-      
-
     },
     postConsult() {
       this.dialogFormVisible = false;
-      this.$axios.post('/xqhz/consult/postConsult',{question:this.textarea}).then(res=>{
-        this.$message(res.msg)
-        this.textarea='';
-      }).catch(err=>{
-        console.log(err);
-      })
+      this.$axios
+        .post("/xqhz/consult/postConsult", { question: this.textarea })
+        .then(res => {
+          this.$message(res.msg);
+          this.textarea = "";
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
-    getConsultList(){
-        this.$axios.post('/xqhz/consult/getConsultList',{}).then(res=>{
-          this.consultContent=res.data;
-        console.log(res);
-      }).catch(err=>{
-        console.log(err);
-      })
+    getConsultList() {
+      this.$axios
+        .post("/xqhz/consult/getConsultList", {})
+        .then(res => {
+          this.consultContent = res.data;
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   },
   created() {
-    this.getConsultList()
-
+    this.getConsultList();
   }
 };
 </script>
@@ -114,19 +119,18 @@ li {
         border-top: 1px solid #ddd;
         font-size: 14px;
         div:first-child {
-          
           img {
             width: 14px;
             height: 14px;
             margin-right: 5px;
           }
         }
-       .answer{
-          margin-left:22px;
-              color: #1abc9c;
-              span{
-                font-weight: bold;
-              }
+        .answer {
+          margin-left: 22px;
+          color: #1abc9c;
+          span {
+            font-weight: bold;
+          }
         }
       }
       li:nth-child(2n-1) {

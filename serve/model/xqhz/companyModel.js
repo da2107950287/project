@@ -141,6 +141,7 @@ class companyModel extends dbBase {
 
         })
     }
+    //获取企业招聘头低低记录
     getRecruitmentList(callback) {
         this.table = 'recruitment'
         
