@@ -497,28 +497,7 @@ export default {
       pageSize: 10,
       pageTotal: 1,
       data: [],
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄"
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄"
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄"
-        }
-      ],
+      tableData:[],
       isShow: 1,
       form: {
         name: "",
@@ -570,8 +549,8 @@ export default {
       rec_position: "",
       editVisible: false,
       value1: "",
-      avatar:
-        "https://cdn6.haitou.cc/user/face/71/1292671_9b07.jpg?v=1567951235&amp;x-oss-process=image/resize,m_fixed,w_200,h_200"
+      // avatar:
+      //   "https://cdn6.haitou.cc/user/face/71/1292671_9b07.jpg?v=1567951235&amp;x-oss-process=image/resize,m_fixed,w_200,h_200"
     };
   },
   methods: {

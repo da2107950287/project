@@ -6,7 +6,6 @@
       </div>
       <div class="set-note">
         <el-form :model="ruleForm" ref="ruleForm" label-width="110px" class="demo-ruleForm">
-          <!-- :rules="rules" -->
           <h4>账户信息</h4>
           <hr style="margin-bottom:25px" />
           <el-form-item label="用户名：" prop="username">

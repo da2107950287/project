@@ -87,7 +87,7 @@ router.post('/getSelfRecruitmentList', (req, res) => {
 })
 router.post('/getDeliveryRecordList', (req, res) => {
     jwt.checkToken(req.headers.authorization).then(res1 => {
-        console.log(res1.cid)
+        
         companymodel.getDeliveryRecordList(res1.cid,(result) => {
             console.log(result)
             res.json({ code: 0, data: result, msg: '获取数据成功' })

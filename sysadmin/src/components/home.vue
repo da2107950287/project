@@ -42,7 +42,7 @@
                 <i class="el-icon-menu"></i>招聘信息管理
               </template>
               <el-menu-item-group>
-                <el-menu-item index="2-1">招聘信息</el-menu-item>
+                <el-menu-item index="2-1" @click="go('/recruitmentList')">招聘信息</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
             <el-submenu index="3">

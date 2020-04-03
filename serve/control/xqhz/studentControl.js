@@ -97,4 +97,11 @@ router.post('/getTrainScore', (req, res) => {
     }
     )
 })
+
+
+
+//测试
+router.post('/test',(req,res)=>{
+    
+})
 module.exports = router;

@@ -10,6 +10,7 @@
         <h3 class="title">招聘信息</h3>
       </div>
       <hr />
+
       <div class="set-note">
         <el-form :model="ruleForm" ref="ruleForm" label-width="110px" class="demo-ruleForm">
           <el-form-item label="招聘职位：" prop="rec_position">
@@ -44,8 +45,18 @@
       </div>
     </div>
     <div class="resume-list" v-if="isShow==2">
-      <div>
+      <div class="header">
         <h3>招聘信息列表</h3>
+        <div class="handle-box">
+          <!-- <el-button
+          type="primary"
+          icon="el-icon-delete"
+          class="handle-del mr10"
+          @click="delAllSelection"
+          >批量删除</el-button>-->
+          <el-input v-model="postion" placeholder="课程名" class="handle-input mr10"></el-input>
+          <!-- <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button> -->
+        </div>
         <hr />
         <div>
           <el-table
@@ -83,12 +94,23 @@
       </div>
     </div>
     <div class="resume-list" v-if="isShow==3">
-      <div>
+      <div class="header">
         <h3>培训投递列表</h3>
+       
+        <div class="handle-box">
+          <!-- <el-button
+          type="primary"
+          icon="el-icon-delete"
+          class="handle-del mr10"
+          @click="delAllSelection"
+          >批量删除</el-button>-->
+          <el-input v-model="postion" placeholder="课程名" class="handle-input mr10"></el-input>
+          <!-- <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button> -->
+        </div>
         <hr />
         <div>
           <el-table
-            :data="tableData1"
+            :data="tableData"
             border
             class="table"
             ref="multipleTable"
@@ -102,9 +124,9 @@
               </template>
             </el-table-column>
             <!-- <el-table-column prop="" label="" align="center"></el-table-column> -->
-            <el-table-column prop="rec_time" label="招聘时间" align="center"></el-table-column>
-            <el-table-column prop="rec_place_name" label="招聘地点" align="center"></el-table-column>
-            <el-table-column prop="status" label="状态" align="center"></el-table-column>
+            <el-table-column prop="username" label="投递人" align="center"></el-table-column>
+            <el-table-column prop="delivery_time" label="投递时间" align="center"></el-table-column>
+            <!-- <el-table-column prop="status" label="状态" align="center"></el-table-column> -->
             <!-- <el-table-column prop="class_introduce" label="课程介绍" align="center"></el-table-column> -->
             <!-- <el-table-column prop="status" label="状态" align="center"></el-table-column> -->
           </el-table>
@@ -112,9 +134,9 @@
             <el-pagination
               background
               layout="total, prev, pager, next"
-              :current-page="pageIndex1"
-              :page-size="pageSize1"
-              :total="pageTotal1"
+              :current-page="pageIndex"
+              :page-size="pageSize"
+              :total="pageTotal"
               @current-change="handlePageChange"
             ></el-pagination>
           </div>
@@ -125,18 +147,19 @@
 </template>
 <script>
 import EditorBar from "../wangEditor/wangEditor";
-import {getList} from '../../assets/common'
+import { getList } from "../../assets/common";
 export default {
   data() {
     return {
       ruleForm: {
-        // rec_position: "", //职位
+        rec_position: "", //职位
         rec_degree: "", //学历要求
         rec_time: "", //招聘时间
         rec_work_place: "", //工作地点
         rec_place_name: "", //招聘地点
         rec_content: "" //职位描述
       },
+      postion: "",
       test: "",
       isClear: false,
       detail: "",
@@ -145,16 +168,18 @@ export default {
       pageSize: 10,
       pageTotal: 0,
       tableData: [],
-      pageIndex1: 1,
-      pageSize1: 10,
-      pageTotal1: 0,
-      tableData1: [],
+      
       data: []
     };
   },
   methods: {
     show(type) {
       this.isShow = type;
+      if(type==2){
+        this.getSelfRecruitmentList()
+      }else if(type==3){
+        this.getDeliveryRecordList();
+      }
     },
     change(val) {
       console.log(val);
@@ -174,57 +199,42 @@ export default {
           console.log(err);
         });
     },
-
     //获取企业招聘信息列表
     getSelfRecruitmentList() {
       this.$axios
         .post("/xqhz/company/getSelfRecruitmentList", {})
         .then(res => {
-          getList(this.tableData, res.data, this.pageIndex, this.pageSize,this.pageTotal);
-          console.log(res.data)
+          this.data = res.data;
+          this.getList();
         })
         .catch(err => {
           console.log(err);
         });
+    },
+    getList() {
+      this.tableData=[];
+      let list = this.data.filter((item, index) =>
+        item.rec_position.includes(this.postion)
+      );
+      this.tableData = list.filter(
+        (item, index) =>
+          index < this.pageIndex * this.pageSize &&
+          index >= this.pageSize * (this.pageIndex - 1)
+      );
+      this.pageTotal = list.length;
     },
     //获取招聘投递列表
     getDeliveryRecordList() {
       this.$axios
         .post("/xqhz/company/getDeliveryRecordList", {})
         .then(res => {
-          this.getList(
-            this.tableData1,
-            res.data,
-            this.pageIndex1,
-            this.pageSize1,
-            this.pageTotal1
-          );
+          this.data=res.data;
+          this.getList();
         })
         .catch(err => {
           console.log(err);
         });
     },
-    //处理数据
-    // getList(tableData, data, pageIndex, pageSize,pageTotal) {
-    //   console.log(this.tableData)
-    //   tableData = data.filter(
-    //     (item, index) =>
-    //       index < pageIndex * pageSize &&
-    //       index >= pageSize * (pageIndex - 1)
-    //   );
-    //   // tableData.forEach(item => {
-    //   //   if (item.status == 0) {
-    //   //     item.status = "待审核";
-    //   //   } else if (item.status == 1) {
-    //   //     item.status = "已通过";
-    //   //   } else {
-    //   //     item.status = "未通过";
-    //   //   }
-    //   // });
-    //   pageTotal = data.length;
-    //   console.log(this.tableData)
-    //   console.log(this.pageTotal)
-    // },
     // 分页导航
     handlePageChange(val) {
       this.pageIndex = val;
@@ -242,7 +252,6 @@ export default {
 <style lang='scss' scoped>
 .continer {
   margin: 50px 100px 50px 300px;
-
   display: flex;
   // width: 100%;
   .aside {
@@ -268,6 +277,13 @@ export default {
     box-shadow: 2px 2px 5px 0 #666;
     background-color: #fff;
     width: 100%;
+    .header {
+      display: flex;
+      align-items: center;
+      .handle-box {
+        text-align: left;
+      }
+    }
     .set-note {
       margin-top: 30px;
     }
@@ -279,5 +295,10 @@ export default {
     border: 1px solid #ccc;
     background-color: #fff;
   }
+}
+
+.handle-input {
+  width: 300px;
+  display: inline-block;
 }
 </style>

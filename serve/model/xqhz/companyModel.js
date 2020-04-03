@@ -14,7 +14,7 @@ class companyModel extends dbBase {
         })
     }
     editCoInfo(data, callback) {
-        // UPDATE 表名称 SET 列名称 = 新值 WHERE 列名称 = 某值
+        // UPDATE 表名称 SET 列名称 = 新值 where 列名称 = 某值
         let string1 = [];
         let string2 = [];
         for (const key in data) {
@@ -169,10 +169,11 @@ class companyModel extends dbBase {
         })
     }
     getDeliveryRecordList(data,callback){
-        // this.table = 'recruitment';
-        console.log(data.cid)
-        let sql = `select * from ${this.table} where cid= ?`;
+        let sql = `select (select recruitment.rec_position from recruitment where delivery.rid=recruitment.rid) AS rec_position,delivery.delivery_time,student.username from student,delivery
+         where (delivery.sid=student.sid and delivery.rid in (select rid from recruitment where cid = ?))`;
         this.mydb.query(sql,[data],(err, result) => {
+            console.log(result)
+            console.log(sql)
             if (err) {
                 callback(err)
             } else {

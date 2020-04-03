@@ -7,6 +7,8 @@ Vue.use(Router)
 let router = new Router({
   mode: 'history',
   routes: [
+    { path: '/test', name: 'test', meta: { title: '登录' }, component: () => import('@/components/test') },
+
     { path: '/login', name: 'login', meta: { title: '登录' }, component: () => import('@/components/login') },
     { path: '/register', name: 'register', meta: { title: '注册' }, component: () => import('@/components/register') },
     { path: '/recruitmentInfo', name: 'recruitmentInfo', meta: { title: '招聘信息详情' }, component: () => import('@/components/recruitmentInfo') },

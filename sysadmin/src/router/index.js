@@ -21,6 +21,8 @@ export default new Router({
         { path: '/trainingInfo', name: 'trainingInfo', meta: { title: "企业列表" }, component: () => import('@/components/training/trainingInfo') },
         { path: '/consultList', name: 'consultList', meta: { title: "企业列表" }, component: () => import('@/components/consult/consultList') },
         { path: '/consultInfo', name: 'consultInfo', meta: { title: "企业列表" }, component: () => import('@/components/consult/consultInfo') },
+        { path: '/recruitmentList', name: 'recruitmentList', meta: { title: "企业列表" }, component: () => import('@/components/recruitment/recruitmentList') },
+        { path: '/recruitmentInfo', name: 'recruitmentInfo', meta: { title: "企业列表" }, component: () => import('@/components/recruitment/recruitmentInfo') },
         
       ]
     }
