@@ -17,6 +17,9 @@ export default new Router({
         { path: '/studentInfo', name: 'studentInfo', meta: { title: "学生列表" }, component: () => import('@/components/userInformation/student/studentInfo') },
         { path: '/companyList', name: 'companyList', meta: { title: "企业列表" }, component: () => import('@/components/userInformation/company/companyList') },
         { path: '/companyInfo', name: 'companyInfo', meta: { title: "企业列表" }, component: () => import('@/components/userInformation/company/companyInfo') },
+        { path: '/adminList', name: 'adminList', meta: { title: "企业列表" }, component: () => import('@/components/userInformation/admin/adminList') },
+        { path: '/adminInfo', name: 'adminInfo', meta: { title: "企业列表" }, component: () => import('@/components/userInformation/admin/adminInfo') },
+        
         { path: '/trainingList', name: 'trainingList', meta: { title: "企业列表" }, component: () => import('@/components/training/trainingList') },
         { path: '/trainingInfo', name: 'trainingInfo', meta: { title: "企业列表" }, component: () => import('@/components/training/trainingInfo') },
         { path: '/consultList', name: 'consultList', meta: { title: "企业列表" }, component: () => import('@/components/consult/consultList') },

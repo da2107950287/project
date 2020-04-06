@@ -68,7 +68,6 @@ router.post('/getTrainingList', (req, res) => {
 })
 
 router.post('/getRecruitmentList', (req, res) => {
-
     companymodel.getRecruitmentList((result) => {
         console.log(result)
         res.json({ code: 0, data: result, msg: '获取数据成功' })
@@ -95,6 +94,34 @@ router.post('/getDeliveryRecordList', (req, res) => {
     }).catch(err => {
         res.json({ err: -1, msg: 'token非法' });
     })
+})
+//获取企业列表
+router.post('/getCompanyList', (req, res) => {
+  
+        companymodel.getCompanyList((result) => {
+            console.log(result)
+            res.json({ code: 0, data: result, msg: '获取数据成功' })
+        })
+    
+})
+//获取培训信息详情
+router.post('/getTrainingInfo', (req, res) => {
+    let data=req.body;
+    companymodel.getTrainingInfo(data,(result) => {
+        console.log(result)
+        res.json({ code: 0, data: result[0], msg: '获取数据成功' })
+    })
+
+})
+//获取招聘信息详情
+
+router.post('/getRecruitmentInfo', (req, res) => {
+    let data=req.body;
+    companymodel.getRecruitmentInfo(data,(result) => {
+        // console.log(result)
+        res.json({ code: 0, data: result[0], msg: '获取数据成功' })
+    })
+
 })
 // postRecruitment
 module.exports = router;

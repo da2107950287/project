@@ -144,8 +144,7 @@ class companyModel extends dbBase {
     //获取企业招聘头低低记录
     getRecruitmentList(callback) {
         this.table = 'recruitment'
-        
-        let sql = `select recruitment.*,company.* from recruitment,company where recruitment.status= 1 and recruitment.cid=company.cid   `;
+        let sql = `select recruitment.*,company.* from recruitment,company where recruitment.status= 1 and recruitment.cid=company.cid`;
         this.mydb.query(sql, (err, result) => {
             if (err) {
                 callback(err)
@@ -183,5 +182,42 @@ class companyModel extends dbBase {
         })
     }
      
+    getCompanyList(callback) {
+        this.table = 'company'
+        let sql = `select * from ${this.table} where 1 limit 12 `;
+        this.mydb.query(sql, (err, result) => {
+            if (err) {
+                callback(err)
+            } else {
+                callback(result)
+            }
+
+        })
+    }
+    getTrainingInfo(data,callback) {
+        this.table = 'training';
+        console.log(data)
+        let sql = `select * from ${this.table} where tid=?`;
+        this.mydb.query(sql,[data.tid],(err, result) => {
+            if (err) {
+                callback(err)
+            } else {
+                callback(result)
+            }
+
+        })
+    }
+    
+    getRecruitmentInfo(data,callback) {
+        let sql = `select recruitment.*,company.* from recruitment,company where recruitment.rid = ? and recruitment.cid=company.cid`;
+        this.mydb.query(sql,[data.rid],(err, result) => {
+            if (err) {
+                callback(err)
+            } else {
+                callback(result)
+            }
+
+        })
+    }
 }
 module.exports = companyModel;

@@ -1,13 +1,14 @@
 <template>
   <div>
+    <img src="../assets/img/top.png" class="top-img">
     <el-menu
       :default-active="activeIndex"
       class="el-menu-demo"
       mode="horizontal"
-      @select="handleSelect"
-      background-color="#545c64"
+      background-color="#1e649f"
       text-color="#fff"
-      active-text-color="#ffd04b"
+      active-text-color="#fff"
+      router
     >
       <el-menu-item index="home">首页</el-menu-item>
       <el-submenu index="2">
@@ -24,15 +25,15 @@
         <el-menu-item index="resumelist">管理简历信息</el-menu-item>
       </el-submenu>
       <el-submenu index="4">
-        <template slot="title">学校</template>
+        <template slot="title">学校概况</template>
         <el-menu-item index="profile">学校简介</el-menu-item>
       </el-submenu>
-      <el-menu-item index="consult">咨询</el-menu-item>
+      <el-menu-item index="consult">留言咨询</el-menu-item>
       
       <el-menu-item index="register" class="right">注册</el-menu-item>
       <el-menu-item index="login" class="right">登录</el-menu-item>
     </el-menu>
-    <div class="blank-box"></div>
+    <!-- <div class="blank-box"></div> -->
     <router-view></router-view>
   </div>
 </template>
@@ -40,25 +41,20 @@
 export default {
   data() {
     return {
-      activeIndex: "/home"
+      activeIndex: "home"
     };
   },
   methods: {
-    handleSelect(key, keyPath) {
-      console.log(key, keyPath);
-      console.log(typeof keyPath);
-      this.$router.push({ name: key });
-    }
+    
   }
 };
 </script>
 <style scoped>
-.el-menu-demo{
-  position: fixed;
-  top:0;
-  width: 100%;
-  z-index: 2000;
+
+.top-img{
+  width: 550px;
 }
+
 .blank-box{
   height:60px;
 }

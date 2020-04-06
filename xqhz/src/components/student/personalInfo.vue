@@ -24,7 +24,6 @@
           </el-form-item>
           <el-form-item class="btns">
             <el-button type="primary" @click="edit">编辑</el-button>
-            <el-button type="info" @click="saveEdit">保存</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -76,8 +75,8 @@ export default {
     edit() {
       this.editVisible = true;
     },
-    saveEdit() {
-      
+    confirm() {
+      this.editVisible = false;
         this.$axios
           .post("/xqhz/student/editStudentInfo", this.ruleForm)
           .then(res => {
@@ -87,10 +86,6 @@ export default {
           .catch(err => {
             console.log(err);
           });
-      
-    },
-    confirm() {
-      this.editVisible = false;
     },
     getStudentInfo() {
       this.$axios.post("/xqhz/student/getStudentInfo").then(res => {
@@ -105,7 +100,7 @@ export default {
 </script>
 <style lang='scss' scoped>
 .register {
-  margin: 50px 150px;
+  margin: 50px 250px;
 
   background-color: #fff;
   .page {

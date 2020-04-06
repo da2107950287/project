@@ -7,7 +7,7 @@
     </div>
     <div class="page" v-if="isShow==1">
       <div class="header">
-        <h3 class="title">招聘信息</h3>
+        <h3 class="title">发布招聘信息</h3>
       </div>
       <hr />
 
@@ -19,11 +19,12 @@
           <el-form-item label="学历要求：" prop="rec_degree">
             <el-input clearable v-model="ruleForm.rec_degree"></el-input>
           </el-form-item>
-          <el-form-item label="培训时间：" prop="rec_time">
+          <el-form-item label="招聘时间：" prop="rec_time">
             <el-date-picker
               v-model="ruleForm.rec_time"
               type="datetime"
               align="right"
+              placeholder="选择日期"
               value-format="yyyy-MM-dd 00:00:00"
             ></el-date-picker>
           </el-form-item>
@@ -38,8 +39,10 @@
             <editor-bar v-model="ruleForm.rec_content" :isClear="isClear" @change="change"></editor-bar>
           </el-form-item>
           <el-form-item class="btns">
-            <el-button type="primary" @click="edit">编辑</el-button>
-            <el-button type="info" @click="postRecruitment">保存</el-button>
+         
+            <el-button v-if="isPost==true" type="danger" @click="postRecruitment">发布</el-button>
+            <el-button v-else type="danger" @click="postRecruitment">修改</el-button>
+          
           </el-form-item>
         </el-form>
       </div>
@@ -48,14 +51,8 @@
       <div class="header">
         <h3>招聘信息列表</h3>
         <div class="handle-box">
-          <!-- <el-button
-          type="primary"
-          icon="el-icon-delete"
-          class="handle-del mr10"
-          @click="delAllSelection"
-          >批量删除</el-button>-->
-          <el-input v-model="postion" placeholder="课程名" class="handle-input mr10"></el-input>
-          <!-- <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button> -->
+          <el-input v-model="postion" placeholder="职位名称" class="handle-input mr10"></el-input>
+          <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
         </div>
         <hr />
         <div>
@@ -66,19 +63,31 @@
             ref="multipleTable"
             header-cell-class-name="table-header"
           >
-            <!-- <el-table-column prop="id" label="ID" align="center"></el-table-column> -->
-            <!-- <el-table-column prop="class_name" label="课程名" align="center"></el-table-column> -->
-            <el-table-column label="职位名称" align="center">
+
+            <el-table-column label="职位名称" align="center" show-overflow-tooltip>
               <template slot-scope="scope">
                 <div @click="getTrainingInfo(scope.row)" class="active">{{scope.row.rec_position}}</div>
               </template>
             </el-table-column>
-            <!-- <el-table-column prop="" label="" align="center"></el-table-column> -->
             <el-table-column prop="rec_time" label="招聘时间" align="center"></el-table-column>
             <el-table-column prop="rec_place_name" label="招聘地点" align="center"></el-table-column>
-            <el-table-column prop="status" label="状态" align="center"></el-table-column>
-            <!-- <el-table-column prop="class_introduce" label="课程介绍" align="center"></el-table-column> -->
-            <!-- <el-table-column prop="status" label="状态" align="center"></el-table-column> -->
+            <el-table-column prop="status" label="状态" align="center" ></el-table-column>
+            
+               <el-table-column label="操作" width="200" align="center">
+          <template slot-scope="scope">
+            <el-button
+              type="text"
+              icon="el-icon-view"
+              @click="handleSee( scope.row)"
+            >查看</el-button>
+            <el-button
+              type="text"
+              icon="el-icon-delete"
+              class="red"
+              @click="handleDelete(scope.$index, scope.row)"
+            >删除</el-button>
+          </template>
+        </el-table-column>
           </el-table>
           <div class="pagination">
             <el-pagination
@@ -104,8 +113,8 @@
           class="handle-del mr10"
           @click="delAllSelection"
           >批量删除</el-button>-->
-          <el-input v-model="postion" placeholder="课程名" class="handle-input mr10"></el-input>
-          <!-- <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button> -->
+          <el-input v-model="postion" placeholder="职位名称" class="handle-input mr10"></el-input>
+          <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
         </div>
         <hr />
         <div>
@@ -168,13 +177,18 @@ export default {
       pageSize: 10,
       pageTotal: 0,
       tableData: [],
-      
-      data: []
+      isClear:false,
+      data: [],
+      isPost:true,
     };
   },
   methods: {
     show(type) {
       this.isShow = type;
+      if(type==1){
+        this.ruleForm={};
+        this.isPost=true;
+      }else
       if(type==2){
         this.getSelfRecruitmentList()
       }else if(type==3){
@@ -216,6 +230,11 @@ export default {
       let list = this.data.filter((item, index) =>
         item.rec_position.includes(this.postion)
       );
+      list.forEach((item,index)=>{
+        if(item.status){
+
+        }
+      })
       this.tableData = list.filter(
         (item, index) =>
           index < this.pageIndex * this.pageSize &&
@@ -239,7 +258,17 @@ export default {
     handlePageChange(val) {
       this.pageIndex = val;
       this.getList();
-    }
+    },
+     handleSearch() {
+      this.pageIndex = 1;
+      this.getList();
+    },
+    handleSee(data){
+       this.ruleForm=data;
+      this.isShow=1;
+      this.isPost=false;
+    },
+    
   },
   created() {
     this.getSelfRecruitmentList();
@@ -251,14 +280,12 @@ export default {
 </script>
 <style lang='scss' scoped>
 .continer {
-  margin: 50px 100px 50px 300px;
+  margin: 50px 100px;
   display: flex;
   // width: 100%;
   .aside {
     margin-right: 30px;
-    position: fixed;
-    top: 110px;
-    left: 100px;
+  
     div {
       padding: 5px;
       padding-left: 1rem;
@@ -296,7 +323,16 @@ export default {
     background-color: #fff;
   }
 }
-
+.el-input {
+  width: 300px;
+}
+ .el-input__inner,
+    .el-input {
+      width: 300px;
+      height: 35px;
+      display: inline-block;
+    }
+   
 .handle-input {
   width: 300px;
   display: inline-block;

@@ -46,7 +46,7 @@ axios.interceptors.request.use(
   config => {
     if (localStorage.getItem("token")) {
       config.headers.authorization = localStorage.getItem("token");
-      console.log(localStorage.getItem("token"))
+      // console.log(localStorage.getItem("token"))
     }
     return config
   },
@@ -55,7 +55,7 @@ axios.interceptors.request.use(
   })
 // axios 响应拦截器
 axios.interceptors.response.use(response => {
-  console.log(response)
+  // console.log(response)
   return response.data;
 }, function (error) {
   return Promise.reject(error);

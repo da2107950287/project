@@ -132,7 +132,7 @@
     width: 100%;
     margin: 0 auto;
     position: relative;
-    /* max-width: 300px; */
+  
     z-index: 0;
   }
   .toolbar {
@@ -140,6 +140,6 @@
   }
   .text {
     border: 1px solid #ccc;
-    min-height: 500px;
+    height: 300px;
   }
 </style>

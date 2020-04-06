@@ -2,7 +2,7 @@
   <div class="register">
     <div class="page">
       <div class="header">
-        <h1 class="title">{{info.class_name}}</h1>
+        <h3 class="title">{{info.class_name}}</h3>
         <hr />
       </div>
       <ul class="cotainer">
@@ -14,7 +14,10 @@
           <div>培训地点：</div>
           <div>{{info.class_place}}</div>
         </li>
-
+        <li>
+          <div>培训讲师：</div>
+          <div>{{info.class_teacher}}</div>
+        </li>
         <li class="content">
           <div>讲师介绍</div>
           <div>北京交大才子，华为、爱立信等通信巨头研发总监，10余年物联网行业工作经验，对物联网、2/3/4G无线网络、NB-IOT技术、数据通信等方面见解独到，主导参与华为骨干路由器、即时通信、网数通产品等多个项目研发，其产品创新解决方案荣获多个华为新颖创新奖。曾负责项目：华为骨干网、智能农业系统。</div>
@@ -23,9 +26,11 @@
           <div>课程简介</div>
           <div v-html="info.class_content"></div>
         </li>
-
-        <el-button type="primary" @click="apply" class="submit_btn">立即报名</el-button>
       </ul>
+<div class="submit_btn">
+        <el-button type="primary" @click="apply" >立即报名</el-button>
+
+</div>
     </div>
   </div>
 </template>
@@ -39,18 +44,17 @@ export default {
   methods: {
     apply() {
       this.$axios
-        .post("/xqhz/training/selectIsApply",{tid:this.info.tid})
+        .post("/xqhz/training/selectIsApply", { tid: this.info.tid })
         .then(res => {
-          console.log(res)
+          console.log(res);
           if (res.code == 0) {
             this.$message(res.msg);
           } else {
-           
             this.$axios
-              .post("/xqhz/training/applyTraining",{tid:this.info.tid})
+              .post("/xqhz/training/applyTraining", { tid: this.info.tid })
               .then(res => {
-                if(res.code==0){
-                  this.$message.success(res.msg)
+                if (res.code == 0) {
+                  this.$message.success(res.msg);
                 }
                 console.log(res);
               })
@@ -62,10 +66,22 @@ export default {
         .catch(err => {
           console.log(err);
         });
+    },
+    getTrainingInfo(tid) {
+      this.$axios
+        .post("/xqhz/company/getTrainingInfo", { tid: tid })
+        .then(res => {
+         this.info=res.data
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   },
   created() {
-    this.info = JSON.parse(this.$route.query.data);
+    console.log(this.$route.query.tid)
+    this.getTrainingInfo(this.$route.query.tid)
   }
 };
 </script>
@@ -77,7 +93,7 @@ li {
   padding: 0;
 }
 .register {
-  margin: 50px 150px;
+  margin: 50px 200px;
   background-color: #fff;
 
   .page {
@@ -118,16 +134,18 @@ li {
         flex-direction: column;
         align-items: flex-start;
         div:last-child {
-          line-height: 30px;
-          border: 1px solid #000;
-          margin-top: 10px;
-          padding: 5px 10px;
+          line-height: 24px;
+          
         }
       }
-      .submit_btn {
-        margin: 0 auto;
-      }
+     
     }
+     .submit_btn {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+      }
+    
   }
 }
 </style>

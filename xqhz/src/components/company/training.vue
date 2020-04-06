@@ -80,6 +80,43 @@
         </div>
       </div>
     </div>
+    <div class="page" v-if="isShow==3">
+      <h3>培训报名列表</h3>
+      <hr />
+      <div>
+        <el-table
+          :data="tableData"
+          border
+          class="table"
+          ref="multipleTable"
+          header-cell-class-name="table-header"
+        >
+          <!-- <el-table-column prop="id" label="ID" align="center"></el-table-column> -->
+          <!-- <el-table-column prop="class_name" label="课程名" align="center"></el-table-column> -->
+          <el-table-column label="课程名" align="center">
+            <template slot-scope="scope">
+              <div @click="getTrainingInfo(scope.row)" class="active">{{scope.row.class_name}}</div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="class_teacher" label="讲师" align="center"></el-table-column>
+          <el-table-column prop="class_time" label="培训时间" align="center"></el-table-column>
+          <el-table-column prop="class_place" label="培训地址" align="center"></el-table-column>
+          <el-table-column prop="apply_time" label="报名时间" align="center"></el-table-column>
+          <!-- <el-table-column prop="class_introduce" label="课程介绍" align="center"></el-table-column> -->
+          <!-- <el-table-column prop="status" label="状态" align="center"></el-table-column> -->
+        </el-table>
+        <div class="pagination">
+          <el-pagination
+            background
+            layout="total, prev, pager, next"
+            :current-page="pageIndex"
+            :page-size="pageSize"
+            :total="pageTotal"
+            @current-change="handlePageChange"
+          ></el-pagination>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -98,7 +135,7 @@ export default {
       tableData: [],
       pageIndex: 1, //默认显示第一页
       pageSize: 10, //默认每页数据量
-      pageTotal: null,
+      pageTotal: 0,
       isClear: false
     };
   },
@@ -165,21 +202,13 @@ export default {
 };
 </script>
 <style lang='scss' scoped>
-// .register {
-//   margin: 50px 150px;
-
-//   background-color: #fff;
-// }
 
 .continer {
-  margin: 50px 100px 50px 300px;
+  margin: 50px 100px;
+
   display: flex;
-  // width: 100%;
   .aside {
     margin-right: 30px;
-    position: fixed;
-    top:110px;
-    left: 100px;
     div {
       padding: 5px;
       padding-left: 1rem;
@@ -205,9 +234,10 @@ export default {
 }
 </style>
 <style lang="scss">
-.el-input {
+.el-input--suffix>.el-input__inner {
   width: 400px;
 }
+
 .el-form-item__label {
   text-align: left;
 }

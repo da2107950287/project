@@ -33,7 +33,6 @@ class recruitmentModel extends dbBase{
         })
     }
     selectIsDelivery(info,callback){
-        console.log(99)
         this.table='delivery'
         let sql =`select * from ${this.table} where sid=? and rid=?  `;
         this.mydb.query(sql,[info.sid,info.rid],(err,result)=>{

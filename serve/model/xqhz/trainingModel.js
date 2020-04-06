@@ -32,8 +32,8 @@ class companyModel extends dbBase{
     }
     selectIsApply(info,callback){
         this.table='entry'
-        let sql =`select * from ${this.table} where sid=? `;
-        this.mydb.query(sql,[info.sid],(err,result)=>{
+        let sql =`select * from ${this.table} where sid=? and tid=? `;
+        this.mydb.query(sql,[info.sid,info.tid],(err,result)=>{
             if(err){
                 callback(err)
             }else{

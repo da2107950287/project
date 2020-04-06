@@ -15,8 +15,7 @@ router.post('/getStudentInfo', (req, res) => {
         })
     }).catch(err => {
         res.json({ err: -1, msg: 'token非法' });
-    }
-    )
+    })
 })
 //修改学生信息
 router.post('/editStudentInfo', (req, res) => {
@@ -82,13 +81,14 @@ router.post('/getSelfDeliveryList', (req, res) => {
     )
 })
 
-// getTrainScore
+
 //获取培训成绩
 router.post('/getTrainScore', (req, res) => {
-    console.log("getTrainScore")
     jwt.checkToken(req.headers.authorization).then(res1 => {
         //token验证成功
-        let data=res1.sid
+        let data={};
+        data.sid=res1.sid
+        
         studentmodel.getTrainScore(data, (result) => {
             res.json({ code: 0, data:result })
         })

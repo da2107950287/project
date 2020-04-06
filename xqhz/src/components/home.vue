@@ -17,6 +17,7 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         <div class="panel-title">培训信息</div>
+        <div class="see_more" @click="seeMore('/trainingList')">更多</div>
       </div>
       <div class="panel-body">
         <table class="table">
@@ -29,14 +30,9 @@
           </thead>
           <tbody>
             <tr v-for="(item,index) in trainingList" :key="index">
-              <td class="post-sort" @click="getTrainingInfo(item)">{{item.class_name}}</td>
+              <td class="post-sort" @click="getTrainingInfo(item.tid)">{{item.class_name}}</td>
               <td class="post-intro">{{item.class_teacher}}</td>
               <td class="post-time">{{item.class_time}}</td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td class="see_more" @click="seeMore('/trainingList')">查看更多</td>
             </tr>
           </tbody>
         </table>
@@ -46,6 +42,7 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         <div class="panel-title">招聘信息</div>
+        <div class="see_more" @click="seeMore('/recruitmentList')">更多</div>
       </div>
       <div class="panel-body">
         <table class="table">
@@ -58,7 +55,7 @@
           </thead>
           <tbody>
             <tr v-for="(item,index) in recruitmentList" :key="index">
-              <td class="post-sort" @click="getRecruitmentInfo(item)">{{item.rec_position}}</td>
+              <td class="post-sort" @click="getRecruitmentInfo(item.rid)">{{item.rec_position}}</td>
               <td class="post-intro">{{item.rec_name}}</td>
               <td class="post-time">{{item.rec_time}}</td>
             </tr>
@@ -68,24 +65,17 @@
     </div>
     <div class="panel panel-default">
       <div class="panel-heading">
-        <div class="panel-title">企业展示</div>
+        <div class="panel-title" style="margin:0 auto; color:#333;font-size: 20px; ">企业展示</div>
       </div>
       <div class="panel-body">
-        <table class="table">
-          <!-- <thead>
-            <tr>
-              <th>课程名</th>
-              <th>讲师</th>
-              <th>培训时间</th>
-            </tr>
-          </thead> -->
-          <tbody>
-            <tr>
-              <!-- <td class="post-sort" style="width:33%" v-for="">{{}}</td> -->
-              
-            </tr>
-          </tbody>
-        </table>
+        <div class="company-box">
+          <div
+            class="post-sort"
+            style="width:33%"
+            v-for="(item,index) in companyList"
+            :key="index"
+          >{{item.rec_name}}</div>
+        </div>
       </div>
     </div>
     <img src alt />
@@ -141,11 +131,11 @@ export default {
         { title: "【军队文职专栏】军队文职招聘信息汇总 3月16日更新", id: 3 }
       ],
       trainingList: [],
-      recruitmentList:[]
+      recruitmentList: [],
+      companyList: []
     };
   },
   methods: {
- 
     seeMore(keypath) {
       this.$router.push({ path: keypath });
     },
@@ -153,36 +143,51 @@ export default {
       this.$axios
         .post("/xqhz/company/getTrainingList", {})
         .then(res => {
-          console.log(res);
+          console.log(res.data)
           this.trainingList = res.data;
-          console.log(this.trainingList);
         })
         .catch(err => {
           console.log(err);
         });
     },
-    getTrainingInfo(data) {
-      console.log(data);
+    getTrainingInfo(tid) {
       this.$router.push({
         path: "/trainingInfo",
-        query: { data: JSON.stringify(data) }
+        query: {tid}
       });
     },
-    getRecruitmentInfo(data){
-this.$router.push({path:'/recruitmentInfo',query:{data:JSON.stringify(data)}})
+    getRecruitmentInfo(rid) {
+      this.$router.push({
+        path: "/recruitmentInfo",
+        query: {rid}
+      });
     },
-    getRecruitmentList(){
-      this.$axios.post('/xqhz/company/getRecruitmentList',{}).then(res=>{
-        this.recruitmentList=res.data;
-        console.log(res)
-      }).catch(err=>{
-        console.log(err)
-      })
+    getRecruitmentList() {
+      this.$axios
+        .post("/xqhz/company/getRecruitmentList", {})
+        .then(res => {
+          this.recruitmentList = res.data;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    getCompanyList() {
+      this.$axios
+        .post("/xqhz/company/getCompanyList", {})
+        .then(res => {
+          this.companyList = res.data;
+          
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   },
   created() {
     this.getTrainingList();
-    this.getRecruitmentList()
+    this.getRecruitmentList();
+    this.getCompanyList();
   }
 };
 </script>
@@ -197,11 +202,8 @@ li {
 }
 .swiper-slide {
   width: 100%;
-  height: 500px;
-  line-height: 500px;
-  font-size: 50px;
+  height: 300px;
   text-align: center;
-  // background-color: rosybrown;
   .swiper-img {
     width: 100%;
     height: 100%;
@@ -238,21 +240,36 @@ li {
     background-color: #ffffff;
     border: 1px solid #efefef;
     border-radius: 4px;
+
     .panel-heading {
       color: #333333;
-      background-color: #ccc;
-      border-color: #dddddd;
-      padding-left: 20px;
-      height: 50px;
-      line-height: 50px;
+      background-color: #fbfbfb;
+      border-top: 3px solid #60b0f4;
+      border-bottom: 1px solid #ddd;
+      padding: 0 20px;
+      height: 40px;
+      line-height: 40px;
+      display: flex;
+      justify-content: space-between;
+      .panel-title {
+        color: #60b0f4;
+      }
+      .see_more {
+        border: none;
+        font-size: 12px;
+        color: #60b0f4;
+        text-align: center;
+        cursor: pointer;
+      }
     }
     .panel-body {
       padding: 0 20px;
+      box-shadow: #ccc 0 0px 4px;
       .table {
         width: 100%;
         max-width: 100%;
         color: #333333;
-        background-color: transparent;
+        background-color: #fff;
         table-layout: fixed;
         border-collapse: collapse;
         th {
@@ -279,13 +296,19 @@ li {
             color: #4a90e6;
             cursor: pointer;
           }
-          .see_more {
-            border: none;
-            font-size: 12px;
-            color:#ccc;
-            text-align: center;
-            cursor: pointer;
-          }
+        }
+      }
+      .company-box {
+        display: flex;
+        flex-wrap: wrap;
+        .post-sort {
+          line-height: 35px;
+          height: 35px;
+          font-size: 14px;
+          color: #005976;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
         }
       }
     }

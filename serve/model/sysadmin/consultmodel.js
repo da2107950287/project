@@ -5,7 +5,7 @@ class consultModel extends dbBase{
         this.table='consult';
     }
     getConsultList(callback){
-        let sql =`select * from ${this.table} where 1  order by cid desc`;
+        let sql =`select * from ${this.table} where 1`;
         this.mydb.query(sql,(err,result)=>{
             if(err){
                 callback(err)
@@ -37,7 +37,11 @@ class consultModel extends dbBase{
           string2.push(data.cid);
           let sql = `update ${this.table} set ${string1.join(",")} where cid=?`;
           this.mydb.query(sql, string2, function (err, result) {
-              callback(result);
+              if(err){
+                  console.log(err)
+              }else{
+                callback(result);
+              }
           })
   
     }

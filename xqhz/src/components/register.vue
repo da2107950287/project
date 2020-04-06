@@ -44,8 +44,9 @@
               ></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="企业所在行业：" prop="rec_class">
-            <el-select v-model="ruleForm.rec_class" placeholder="请选择">
+
+          <el-form-item label="企业规模：" prop="rec_scale">
+            <el-select v-model="ruleForm.rec_scale" placeholder="请选择">
               <el-option
                 v-for="item in arr2"
                 :key="item.value"
@@ -54,8 +55,8 @@
               ></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="企业规模：" prop="rec_scale">
-            <el-select v-model=" ruleForm.rec_scale" placeholder="请选择">
+          <el-form-item label="企业所在行业：" prop="rec_class">
+            <el-select v-model="ruleForm.rec_class" placeholder="请选择">
               <el-option
                 v-for="item in arr3"
                 :key="item.value"
@@ -67,9 +68,7 @@
           <el-form-item label="企业网站主页：" prop="rec_page">
             <el-input v-model="ruleForm.rec_page"></el-input>
           </el-form-item>
-          <el-form-item label="企业简介：" prop="rec_intro">
-            <el-input v-model="ruleForm.rec_intro"></el-input>
-          </el-form-item>
+
           <el-form-item label="简历投递邮箱：" prop="rec_email">
             <el-input v-model="ruleForm.rec_email"></el-input>
           </el-form-item>
@@ -80,6 +79,10 @@
           <el-form-item label="企业地址：" prop="rec_address">
             <el-input v-model="ruleForm.rec_address"></el-input>
           </el-form-item>
+          <el-form-item label="企业简介：" prop="rec_intro">
+            <editor-bar v-model="ruleForm.rec_intro" :isClear="isClear" @change="change"></editor-bar>
+          </el-form-item>
+
           <el-form-item class="btns">
             <el-button type="primary" @click="register">注册</el-button>
             <!-- <el-button type="info" @click="resetLoginForm">重置</el-button> -->
@@ -87,14 +90,14 @@
         </el-form>
       </div>
     </div>
-
-    
   </div>
 </template>
 <script>
+import EditorBar from '../components/wangEditor/wangEditor'
 export default {
   data() {
     return {
+      isClear:false,
       ruleForm: {
         username: "", //用户名
         password: "", //密码
@@ -136,19 +139,42 @@ export default {
         { value: "500人以上", label: "500人以上" }
       ],
       arr3: [
-        { value: "机关单位", label: "机关单位" },
-        { value: "科研设计单位", label: "科研设计单位" },
-        { value: "高等教育单位", label: "高等教育单位" },
-        { value: "中初教育单位", label: "中初教育单位" },
-        { value: "医疗卫生单位", label: "医疗卫生单位" },
-        { value: "其他事业单位", label: "其他事业单位" },
-        { value: "国有企业", label: "国有企业" },
-        { value: "三资企业", label: "三资企业" },
-        { value: "其他企业", label: "其他企业" },
-        { value: "部队", label: "部队" },
-        { value: "农村建制村", label: "农村建制村" },
-        { value: "城镇社区", label: "城镇社区" },
-        { value: "其他", label: "其他" }
+        { value: "农、林、牧、渔业 ", label: "农、林、牧、渔业 " },
+        { value: "采矿业", label: "采矿业" },
+        { value: "制造业", label: "制造业" },
+        {
+          value: "电力、热力、燃气及水的生产和供应业",
+          label: "电力、热力、燃气及水的生产和供应业"
+        },
+        { value: "建筑业", label: "建筑业" },
+        { value: "批发和零售业", label: "批发和零售业" },
+        { value: "交通运输、仓储和邮政业", label: "交通运输、仓储和邮政业" },
+        { value: "住宿和餐饮业", label: "住宿和餐饮业" },
+        {
+          value: "信息传输、软件和信息技术服务业",
+          label: "信息传输、软件和信息技术服务业"
+        },
+        { value: "金融业", label: "金融业" },
+        { value: "房地产业", label: "房地产业" },
+        { value: "租赁和商务服务业", label: "租赁和商务服务业" },
+        { value: "科学研究和技术服务业", label: "科学研究和技术服务业" },
+        {
+          value: "水利、环境和公共设施管理业",
+          label: "水利、环境和公共设施管理业"
+        },
+        {
+          value: "居民服务、修理和其他服务业",
+          label: "居民服务、修理和其他服务业"
+        },
+        { value: "教育", label: "教育" },
+        { value: "卫生和社会工作", label: "卫生和社会工作" },
+        { value: "文化、体育和娱乐业", label: "文化、体育和娱乐业" },
+        {
+          value: "公共管理、社会保障和社会组织",
+          label: "公共管理、社会保障和社会组织"
+        },
+        { value: "国际组织", label: "国际组织" },
+        { value: "军队", label: "军队" }
       ],
       fileList: []
     };
@@ -162,13 +188,16 @@ export default {
           .post("/xqhz/user/register", this.ruleForm)
           .then(res => {
             console.log(res);
-            this.$router.push({ path: "/login" });
+            // this.$router.push({ path: "/login" });
           })
           .catch(err => {
             console.log(err);
           });
       }
       console.log(this.ruleForm);
+    },
+    change(val){
+      this.rec_intro=val
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
@@ -186,6 +215,9 @@ export default {
     beforeRemove(file, fileList) {
       return this.$confirm(`确定移除 ${file.name}？`);
     }
+  },
+  components:{
+    EditorBar
   }
 };
 </script>
@@ -201,6 +233,7 @@ export default {
     box-shadow: 2px 2px 5px 0 #666;
     .set-note {
       margin-top: 30px;
+      padding: 0 20px;
     }
   }
 }

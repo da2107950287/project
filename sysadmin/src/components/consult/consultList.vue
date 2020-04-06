@@ -2,13 +2,21 @@
   <div>
     <div class="container">
       <div class="handle-box">
-        <el-button
+        <!-- <el-button
           type="primary"
           icon="el-icon-delete"
           class="handle-del mr10"
           @click="delAllSelection"
-        >批量删除</el-button>
-        <el-input v-model="status" placeholder="课程名" class="handle-input mr10"></el-input>
+        >批量删除</el-button>-->
+        <!-- <el-input v-model="status" placeholder="课程名" class="handle-input mr10"></el-input> -->
+        <el-select v-model="status" placeholder="请选择">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
         <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
       </div>
       <el-table
@@ -19,11 +27,11 @@
         header-cell-class-name="table-header"
         @selection-change="handleSelectionChange"
       >
-        <el-table-column type="selection" width="60" align="center"></el-table-column>
+        <!-- <el-table-column type="selection" width="60" align="center"></el-table-column> -->
         <el-table-column prop="cid" label="ID" width="150" align="center"></el-table-column>
         <el-table-column prop="question" label="问题" align="center" show-overflow-tooltip></el-table-column>
 
-        <el-table-column prop="status" label="状态" align="center"></el-table-column>
+        <el-table-column prop="statusText" label="状态" align="center"></el-table-column>
         <el-table-column label="操作" width="200" align="center">
           <template slot-scope="scope">
             <el-button
@@ -31,11 +39,11 @@
               icon="el-icon-view"
               @click="handleSee(scope.$index, scope.row)"
             >查看</el-button>
-            <el-button
+            <!-- <el-button
               type="text"
               icon="el-icon-edit"
               @click="handleEdit(scope.$index, scope.row)"
-            >编辑</el-button>
+            >编辑</el-button>-->
             <el-button
               type="text"
               icon="el-icon-delete"
@@ -60,11 +68,11 @@
     <!-- 编辑弹出框 -->
     <el-dialog title="回复咨询问题 " :visible.sync="editVisible" width="40%">
       <el-form :model="form" label-width="70px">
-          <el-form-item label="问题">
+        <el-form-item label="问题">
           <el-input v-model="form.question" type="textarea" readonly></el-input>
         </el-form-item>
         <el-form-item label="回复">
-          <el-input v-model="form.answer" type="textarea" show-word-limit maxlength =100></el-input>
+          <el-input v-model="form.answer" type="textarea" show-word-limit maxlength="100"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -80,7 +88,7 @@ export default {
   data() {
     return {
       data: [],
-      status: "",
+      status: -1,
       pageIndex: 1, //当前页码
       pageSize: 10, //每页的条数
       limitUpload: 1,
@@ -90,8 +98,20 @@ export default {
       editVisible: false,
       pageTotal: null,
       form: {},
-      idx: -1,
-      id: -1
+      options: [
+        {
+          value: -1,
+          label: "全部"
+        },
+        {
+          value: 0,
+          label: "待回复"
+        },
+        {
+          value: 1,
+          label: "已回复"
+        }
+      ]
     };
   },
   methods: {
@@ -147,7 +167,7 @@ export default {
     saveEdit() {
       this.editVisible = false;
       this.$axios
-        .post("/sysadmin/consult/editConsult", this.form.answer)
+        .post("/sysadmin/consult/editConsult", this.form)
         .then(res => {
           if (res.data.code == 0) {
             this.$message(res.data.msg);
@@ -159,7 +179,7 @@ export default {
     },
     // 查看个人信息详情
     // handleSee(index, row) {
-      
+
     // },
     // 分页导航
     handlePageChange(val) {
@@ -181,14 +201,20 @@ export default {
     // 处理数据
     getList() {
       // es6过滤得到满足搜索条件的展示数据list
-      let list = this.data.filter((item, index) =>
-        item.status.includes(this.status)
-      );
+      console.log(this.status);
+      let list = this.data.filter((item, index) => {
+        if (this.status === 0 || this.status === 1) {
+          return this.status === item.status;
+        } else {
+          return true;
+        }
+      });
+      console.log(list);
       list.forEach(item => {
         if (item.status == 0) {
-          item.status = "待回复";
+          this.$set(item, "statusText", "待回复");
         } else {
-          item.status = "已回复";
+          this.$set(item, "statusText", "已回复");
         }
       });
       this.tableData = list.filter(

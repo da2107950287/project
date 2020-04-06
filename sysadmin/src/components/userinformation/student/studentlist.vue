@@ -14,12 +14,12 @@
           <el-button size="small" type="primary">导入</el-button>
           <!-- <div slot="tip" class="el-upload__tip">只 能 上 传 xlsx / xls 文 件</div> -->
         </el-upload>
-        <el-button
+        <!-- <el-button
           type="primary"
           icon="el-icon-delete"
           class="handle-del mr10"
           @click="delAllSelection"
-        >批量删除</el-button>
+        >批量删除</el-button> -->
         <el-input v-model="sno" placeholder="学号" class="handle-input mr10"></el-input>
         <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
       </div>

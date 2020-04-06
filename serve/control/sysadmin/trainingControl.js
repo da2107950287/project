@@ -35,7 +35,25 @@ router.post('/editTraining',(req,res)=>{
     }
     })
 })
-
-
+router.post('/getTrainingInfo', (req, res) => {
+    let data={};
+    console.log(req.body)
+    data.tid=req.body.tid;
+    trainingmodel.getTrainingInfo(data,(result) => {
+        console.log(result[0])
+        res.json(result[0])
+    })
+})
+router.post('/modifyApprovalStatus',(req,res)=>{
+    let data=req.body;
+    trainingmodel.modifyApprovalStatus(data,(result)=>{
+    if(result.affectedRows){
+        res.json({code:0,msg:'编辑成功'})
+        
+    }else{
+        res.json({code:1,msg:'编辑失败，请重新编辑'})
+    }
+    })
+})
 
 module.exports = router;

@@ -26,7 +26,11 @@ router.post('/getConsultList', (req, res) => {
 // })
 //修改学生信息
 router.post('/editConsult',(req,res)=>{
-    let data=req.body;
+    let data={};
+    console.log(req.body)
+    data.cid=req.body.cid;
+    data.answer=req.body.answer;
+    data.status=1;
     consultmodel.editConsult(data,(result)=>{
         console.log(result)
     if(result.affectedRows){

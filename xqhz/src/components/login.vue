@@ -79,6 +79,7 @@ export default {
       this.$axios
         .post("/xqhz/user/login", this.loginForm)
         .then(res => {
+          // if(res.code)
           this.$message(res.msg);
           localStorage.setItem("token", res.data.token);
           localStorage.setItem("role", res.data.role);

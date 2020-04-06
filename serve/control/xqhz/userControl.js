@@ -21,9 +21,9 @@ router.post('/login', (req, res) => {
                     result[0].role = 'company'
                     token = jwt.createToken({ cid: result[0].cid })
                 } else if (result[0].status == 0) {
-                    res.json({ msg: '公司待审核' })
+                    res.json({code:1, msg: '请耐心等待管理员审核' })
                 } else {
-                    res.json({ mag: '公司审核不通过' })
+                    res.json({ msg: '公司审核不通过' })
                 }
             } else {
                 result[0].role = 'admin'

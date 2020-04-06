@@ -40,7 +40,7 @@ class studentModel extends dbBase{
     getEntryTrainList(info,callback){
         this.table='entry'
         console.log(999)
-        let sql =`select training.*,entry.entry_time from training,entry where sid = 11 and training.tid in (select tid from entry where sid=?)`;
+        let sql =`select training.*,entry.entry_time from training,entry where sid = ? and training.tid=entry.tid`;
         this.mydb.query(sql,[info.sid],(err,result)=>{
             console.log(result)
             // console.log(result[0].entry_time.replace(/T/g,'').replace(/\.[\d]{3}Z,''))
@@ -164,10 +164,16 @@ class studentModel extends dbBase{
         })
     }
     getTrainScore(data,callback){
-        
-        let sql =`select score.*,training.class_name from training,score where training.tid in (select tid from entry where sid=4) and sid=4 `;
+        console.log(data)
+        let sql =` select training.tid,training.class_name,training.class_teacher,score.score,entry.eid from training,score,entry where entry.eid=score.eid and entry.tid=training.tid and score.sid=? and score.status=1 `;
         this.mydb.query(sql,[data.sid],(err,result)=>{
-          callback(result)       
+          if(err){
+              callback(err)
+              console.log(err)
+          } else{
+            callback(result)  
+            console.log(result)
+          }    
         })
     }
 

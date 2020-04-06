@@ -38,9 +38,15 @@ class userModel extends dbBase {
         }
         let sql = `insert into company (${fieldstring.join(",")}) values (${field.join(",")})`;
         // this.test();
-        this.mydb.query(sql, data, (error, result) => {
+        this.mydb.query(sql, data, (err, result) => {
+            if(err){
+                callback(err);
+                console.log(err)
+            }else{
+
+             
             callback(result);
-            // this.end();
+            }
         })
     }
     // adminList(callback){        

@@ -73,5 +73,16 @@ router.post('/editCompany',(req,res)=>{
     })
 })
 
-
+router.post('/modifyApprovalStatus',(req,res)=>{
+    let data=req.body;
+    console.log(data.cid)
+    usermodel.modifyApprovalStatus(data,(result)=>{
+    if(result.affectedRows){
+        res.json({code:0,msg:'编辑成功'})
+        
+    }else{
+        res.json({code:1,msg:'编辑视频，请重新操作！'})
+    }
+    })
+})
 module.exports = router;

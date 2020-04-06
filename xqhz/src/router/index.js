@@ -11,13 +11,11 @@ let router = new Router({
 
     { path: '/login', name: 'login', meta: { title: '登录' }, component: () => import('@/components/login') },
     { path: '/register', name: 'register', meta: { title: '注册' }, component: () => import('@/components/register') },
-    { path: '/recruitmentInfo', name: 'recruitmentInfo', meta: { title: '招聘信息详情' }, component: () => import('@/components/recruitmentInfo') },
-    { path: '/trainingInfo', name: 'trainingInfo', meta: { title: '培训信息详情' }, component: () => import('@/components/trainingInfo') },
-    { path: '/trainingList', name: 'trainingList', meta: { title: '培训信息详情' }, component: () => import('@/components/trainingList') },
-   
+
+
     {
       path: '/', redirect: '/home', name: 'index', meta: { title: '' }, component: () => import('@/components/index'),
-       children: [
+      children: [
         { path: '/home', name: 'home', meta: { title: '首页' }, component: () => import('@/components/home') },
         //学生
         { path: '/manageResume', name: 'manageResume', meta: { title: '简历管理', role: ['student'] }, component: () => import('@/components/student/manageResume') },
@@ -30,6 +28,10 @@ let router = new Router({
         { path: '/recruitment', name: 'recruitment', meta: { title: '招聘信息', role: ['company'] }, component: () => import('@/components/company/recruitment') },
         { path: '/training', name: 'training', meta: { title: '培训信息', role: ['company'] }, component: () => import('@/components/company/training') },
         { path: '/resumelist', name: 'resumelist', meta: { title: '简历管理', role: ['company'] }, component: () => import('@/components/company/resumelist') },
+        { path: '/recruitmentInfo', name: 'recruitmentInfo', meta: { title: '招聘信息详情' }, component: () => import('@/components/recruitmentInfo') },
+        { path: '/trainingInfo', name: 'trainingInfo', meta: { title: '培训信息详情' }, component: () => import('@/components/trainingInfo') },
+        { path: '/trainingList', name: 'trainingList', meta: { title: '培训信息详情' }, component: () => import('@/components/trainingList') },
+
         //学校
         { path: '/profile', name: 'profile', meta: { title: '学校简介' }, component: () => import('@/components/school/profile') },
         //咨询

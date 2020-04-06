@@ -9,29 +9,36 @@
           <h4>账户信息</h4>
           <hr style="margin-bottom:25px" />
           <el-form-item label="用户名：" prop="username">
-            <el-input :disabled="disabled" clearable v-model="ruleForm.username"></el-input>
+            <!-- <div v-if="disabled==true">{{ruleForm.username}}</div> -->
+            <el-input  clearable v-model="ruleForm.username"></el-input>
           </el-form-item>
           <el-form-item label="密码：" prop="password">
-            <el-input :disabled="disabled" clearable v-model="ruleForm.password" type="password"></el-input>
+            <!-- <div v-if="disabled==true">{{ruleForm.password}}</div> -->
+            <el-input  clearable v-model="ruleForm.password" type="password"></el-input>
           </el-form-item>
           <h4>联系人信息</h4>
           <hr style="margin-bottom:25px" />
           <el-form-item label="联系人姓名：" prop="personal_username">
-            <el-input :disabled="disabled" clearable v-model="ruleForm.personal_username"></el-input>
+            <!-- <div v-if="disabled==true">{{ruleForm.personal_username}}</div> -->
+            <el-input  clearable v-model="ruleForm.personal_username"></el-input>
           </el-form-item>
           <el-form-item label="联系人电话：" prop="personal_tel">
-            <el-input :disabled="disabled" clearable v-model="ruleForm.personal_tel"></el-input>
+            <!-- <div v-if="disabled==true">{{ruleForm.personal_tel}}</div> -->
+            <el-input  clearable v-model="ruleForm.personal_tel"></el-input>
           </el-form-item>
           <el-form-item label="联系人邮箱：" prop="personal_email">
-            <el-input :disabled="disabled" clearable v-model="ruleForm.personal_email"></el-input>
+            <!-- <div v-if="disabled==true">{{ruleForm.personal_email}}</div> -->
+            <el-input  clearable v-model="ruleForm.personal_email"></el-input>
           </el-form-item>
           <h4>企业信息</h4>
           <hr style="margin-bottom:25px" />
           <el-form-item label="企业名称：" prop="rec_name">
-            <el-input :disabled="disabled" clearable v-model="ruleForm.rec_name"></el-input>
+            <!-- <div v-if="disabled==true">{{ruleForm.rec_name}}</div> -->
+            <el-input  clearable v-model="ruleForm.rec_name"></el-input>
           </el-form-item>
           <el-form-item label="企业性质：" prop="rec_kind">
-            <el-select :disabled="disabled" v-model="ruleForm.rec_kind" placeholder="请选择">
+            <!-- <div v-if="disabled==true">{{ruleForm.rec_kind}}</div> -->
+            <el-select  v-model="ruleForm.rec_kind" placeholder="请选择">
               <el-option
                 v-for="item in arr1"
                 :key="item.value"
@@ -41,7 +48,8 @@
             </el-select>
           </el-form-item>
           <el-form-item label="企业所在行业：" prop="rec_class">
-            <el-select :disabled="disabled" v-model="ruleForm.rec_class" placeholder="请选择">
+            <!-- <div v-if="disabled==true">{{ruleForm.rec_class}}</div> -->
+            <el-select  v-model="ruleForm.rec_class" placeholder="请选择">
               <el-option
                 v-for="item in arr2"
                 :key="item.value"
@@ -51,7 +59,8 @@
             </el-select>
           </el-form-item>
           <el-form-item label="企业规模：" prop="rec_scale">
-            <el-select :disabled="disabled" v-model=" ruleForm.rec_scale" placeholder="请选择">
+            <!-- <div v-if="disabled==true">{{ruleForm.rec_scale}}</div> -->
+            <el-select  v-model=" ruleForm.rec_scale" placeholder="请选择">
               <el-option
                 v-for="item in arr3"
                 :key="item.value"
@@ -61,27 +70,32 @@
             </el-select>
           </el-form-item>
           <el-form-item label="企业网站主页：" prop="rec_page">
-            <el-input :disabled="disabled" clearable v-model="ruleForm.rec_page"></el-input>
+            <!-- <div v-if="disabled==true">{{ruleForm.rec_page}}</div> -->
+            <el-input  clearable v-model="ruleForm.rec_page"></el-input>
           </el-form-item>
-          <el-form-item label="企业简介：" prop="rec_intro">
-            <el-input :disabled="disabled" clearable v-model="ruleForm.rec_intro"></el-input>
-          </el-form-item>
+          
           <el-form-item label="简历投递邮箱：" prop="rec_email">
-            <el-input :disabled="disabled" clearable v-model="ruleForm.rec_email"></el-input>
+            <!-- <div v-if="disabled==true">{{ruleForm.rec_email}}</div> -->
+            <el-input  clearable v-model="ruleForm.rec_email"></el-input>
           </el-form-item>
           <el-form-item label="企业联系电话：" prop="rec_tel">
-            <el-input :disabled="disabled" clearable v-model="ruleForm.rec_tel"></el-input>
+            <!-- <div v-if="disabled==true">{{ruleForm.rec_tel}}</div> -->
+
+            <el-input  clearable v-model="ruleForm.rec_tel"></el-input>
           </el-form-item>
 
           <el-form-item label="企业地址：" prop="rec_address">
-            <el-input :disabled="disabled" clearable v-model="ruleForm.rec_address"></el-input>
+            <!-- <div v-if="disabled==true">{{ruleForm.rec_address}}</div> -->
+
+            <el-input  clearable v-model="ruleForm.rec_address"></el-input>
           </el-form-item>
-          <!-- <el-form-item label="企业地址：" prop="rec_address">
-          <div contenteditable="true">这里可以编辑</div>
-          </el-form-item>-->
+          <el-form-item label="企业简介：" prop="rec_intro">
+            <!-- <div v-html="ruleForm.rec_intro" v-if="disabled==true"></div> -->
+            <editor-bar v-model="ruleForm.rec_intro" :isClear="isClear" @change="change"></editor-bar> 
+          </el-form-item>
           <el-form-item class="btns">
-            <el-button type="primary" @click="edit">编辑</el-button>
-            <el-button type="info" @click="submit">保存</el-button>
+           
+            <el-button type="danger" @click="submit">确定</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -89,7 +103,9 @@
   </div>
 </template>
 <script>
+import EditorBar from "../wangEditor/wangEditor";
 export default {
+  
   data() {
     return {
       ruleForm: {
@@ -160,23 +176,30 @@ export default {
         .post("/xqhz/company/editCoInfo", this.ruleForm)
         .then(res => {
           this.$message(res.msg)
+          this.disabled=true;
         })
         .catch(err => {
           console.log(err);
         });
-    }
+    },
+    change(val) {
+      this.rec_intro = val;
+      console.log(val);
+    },
   },
   created() {
     this.$axios.post("/xqhz/company/getCoInfo").then(res => {
       this.ruleForm = res.data;
       console.log(res.data);
     });
+  },components:{
+    EditorBar
   }
 };
 </script>
 <style lang='scss' scoped>
 .register {
-  margin: 50px 150px;
+  margin: 50px 200px;
   // margin:0 auto;
   // border-radius: 1px solid #000;
   background-color: #fff;
@@ -184,6 +207,9 @@ export default {
     margin: 0 auto;
     padding: 10px 50px;
     box-shadow: 2px 2px 5px 0 #666;
+    .title{
+      text-align: center;
+    }
     .set-note {
       margin-top: 30px;
     }

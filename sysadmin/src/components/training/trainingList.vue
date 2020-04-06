@@ -1,6 +1,8 @@
 <template>
   <div>
     <div class="container">
+      <h3>培训信息列表</h3>
+      <hr style="margin-bottom:25px"/>
       <div class="handle-box">
         <el-button
           type="primary"
@@ -8,6 +10,14 @@
           class="handle-del mr10"
           @click="delAllSelection"
         >批量删除</el-button>
+        <el-select v-model="status" placeholder="请选择">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
         <el-input v-model="class_name" placeholder="课程名" class="handle-input mr10"></el-input>
         <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
       </div>
@@ -20,24 +30,19 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="60" align="center"></el-table-column>
-        <el-table-column prop="tid" label="ID" align="center"></el-table-column>
+        <el-table-column prop="tid" label="ID" width="100" align="center"></el-table-column>
         <el-table-column prop="class_name" label="课程名" align="center"></el-table-column>
         <el-table-column prop="class_teacher" label="培训讲师" align="center"></el-table-column>
-        <el-table-column prop="class_time" label="培训时间" align="center"></el-table-column>
-        <el-table-column prop="class_place" label="培训地点" align="center"></el-table-column>
-        <el-table-column prop="status" label="状态" align="center"></el-table-column>
+
+        <el-table-column prop="statusText" label="状态" align="center"></el-table-column>
         <el-table-column label="操作" width="200" align="center">
           <template slot-scope="scope">
-            <el-button
-              type="text"
-              icon="el-icon-view"
-              @click="handleSee(scope.$index, scope.row)"
-            >查看</el-button>
-            <el-button
+            <el-button type="text" icon="el-icon-view" @click="handleSee(scope.row.tid)">查看</el-button>
+            <!-- <el-button
               type="text"
               icon="el-icon-edit"
               @click="handleEdit(scope.$index, scope.row)"
-            >编辑</el-button>
+            >编辑</el-button>-->
             <el-button
               type="text"
               icon="el-icon-delete"
@@ -80,6 +85,7 @@ export default {
     return {
       data: [],
       class_name: "",
+      status: -1,
       pageIndex: 1, //当前页码
       pageSize: 10, //每页的条数
       limitUpload: 1,
@@ -90,7 +96,25 @@ export default {
       pageTotal: null,
       form: {},
       idx: -1,
-      id: -1
+      id: -1,
+      options: [
+        {
+          value: -1,
+          label: "全部"
+        },
+        {
+          value: 0,
+          label: "未审核"
+        },
+        {
+          value: 1,
+          label: "审核已通过"
+        },
+        {
+          value: 2,
+          label: "审核未通过"
+        }
+      ]
     };
   },
   methods: {
@@ -109,11 +133,10 @@ export default {
           this.$axios
             .post("/sysadmin/training/delTraining", { tid: row.tid })
             .then(res => {
-              if(res.data.code==0){
-                  this.tableData.splice(index, 1);
-              this.$message.success(res.data.msg);
+              if (res.data.code == 0) {
+                this.tableData.splice(index, 1);
+                this.$message.success(res.data.msg);
               }
-              
             })
             .catch(err => {
               console.log(err);
@@ -158,9 +181,8 @@ export default {
         });
     },
     // 查看个人信息详情
-    handleSee(index, row) {
-      console.log(row);
-      this.$router.push({ path: "/trainingInfo", query: { row } });
+    handleSee(tid) {
+      this.$router.push({ path: "/trainingInfo", query: { tid } });
     },
     // 分页导航
     handlePageChange(val) {
@@ -182,10 +204,24 @@ export default {
     // 处理数据
     getList() {
       // es6过滤得到满足搜索条件的展示数据list
-      let list = this.data.filter((item, index) =>
-        item.class_name.includes(this.class_name)
-      );
-
+      console.log(this.status);
+      let list = this.data.filter((item, index) => {
+        if (this.status === 0 || this.status === 1 || this.status === 2) {
+          
+          return this.status === item.status&&item.class_name.includes(this.class_name);
+        } else {
+          return true&&item.class_name.includes(this.class_name);
+        }
+      });
+      list.forEach((item, index) => {
+        if (item.status == 0) {
+          this.$set(item, "statusText", "待审核");
+        } else if (item.status == 1) {
+          this.$set(item, "statusText", "审核已通过");
+        } else {
+          this.$set(item, "statusText", "审核未通过");
+        }
+      });
       this.tableData = list.filter(
         (item, index) =>
           index < this.pageIndex * this.pageSize &&

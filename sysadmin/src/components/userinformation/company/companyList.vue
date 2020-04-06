@@ -2,12 +2,12 @@
   <div>
     <div class="container">
       <div class="handle-box">
-        <el-button
+        <!-- <el-button
           type="primary"
           icon="el-icon-delete"
           class="handle-del mr10"
           @click="delAllSelection"
-        >批量删除</el-button>
+        >批量删除</el-button> -->
         <el-input v-model="rec_name" placeholder="企业名称" class="handle-input mr10"></el-input>
         <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
       </div>
@@ -20,11 +20,16 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="60" align="center"></el-table-column>
-        <el-table-column prop="cid" label="ID" align="center"></el-table-column>
+        <el-table-column prop="cid" label="ID" width="100" align="center"></el-table-column>
         <el-table-column prop="rec_name" label="企业名称" align="center"></el-table-column>
+        <!-- <el-table-column prop="rec_page" label="企业网站首页" align="center"></el-table-column>  -->
+        <el-table-column label="企业网站首页" align="center">
+          <template slot-scope="scope">
+            <a :href="scope.row.rec_page">{{scope.row.rec_page}}</a>
+          </template>
+        </el-table-column>
         <el-table-column prop="rec_tel" label="企业联系电话" align="center"></el-table-column>
         <el-table-column prop="rec_address" label="企业地址" align="center"></el-table-column>
-        <el-table-column prop="rec_page" label="企业网站首页" align="center"></el-table-column>  
         <el-table-column prop="status" label="状态" align="center"></el-table-column>
         <el-table-column label="操作" width="200" align="center">
           <template slot-scope="scope">
@@ -33,11 +38,11 @@
               icon="el-icon-view"
               @click="handleSee(scope.$index, scope.row)"
             >查看</el-button>
-            <el-button
+            <!-- <el-button
               type="text"
               icon="el-icon-edit"
               @click="handleEdit(scope.$index, scope.row)"
-            >编辑</el-button>
+            >编辑</el-button> -->
             <el-button
               type="text"
               icon="el-icon-delete"
@@ -107,9 +112,8 @@ export default {
       })
         .then(() => {
           this.$axios
-            .post("/sysadmin/user/delCompany", { cid:row.cid })
+            .post("/sysadmin/user/delCompany", { cid: row.cid })
             .then(res => {
-             
               this.tableData.splice(index, 1);
               this.$message.success("删除成功");
             })
@@ -158,8 +162,7 @@ export default {
     },
     // 查看个人信息详情
     handleSee(index, row) {
-      console.log(row);
-      this.$router.push({ path: "/companyInfo", query: {cid:row.cid } });
+      this.$router.push({ path: "/companyInfo", query: { cid: row.cid } });
     },
     // 分页导航
     handlePageChange(val) {
@@ -181,8 +184,18 @@ export default {
     // 处理数据
     getList() {
       // es6过滤得到满足搜索条件的展示数据list
-      let list = this.data.filter((item, index) => item.rec_name.includes(this.rec_name));
-
+      let list = this.data.filter((item, index) =>
+        item.rec_name.includes(this.rec_name)
+      );
+      list.forEach((item, index) => {
+        if (item.status == 0) {
+          item.status = "待审核";
+        } else if (item.status == 1) {
+          item.status = "审核已通过";
+        } else {
+          item.status = "审核未通过";
+        }
+      });
       this.tableData = list.filter(
         (item, index) =>
           index < this.pageIndex * this.pageSize &&
