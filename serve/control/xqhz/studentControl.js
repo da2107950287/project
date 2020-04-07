@@ -100,8 +100,32 @@ router.post('/getTrainScore', (req, res) => {
 
 
 
-//测试
-router.post('/test',(req,res)=>{
-    
+//获取简历信息
+router.post('/getSelfResume',(req,res)=>{
+    jwt.checkToken(req.headers.authorization).then(res1 => {
+        //token验证成功
+        let data={};
+        data.sid=res1.sid
+        console.log(data)
+        studentmodel.getSelfResume(data, (result) => {
+            res.json({ code: 0, data:result[0] })
+        })
+    }).catch(err => {
+        res.json({ err: -1, msg: 'token非法' });
+    })
+})
+// delSelfResume
+//删除简历
+router.post('/delSelfResume',(req,res)=>{
+    jwt.checkToken(req.headers.authorization).then(res1 => {
+        //token验证成功
+        let data={};
+        data.sid=res1.sid
+        studentmodel.delSelfResume(data, (result) => {
+            res.json({ code: 0, msg:'操作成功' })
+        })
+    }).catch(err => {
+        res.json({ err: -1, msg: 'token非法' });
+    })
 })
 module.exports = router;

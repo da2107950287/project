@@ -37,9 +37,11 @@
           class="upload-demo"
           drag
           ref="upload"
-          action="http://localhost:81/xqhz/upload/"
-          multiple
+          action="http://localhost:81/xqhz/upload/insertSelfResume"
+          :show-file-list="false"
           :data="token"
+          :on-success="handleSucess"
+          :before-upload="beforeAvatarUpload"
         >
           <i class="el-icon-upload"></i>
           <div class="el-upload__text">
@@ -48,28 +50,29 @@
 
           <!-- <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div> -->
         </el-upload>
-        <div class="del-resume" @click="delResume">删除简历</div>
+        <div class="del-resume" @click="delSelfResume">删除简历</div>
       </div>
-      <div v-show="fileType === 'pdf'">
+      <div v-show="fileType === 'pdf'&&src!=''">
         <pdf
           class="pdf"
-          src="http://localhost:81/uploads/1586179127010.pdf"
+          :src="src"
           :page="currentPage"
           @num-pages="pageCount=$event"
           @page-loaded="currentPage=$event"
           @loaded="loadPdfHandler"
         ></pdf>
         <p class="arrow">
-          <span @click="changePdfPage(0)" class="turn" :class="{grey: currentPage==1}">Preview</span>
+          <span @click="changePdfPage(0)" class="turn" :class="{grey: currentPage==1}">上一页</span>
           {{currentPage}} / {{pageCount}}
           <span
             @click="changePdfPage(1)"
             class="turn"
             :class="{grey: currentPage==pageCount}"
-          >Next</span>
+          >下一页</span>
         </p>
         <!-- // 自己引入就可以使用,这里我的需求是做了分页功能,如果不需要分页功能,只要src就可以了 -->
       </div>
+      <div v-show="src==''" class="none">暂无简历，请上传简历</div>
     </div>
     <div class="resume-list" v-if="isShow==2">
       <div>
@@ -122,25 +125,36 @@ export default {
       data: [],
       tableData: [],
       filename: "",
-    
+      rec_position:""
     };
   },
-computed:{
-  token(){
-    if (localStorage.getItem("token")) {
-     
-     return {'token':localStorage.getItem("token")};
-      // console.log(localStorage.getItem("token"))
+  computed: {
+    token() {
+      if (localStorage.getItem("token")) {
+        return { token: localStorage.getItem("token") };
+      }
     }
-  }
-},
+  },
   methods: {
     show(type) {
       this.isShow = type;
+      if (type == 1) {
+        this.getSelfResume();
+      } else {
+        this.getSelfDeliveryList();
+      }
     },
-delResume(){
-
-},
+    delSelfResume() {
+      this.$axios
+        .post("/xqhz/student/delSelfResume", {})
+        .then(res => {
+          this.$message(res.msg);
+          window.location.reload();
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
     // 分页导航
     handlePageChange(val) {
       this.pageIndex = val;
@@ -164,32 +178,19 @@ delResume(){
       let list = this.data.filter((item, index) =>
         item.rec_position.includes(this.rec_position)
       );
-
+      list.forEach((item,index)=>{
+        item.delivery=item.delivery.replace(/T/g,' ').replace(/\.[\d]{3}Z/,'')
+      })
       this.tableData = list.filter(
         (item, index) =>
           index < this.pageIndex * this.pageSize &&
           index >= this.pageSize * (this.pageIndex - 1)
       );
+      console.log(this.tableData)
       this.pageTotal = list.length;
-    },
-    getProvince(data) {
-      this.newInfo.province = data.value;
-    },
-    getCity(data) {
-      this.newInfo.city = data.value;
     },
     handleEdit() {
       this.editVisible = true;
-    },
-    handleFile(e) {
-      let $target = e.target || e.srcElement;
-      let file = $target.files[0];
-      var reader = new FileReader();
-      reader.onload = data => {
-        let res = data.target || data.srcElement;
-        this.avatar = res.result;
-      };
-      reader.readAsDataURL(file);
     },
 
     changePdfPage(val) {
@@ -221,17 +222,18 @@ delResume(){
     },
     //图片上传前
     beforeAvatarUpload(file) {
-      // 	const isJPG = (file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png');
-      // 	const isLt2M = file.size / 1024 / 1024 < 10;
-      // 	if (!isJPG || !isLt2M) {
-      // 		this.$notify({
-      // 			title: "提示",
-      // 			message: '只能上传 jpg/jpeg/png文件，且不超过10M',
-      // 			type: "warning",
-      // 			duration: 3000
-      // 		});
-      // 	}
-      // 	return isJPG && isLt2M;
+      console.log(file);
+      const isJPG = file.type === "application/pdf";
+      const isLt2M = file.size / 1024 / 1024 < 10;
+      if (!isJPG || !isLt2M) {
+        this.$notify({
+          title: "提示",
+          message: "只能上传 pdf文件，且不超过10M",
+          type: "warning",
+          duration: 3000
+        });
+      }
+      return isJPG && isLt2M;
     },
     //上传成功过后
     handleSucess(response, file, fileList) {
@@ -240,11 +242,12 @@ delResume(){
       if (response.code == 0) {
         let data = response.data;
 
-        let file = {};
-        file.name = data.name;
-        file.url = self.$store.state.imgurlhttp + data.url;
-        self.fileList[0] = file;
-        this.src = "http://localhost:81/uploads/" + data.url;
+        // let file = {};
+        // file.name = data.name;
+        // file.url = self.$store.state.imgurlhttp + data.url;
+        // self.fileList[0] = file;
+        this.src = data.url;
+        console.log(this.src);
         return;
       } else {
         this.$notify({
@@ -264,7 +267,20 @@ delResume(){
         type: "warning",
         duration: 2000
       });
+    },
+    getSelfResume() {
+      this.$axios
+        .post("/xqhz/student/getSelfResume", {})
+        .then(res => {
+          this.src = res.data.url;
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
+  },
+  created() {
+    this.getSelfResume();
   },
   components: {
     pdf
@@ -299,6 +315,7 @@ li {
     margin: 0 auto;
     padding: 10px 50px;
     width: 100%;
+    min-height: 300px;
     background-color: #fff;
     .my-resume {
       margin: 0 auto;
@@ -314,6 +331,7 @@ li {
       margin: 20px 0;
     }
     .handle {
+      margin-bottom: 30px;
       display: flex;
       .upload-demo {
         margin-right: 20px;
@@ -339,14 +357,23 @@ li {
         width: 56px;
         border-radius: 2px;
         font-size: 14px;
-           border: 1px dashed #d9d9d9;
+        border: 1px dashed #d9d9d9;
         color: #409eff;
+        cursor: pointer;
       }
     }
 
     .pdf {
       border: 1px dashed #b4bcc9;
-      margin-top: 20px;
+      // margin-top: 20px;
+    }
+    .none {
+      border: 1px dashed #b4bcc9;
+      height: 200px;
+      width: 200px;
+      line-height: 200px;
+      text-align: center;
+      color: #ccc;
     }
   }
   .resume-list {

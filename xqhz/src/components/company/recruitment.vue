@@ -231,8 +231,10 @@ export default {
         item.rec_position.includes(this.postion)
       );
       list.forEach((item,index)=>{
-        if(item.status){
-
+        if(item.delivery_time){
+          item.delivery_time=item.delivery_time.replace(/T/g,' ').replace(/\.[\d]{3}Z/,'')
+        }if(item.rec_time){
+          item.rec_time=item.rec_time.replace(/T/g,' ').replace(/\.[\d]{3}Z/,'')
         }
       })
       this.tableData = list.filter(

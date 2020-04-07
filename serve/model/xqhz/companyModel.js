@@ -168,7 +168,8 @@ class companyModel extends dbBase {
         })
     }
     getDeliveryRecordList(data,callback){
-        let sql = `select (select recruitment.rec_position from recruitment where delivery.rid=recruitment.rid) AS rec_position,delivery.delivery_time,student.username from student,delivery
+        let sql = `select (select recruitment.rec_position from recruitment where delivery.rid=recruitment.rid) AS rec_position,
+        delivery.delivery_time,student.username from student,delivery
          where (delivery.sid=student.sid and delivery.rid in (select rid from recruitment where cid = ?))`;
         this.mydb.query(sql,[data],(err, result) => {
             console.log(result)
