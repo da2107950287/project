@@ -39,10 +39,8 @@
             <editor-bar v-model="ruleForm.rec_content" :isClear="isClear" @change="change"></editor-bar>
           </el-form-item>
           <el-form-item class="btns">
-         
             <el-button v-if="isPost==true" type="danger" @click="postRecruitment">发布</el-button>
             <el-button v-else type="danger" @click="postRecruitment">修改</el-button>
-          
           </el-form-item>
         </el-form>
       </div>
@@ -63,7 +61,6 @@
             ref="multipleTable"
             header-cell-class-name="table-header"
           >
-
             <el-table-column label="职位名称" align="center" show-overflow-tooltip>
               <template slot-scope="scope">
                 <div @click="getTrainingInfo(scope.row)" class="active">{{scope.row.rec_position}}</div>
@@ -71,23 +68,19 @@
             </el-table-column>
             <el-table-column prop="rec_time" label="招聘时间" align="center"></el-table-column>
             <el-table-column prop="rec_place_name" label="招聘地点" align="center"></el-table-column>
-            <el-table-column prop="status" label="状态" align="center" ></el-table-column>
-            
-               <el-table-column label="操作" width="200" align="center">
-          <template slot-scope="scope">
-            <el-button
-              type="text"
-              icon="el-icon-view"
-              @click="handleSee( scope.row)"
-            >查看</el-button>
-            <el-button
-              type="text"
-              icon="el-icon-delete"
-              class="red"
-              @click="handleDelete(scope.$index, scope.row)"
-            >删除</el-button>
-          </template>
-        </el-table-column>
+            <el-table-column prop="status" label="状态" align="center"></el-table-column>
+
+            <el-table-column label="操作" width="200" align="center">
+              <template slot-scope="scope">
+                <el-button type="text" icon="el-icon-view" @click="handleSee( scope.row)">查看</el-button>
+                <el-button
+                  type="text"
+                  icon="el-icon-delete"
+                  class="red"
+                  @click="handleDelete(scope.$index, scope.row)"
+                >删除</el-button>
+              </template>
+            </el-table-column>
           </el-table>
           <div class="pagination">
             <el-pagination
@@ -105,7 +98,7 @@
     <div class="resume-list" v-if="isShow==3">
       <div class="header">
         <h3>培训投递列表</h3>
-       
+
         <div class="handle-box">
           <!-- <el-button
           type="primary"
@@ -134,6 +127,12 @@
             </el-table-column>
             <!-- <el-table-column prop="" label="" align="center"></el-table-column> -->
             <el-table-column prop="username" label="投递人" align="center"></el-table-column>
+            <!-- <el-table-column prop="filename" label="简历" align="center"></el-table-column> -->
+            <el-table-column label="简历" align="center">
+              <template slot-scope="scope">
+                <div @click="showResume(scope.row.url)" class="active">{{scope.row.filename}}</div>
+              </template>
+            </el-table-column>
             <el-table-column prop="delivery_time" label="投递时间" align="center"></el-table-column>
             <!-- <el-table-column prop="status" label="状态" align="center"></el-table-column> -->
             <!-- <el-table-column prop="class_introduce" label="课程介绍" align="center"></el-table-column> -->
@@ -177,26 +176,28 @@ export default {
       pageSize: 10,
       pageTotal: 0,
       tableData: [],
-      isClear:false,
+      isClear: false,
       data: [],
-      isPost:true,
+      isPost: true
     };
   },
   methods: {
     show(type) {
       this.isShow = type;
-      if(type==1){
-        this.ruleForm={};
-        this.isPost=true;
-      }else
-      if(type==2){
-        this.getSelfRecruitmentList()
-      }else if(type==3){
+      if (type == 1) {
+        this.ruleForm = {};
+        this.isPost = true;
+      } else if (type == 2) {
+        this.getSelfRecruitmentList();
+      } else if (type == 3) {
         this.getDeliveryRecordList();
       }
     },
     change(val) {
       console.log(val);
+    },
+    showResume(url) {
+      this.$router.push({ path: "/showResume", query: { url: url } });
     },
     edit() {
       this.disabled = false;
@@ -226,17 +227,22 @@ export default {
         });
     },
     getList() {
-      this.tableData=[];
+      this.tableData = [];
       let list = this.data.filter((item, index) =>
         item.rec_position.includes(this.postion)
       );
-      list.forEach((item,index)=>{
-        if(item.delivery_time){
-          item.delivery_time=item.delivery_time.replace(/T/g,' ').replace(/\.[\d]{3}Z/,'')
-        }if(item.rec_time){
-          item.rec_time=item.rec_time.replace(/T/g,' ').replace(/\.[\d]{3}Z/,'')
+      list.forEach((item, index) => {
+        if (item.delivery_time) {
+          item.delivery_time = item.delivery_time
+            .replace(/T/g, " ")
+            .replace(/\.[\d]{3}Z/, "");
         }
-      })
+        if (item.rec_time) {
+          item.rec_time = item.rec_time
+            .replace(/T/g, " ")
+            .replace(/\.[\d]{3}Z/, "");
+        }
+      });
       this.tableData = list.filter(
         (item, index) =>
           index < this.pageIndex * this.pageSize &&
@@ -249,7 +255,7 @@ export default {
       this.$axios
         .post("/xqhz/company/getDeliveryRecordList", {})
         .then(res => {
-          this.data=res.data;
+          this.data = res.data;
           this.getList();
         })
         .catch(err => {
@@ -261,16 +267,15 @@ export default {
       this.pageIndex = val;
       this.getList();
     },
-     handleSearch() {
+    handleSearch() {
       this.pageIndex = 1;
       this.getList();
     },
-    handleSee(data){
-       this.ruleForm=data;
-      this.isShow=1;
-      this.isPost=false;
-    },
-    
+    handleSee(data) {
+      this.ruleForm = data;
+      this.isShow = 1;
+      this.isPost = false;
+    }
   },
   created() {
     this.getSelfRecruitmentList();
@@ -287,7 +292,7 @@ export default {
   // width: 100%;
   .aside {
     margin-right: 30px;
-  
+
     div {
       padding: 5px;
       padding-left: 1rem;
@@ -328,13 +333,13 @@ export default {
 .el-input {
   width: 300px;
 }
- .el-input__inner,
-    .el-input {
-      width: 300px;
-      height: 35px;
-      display: inline-block;
-    }
-   
+.el-input__inner,
+.el-input {
+  width: 300px;
+  height: 35px;
+  display: inline-block;
+}
+
 .handle-input {
   width: 300px;
   display: inline-block;

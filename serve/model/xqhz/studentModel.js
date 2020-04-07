@@ -50,13 +50,19 @@ class studentModel extends dbBase {
     }
     getSelfDeliveryList(info, callback) {
         this.table = 'delivery'
-        console.log(999)
-        let sql = `select  recruitment.rec_position,delivery.delivery_time,
-        company.rec_name from company,delivery,recruitment 
+        console.log(info.sid)
+        let sql = `select  recruitment.rec_position,recruitment.rid,delivery.delivery_time,
+        company.rec_name from company,delivery,recruitment
         where delivery.rid=recruitment.rid and 
-        company.cid=recruitment.cid and sid=? `;
-        this.mydb.query(sql, [info.sid], (err, result) => {
-            callback(result)
+        company.cid=recruitment.cid and delivery.sid = ? and resume.sid =?`;
+        this.mydb.query(sql, [info.sid,info.sid], (err, result) => {
+            console.log(sql)
+            if(err){
+                console.log(err)
+            }else{
+                callback(result)
+                console.log(result)
+            }
         })
     }
 

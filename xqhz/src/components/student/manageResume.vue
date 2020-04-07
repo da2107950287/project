@@ -88,11 +88,17 @@
           >
             <el-table-column label="投递职位" align="center">
               <template slot-scope="scope">
-                <div @click="getTrainingInfo(scope.row)" class="active">{{scope.row.rec_position}}</div>
+                <div
+                  @click="getRecruitmentInfo(scope.row.rid)"
+                  class="active"
+                >{{scope.row.rec_position}}</div>
               </template>
             </el-table-column>
+
             <el-table-column prop="rec_name" label="投递公司" align="center"></el-table-column>
             <el-table-column prop="delivery_time" label="投递时间" align="center"></el-table-column>
+
+            
           </el-table>
           <div class="pagination">
             <el-pagination
@@ -125,7 +131,7 @@ export default {
       data: [],
       tableData: [],
       filename: "",
-      rec_position:""
+      rec_position: ""
     };
   },
   computed: {
@@ -173,26 +179,35 @@ export default {
           console.log(err);
         });
     },
+    getResumeInfo() {},
     // 处理数据
     getList() {
       let list = this.data.filter((item, index) =>
         item.rec_position.includes(this.rec_position)
       );
-      list.forEach((item,index)=>{
-        item.delivery=item.delivery.replace(/T/g,' ').replace(/\.[\d]{3}Z/,'')
-      })
+      list.forEach((item, index) => {
+        item.delivery_time = item.delivery_time
+          .replace(/T/g, " ")
+          .replace(/\.[\d]{3}Z/, "");
+      });
       this.tableData = list.filter(
         (item, index) =>
           index < this.pageIndex * this.pageSize &&
           index >= this.pageSize * (this.pageIndex - 1)
       );
-      console.log(this.tableData)
+      console.log(this.tableData);
       this.pageTotal = list.length;
     },
     handleEdit() {
       this.editVisible = true;
     },
-
+    getRecruitmentInfo(rid) {
+        console.log(rid)
+      this.$router.push({
+        path: "/recruitmentInfo",
+        query: { rid: rid }
+      });
+    },
     changePdfPage(val) {
       // console.log(val)
       if (val === 0 && this.currentPage > 1) {

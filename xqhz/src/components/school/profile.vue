@@ -1,6 +1,6 @@
 <template>
   <div class="s-profile">
-    <el-col :span="12" class="aside">
+    <!-- <el-col :span="12" class="aside">
       <el-menu default-active="1" class="el-menu-vertical-demo">
         <el-menu-item
           :index="item.index.toString()"
@@ -11,7 +11,12 @@
           <span slot="title">{{item.title}}</span>
         </el-menu-item>
       </el-menu>
-    </el-col>
+    </el-col> -->
+    <div class="aside">
+      <div @click="show(1)">学校简介</div>
+      <div @click="show(2)">历史沿改</div>
+      <div @click="show(3)">治理架构</div>
+    </div>
     <div class="content" v-if="selected==1">
       <h3>攀枝花学院简介</h3>
       <p>攀枝花学院是教育部布点在川西南、滇西北唯一一所以工为主的综合性普通本科院校。学校坐落于著名的钒钛之都、阳光花城、康养胜地、四川南向开放门户、全国唯一以花命名的优秀旅游城市--攀枝花市。</p>
@@ -63,7 +68,7 @@ export default {
     };
   },
   methods: {
-    select(index) {
+    show(index) {
       this.selected = index;
     }
   }
@@ -77,9 +82,25 @@ export default {
   display: block;
 }
 .s-profile {
+  margin: 50px 150px;
   display: flex;
   justify-content: space-between;
   position: relative;
+  .aside {
+    margin-right: 30px;
+
+    div {
+      padding: 5px;
+      padding-left: 1rem;
+      height: 30px;
+      line-height: 30px;
+      margin-top: 4px;
+      background-color: #fff;
+      min-width: 150px;
+      cursor: pointer;
+      color: #505459;
+    }
+  }
 }
 .el-col-12 {
   width: 200px;
@@ -94,8 +115,11 @@ export default {
   background-color: #ccc;
 }
 .content {
-  width: calc(100% - 150px);
-  padding: 0 120px;
+ margin: 0 auto;
+    padding: 0 50px;
+    // box-shadow: 2px 2px 5px 0 #666;
+    // background-color: #fff;
+    width: 100%;
   h3 {
     text-align: center;
   }

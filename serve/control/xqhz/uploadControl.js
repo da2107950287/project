@@ -43,11 +43,13 @@ router.post("/insertSelfResume", function (req, res) {
             data1.url = "http://localhost:81/uploads/" + avatarName;
             datas.data = data1
             console.log(newPath)
+            console.log(filename)
             // router.post('/insertSelfResume', (req, res) => {
                 // console.log(req1.sid)
             let data = {};
             data.sid = res1.sid;
-            data.url = data1.url
+            data.url = data1.url;
+            data.filename=filename;
             console.log(data, 9999999)
             studentmodel.insertSelfResume(data, (result) => {
                 // res.json({ code: 0, msg: '操作成功' })

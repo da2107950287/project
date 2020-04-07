@@ -29,6 +29,10 @@ let router = new Router({
         { path: '/training', name: 'training', meta: { title: '培训信息', role: ['company'] }, component: () => import('@/components/company/training') },
         { path: '/resumelist', name: 'resumelist', meta: { title: '简历管理', role: ['company'] }, component: () => import('@/components/company/resumelist') },
         { path: '/recruitmentInfo', name: 'recruitmentInfo', meta: { title: '招聘信息详情' }, component: () => import('@/components/recruitmentInfo') },
+        { path: '/recruitmentList', name: 'recruitmentList', meta: { title: '培训信息详情' }, component: () => import('@/components/recruitmentList') },
+        { path: '/showResume', name: 'showResume', meta: { title: '培训信息详情' }, component: () => import('@/components/showResume') },
+        
+        
         { path: '/trainingInfo', name: 'trainingInfo', meta: { title: '培训信息详情' }, component: () => import('@/components/trainingInfo') },
         { path: '/trainingList', name: 'trainingList', meta: { title: '培训信息详情' }, component: () => import('@/components/trainingList') },
 
