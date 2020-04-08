@@ -128,8 +128,9 @@ export default {
       })
         .then(() => {
           this.$axios
-            .post("/sysadmin/training/delTraining", { tid: row.tid })
+            .post("/sysadmin/consult/delConsult", { cid: row.cid })
             .then(res => {
+              console.log(res)
               if (res.data.code == 0) {
                 this.tableData.splice(index, 1);
                 this.$message.success(res.data.msg);

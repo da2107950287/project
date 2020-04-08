@@ -2,7 +2,7 @@
   <div>
     <div class="container">
       <div class="handle-box">
-        <el-input v-model="aid" placeholder="ID" class="handle-input mr10"></el-input>
+        <el-input v-model="username" placeholder="ID" class="handle-input mr10"></el-input>
         <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
       </div>
       <el-table
@@ -70,7 +70,7 @@ export default {
   data() {
     return {
       data: [],
-      aid: "",
+      username: "",
       pageIndex: 1, //当前页码
       pageSize: 10, //每页的条数
       limitUpload: 1,
@@ -160,11 +160,11 @@ export default {
       this.getList();
     },
     //获取管理员列表
-    getData() {
+    getAdminList() {
       this.$axios
         .post("/sysadmin/user/getAdminList", {})
         .then(res => {
-          this.data = res.data;
+          this.data = res.data.data;
           console.log(this.data)
           this.getList();
         })
@@ -175,18 +175,19 @@ export default {
     // 处理数据
     getList() {
       // es6过滤得到满足搜索条件的展示数据list
-      let list = this.data.filter((item, index) => item.aid.includes(this.aid));
+      let list = this.data.filter((item, index) => item.username.includes(this.username));
 
       this.tableData = list.filter(
         (item, index) =>
           index < this.pageIndex * this.pageSize &&
           index >= this.pageSize * (this.pageIndex - 1)
       );
+      console.log(this.tableData)
       this.pageTotal = list.length;
     }
   },
   created() {
-    this.getData();
+    this.getAdminList();
   }
 };
 </script>

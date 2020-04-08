@@ -13,17 +13,17 @@ router.post('/getConsultList', (req, res) => {
     })
 })
 // //删除学生信息
-// router.post('/delconsult',(req,res)=>{
-//     let data=req.body;
-//     consultmodel.delconsult(data,(result)=>{
-//        if(result.affectedRows){
-//            res.json({code:0,msg:'删除成功'})
-//        }else{
-//            res.json({code:1,msg:'删除失败，请重新操作！'})
-//        }
+router.post('/delConsult',(req,res)=>{
+    let data=req.body;
+    consultmodel.delConsult(data,(result)=>{
+       if(result.affectedRows){
+           res.json({code:0,msg:'删除成功'})
+       }else{
+           res.json({code:1,msg:'删除失败，请重新操作！'})
+       }
 
-//     })
-// })
+    })
+})
 //修改学生信息
 router.post('/editConsult',(req,res)=>{
     let data={};

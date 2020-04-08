@@ -51,6 +51,8 @@ app.use('/uploads', express.static(__dirname+'/uploads'));
 app.use('/sysadmin/company',require('./control/sysadmin/companyControl'));
 app.use('/sysadmin/user',require('./control/sysadmin/userControl'));
 app.use('/sysadmin/training',require('./control/sysadmin/trainingControl'));
+app.use('/sysadmin/recruitment',require('./control/sysadmin/recruitmentControl'));
+
 app.use('/sysadmin/consult',require('./control/sysadmin/consultControl'));
 
 // app.use('/',require('./control/admin'))

@@ -8,7 +8,8 @@
           class="handle-del mr10"
           @click="delAllSelection"
         >批量删除</el-button>
-        <el-input v-model="class_name" placeholder="课程名" class="handle-input mr10"></el-input>
+        <!-- <el-input v-model="rec_name" placeholder="公司名称" class="handle-input mr10"></el-input> -->
+        <el-input v-model="rec_position" placeholder="职位名称" class="handle-input mr10"></el-input>
         <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
       </div>
       <el-table
@@ -20,18 +21,18 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="60" align="center"></el-table-column>
-        <el-table-column prop="tid" label="ID" align="center"></el-table-column>
-        <el-table-column prop="class_name" label="课程名" align="center"></el-table-column>
-        <el-table-column prop="class_teacher" label="培训讲师" align="center"></el-table-column>
-        <el-table-column prop="class_time" label="培训时间" align="center"></el-table-column>
-        <el-table-column prop="class_place" label="培训地点" align="center"></el-table-column>
+        <el-table-column prop="rid" label="ID" align="center"></el-table-column>
+        <el-table-column prop="rec_position" label="职位名称" align="center"></el-table-column>
+        <el-table-column prop="rec_name" label="企业名称" align="center"></el-table-column>
+        <el-table-column prop="rec_time" label="招聘时间" align="center"></el-table-column>
+        <el-table-column prop="rec_place_name" label="招聘地点" align="center"></el-table-column>
         <el-table-column prop="status" label="状态" align="center"></el-table-column>
         <el-table-column label="操作" width="200" align="center">
           <template slot-scope="scope">
             <el-button
               type="text"
               icon="el-icon-view"
-              @click="handleSee(scope.$index, scope.row)"
+              @click="handleSee(scope.row.rid)"
             >查看</el-button>
             <el-button
               type="text"
@@ -79,7 +80,7 @@ export default {
   data() {
     return {
       data: [],
-      class_name: "",
+      rec_position: "",
       pageIndex: 1, //当前页码
       pageSize: 10, //每页的条数
       limitUpload: 1,
@@ -107,7 +108,7 @@ export default {
       })
         .then(() => {
           this.$axios
-            .post("/sysadmin/training/delTraining", { tid: row.tid })
+            .post("/sysadmin/recruitment/delRecruitment", { tid: row.tid })
             .then(res => {
               if(res.data.code==0){
                   this.tableData.splice(index, 1);
@@ -147,7 +148,7 @@ export default {
     saveEdit() {
       this.editVisible = false;
       this.$axios
-        .post("/sysadmin/training/editTraining", this.form)
+        .post("/sysadmin/recruitment/editRecruitment", this.form)
         .then(res => {
           if (res.data.code == 0) {
             this.$message(res.data.msg);
@@ -160,7 +161,7 @@ export default {
     // 查看个人信息详情
     handleSee(index, row) {
       console.log(row);
-      this.$router.push({ path: "/trainingInfo", query: { row } });
+      this.$router.push({ path: "/recruitmentInfo", query: { row } });
     },
     // 分页导航
     handlePageChange(val) {
@@ -168,9 +169,9 @@ export default {
       this.getList();
     },
     //获取数据
-    getData() {
+    getRecruitmentList() {
       this.$axios
-        .post("/sysadmin/training/getTrainingList", {})
+        .post("/sysadmin/recruitment/getRecruitmentList", {})
         .then(res => {
           this.data = res.data;
           this.getList();
@@ -183,7 +184,7 @@ export default {
     getList() {
       // es6过滤得到满足搜索条件的展示数据list
       let list = this.data.filter((item, index) =>
-        item.class_name.includes(this.class_name)
+        item.rec_position.includes(this.rec_position)
       );
 
       this.tableData = list.filter(
@@ -195,7 +196,7 @@ export default {
     }
   },
   created() {
-    this.getData();
+    this.getRecruitmentList();
   }
 };
 </script>
