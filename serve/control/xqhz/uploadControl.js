@@ -15,21 +15,18 @@ router.post("/insertSelfResume", function (req, res) {
     datas.code = '0';
     datas.message = '上传图片成功';
     var form = new formidable.IncomingForm();
-    form.encoding = 'utf-8';
+    form.encoding = 'utf-8';//设置表单域的编码
     console.log(__dirname);
     let filedr = "/../../uploads";
-    form.uploadDir = path.join(__dirname + filedr);
+    form.uploadDir = path.join(__dirname + filedr);//设置上传文件存放的文件夹
     form.keepExtensions = true; //保留后缀
     form.maxFieldsSize = 2 * 1024 * 1024;
     //处理图片
     form.parse(req, function (err, fields, files) {
-
         jwt.checkToken(fields.token).then(res1 => {
-            console.log(res1.sid)
-
             var filename = files.file.name
             var nameArray = filename.split('.');
-            var type = nameArray[nameArray.length - 1];
+            var type = nameArray[nameArray.length - 1];//获取后缀名
             var name = '';
             for (var i = 0; i < nameArray.length - 1; i++) {
                 name = name + nameArray[i];
@@ -50,15 +47,11 @@ router.post("/insertSelfResume", function (req, res) {
             data.sid = res1.sid;
             data.url = data1.url;
             data.filename=filename;
-            console.log(data, 9999999)
             studentmodel.insertSelfResume(data, (result) => {
                 // res.json({ code: 0, msg: '操作成功' })
                 res.send(datas);
 
             })
-
-            // })
-
             return;
         }).catch(err => {
             res.json({ err: -1, msg: 'token非法' });

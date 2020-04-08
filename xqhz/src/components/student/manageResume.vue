@@ -47,7 +47,6 @@
           <div class="el-upload__text">
             <em>上传简历附件</em>
           </div>
-
           <!-- <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div> -->
         </el-upload>
         <div class="del-resume" @click="delSelfResume">删除简历</div>

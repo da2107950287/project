@@ -64,7 +64,7 @@
           <el-table-column prop="class_teacher" label="讲师" align="center"></el-table-column>
           <el-table-column prop="class_time" label="培训时间" align="center"></el-table-column>
           <el-table-column prop="class_place" label="培训地址" align="center"></el-table-column>
-          <el-table-column prop="apply_time" label="报名时间" align="center"></el-table-column>
+          <!-- <el-table-column prop="apply_time" label="报名时间" align="center"></el-table-column> -->
           <!-- <el-table-column prop="class_introduce" label="课程介绍" align="center"></el-table-column> -->
           <!-- <el-table-column prop="status" label="状态" align="center"></el-table-column> -->
         </el-table>
@@ -100,7 +100,7 @@
           </el-table-column>
           <el-table-column prop="class_teacher" label="讲师" align="center"></el-table-column>
           <el-table-column prop="class_time" label="培训时间" align="center"></el-table-column>
-          <el-table-column prop="class_place" label="培训地址" align="center"></el-table-column>
+          <!-- <el-table-column prop="class_place" label="培训地址" align="center"></el-table-column> -->
           <el-table-column prop="apply_time" label="报名时间" align="center"></el-table-column>
           <!-- <el-table-column prop="class_introduce" label="课程介绍" align="center"></el-table-column> -->
           <!-- <el-table-column prop="status" label="状态" align="center"></el-table-column> -->
@@ -136,12 +136,18 @@ export default {
       pageIndex: 1, //默认显示第一页
       pageSize: 10, //默认每页数据量
       pageTotal: 0,
-      isClear: false
+      isClear: false,
+      class_name:""
     };
   },
   methods: {
     show(index) {
       this.isShow = index;
+      if(index==2){
+this.getSelfTrainingList()
+      }else if(index==3){
+        // this.get
+      }
     },
     change(val) {
       this.class_content = val;
@@ -169,11 +175,12 @@ export default {
       this.getList();
     },
     //获取数据
-    getData() {
+    getSelfTrainingList() {
       this.$axios
-        .post("/xqhz/company/training", {})
+        .post("/xqhz/company/getSelfTrainingList", {})
         .then(res => {
           this.data = res.data;
+          console.log(this.data)
           this.getList();
         })
         .catch(err => {
@@ -183,10 +190,10 @@ export default {
     // 处理数据
     getList() {
       // es6过滤得到满足搜索条件的展示数据list
+    this.tableData=[];
       let list = this.data.filter((item, index) =>
-        item.rec_name.includes(this.rec_name)
+        item.class_name.includes(this.class_name)
       );
-
       this.tableData = list.filter(
         (item, index) =>
           index < this.pageIndex * this.pageSize &&

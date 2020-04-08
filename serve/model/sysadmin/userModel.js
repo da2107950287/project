@@ -4,6 +4,19 @@ class userModel extends dbBase {
         super();
         this.table = '';
     }
+    //登录
+    login(loginInfo,callback){   
+        this.table='admin'     
+        let sql=`select * from ${this.table} where username = ? `;
+        this.mydb.query(sql,[loginInfo.username],(err,result)=>{
+            if(err){              
+                callback(err);
+            }else{
+                callback(result);
+            }            
+        })
+    }
+    //获取学生列表
     getStudentList(callback) {
 
         this.table = 'student'
@@ -12,6 +25,7 @@ class userModel extends dbBase {
             callback(result)
         })
     }
+    //删除学生
     delStudent(data, callback) {
         this.table = 'student';
         let sql = `delete from ${this.table} where sid = ?`;
@@ -19,6 +33,7 @@ class userModel extends dbBase {
             callback(result)
         })
     }
+    //编辑学生信息
     editStudent(data, callback) {
         // UPDATE 表名称 SET 列名称 = 新值 WHERE 列名称 = 某值
         this.table = 'student'
@@ -39,6 +54,7 @@ class userModel extends dbBase {
         })
 
     }
+    //获取企业列表
     getCompanyList(callback) {
         this.table = 'company'
         let sql = `select * from ${this.table} where 1 `;
@@ -50,6 +66,7 @@ class userModel extends dbBase {
             }
         })
     }
+    //获取企业信息
     getCompanyInfo(data, callback) {
         console.log(data)
         this.table = 'company'
@@ -60,6 +77,7 @@ class userModel extends dbBase {
             callback(result)
         })
     }
+    //删除企业
     delCompany(data, callback) {
         this.table = 'company';
         let sql = `delete from ${this.table} where cid = ?`;
@@ -71,6 +89,7 @@ class userModel extends dbBase {
             }
         })
     }
+    //编辑企业信息
     editCompany(data, callback) {
         // UPDATE 表名称 SET 列名称 = 新值 WHERE 列名称 = 某值
         this.table = 'company'
@@ -91,6 +110,7 @@ class userModel extends dbBase {
         })
 
     }
+    //修改公司审核状态
     modifyApprovalStatus(data, callback) {
         // UPDATE 表名称 SET 列名称 = 新值 WHERE 列名称 = 某值
         this.table = 'company'
@@ -115,58 +135,19 @@ class userModel extends dbBase {
         })
 
     }
+  //获取管理员列表
+  getAdminList(callback) {
+    this.table = 'admin'
+    let sql = `select * from ${this.table} where 1 `;
+    this.mydb.query(sql, (err, result) => {
+        callback(result)
+    })
+}
 
 
 
 
 
-
-    Login(loginInfo, callback) {
-        if (loginInfo.radio == 1) {
-            this.table = 'student'
-        } else if (loginInfo.radio == 2) {
-            this.table = 'user'
-        } else {
-            this.table = 'admin'
-        }
-        console.log(this.table)
-        let sql = `select * from ${this.table} where username = ? `;
-        this.mydb.query(sql, [loginInfo.username], (err, result) => {
-            if (err) {
-                callback(err);
-            } else {
-                if (loginInfo.radio == 1) {
-                    result[0].role = 'student'
-                } else if (loginInfo.radio == 2) {
-                    result[0].role = 'user'
-                } else {
-                    result[0].role = 'admin'
-                }
-                console.log(result)
-                callback(result);
-            }
-        })
-    }
-    Register(userinfo, callback) {
-        console.log(userinfo)
-        let data = [];
-        let fieldstring = [];
-        let field = [];
-
-        for (const key in userinfo) {
-            if (userinfo.hasOwnProperty(key)) {
-                field.push("?");
-                data.push(userinfo[key]);
-                fieldstring.push(key);
-            }
-        }
-        let sql = `insert into user (${fieldstring.join(",")}) values (${field.join(",")})`;
-        // this.test();
-        this.mydb.query(sql, data, (error, result) => {
-            console.log(result, "jjjjj")
-            callback(result);
-            // this.end();
-        })
-    }
+    
 }
 module.exports = userModel;

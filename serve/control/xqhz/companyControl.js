@@ -16,6 +16,7 @@ router.post('/getCoInfo', (req, res) => {
     }
     )
 })
+//编辑企业信息
 router.post('/editCoInfo', (req, res) => {
     jwt.checkToken(req.headers.authorization).then(res1 => {
         //token验证成功
@@ -30,6 +31,7 @@ router.post('/editCoInfo', (req, res) => {
     }
     )
 })
+//发布培训信息
 router.post('/postTraining', (req, res) => {
     console.log('postTraining')
     jwt.checkToken(req.headers.authorization).then(res1 => {
@@ -44,6 +46,7 @@ router.post('/postTraining', (req, res) => {
         console.log(err)
     })
 })
+//发布招聘信息
 router.post('/postRecruitment', (req, res) => {
     console.log('postRecruitment')
     jwt.checkToken(req.headers.authorization).then(res1 => {
@@ -60,19 +63,21 @@ router.post('/postRecruitment', (req, res) => {
     }
     )
 })
+//获取所有企业培训信息表
 router.post('/getTrainingList', (req, res) => {
     companymodel.getTrainingList((result) => {
         console.log(result)
         res.json({ code: 0, data: result, msg: '获取数据成功' })
     })
 })
-
+//获取所有企业招聘信息列表
 router.post('/getRecruitmentList', (req, res) => {
     companymodel.getRecruitmentList((result) => {
         console.log(result)
         res.json({ code: 0, data: result, msg: '获取数据成功' })
     })
 })
+//企业自己的招聘信息列表
 router.post('/getSelfRecruitmentList', (req, res) => {
     jwt.checkToken(req.headers.authorization).then(res1 => {
         console.log(res1.cid)
@@ -84,6 +89,19 @@ router.post('/getSelfRecruitmentList', (req, res) => {
         res.json({ err: -1, msg: 'token非法' });
     })
 })
+//获取企业自己的培训信息
+router.post('/getSelfTrainingList', (req, res) => {
+    jwt.checkToken(req.headers.authorization).then(res1 => {
+        let data={};
+        data.cid=res1.cid;
+        companymodel.getSelfTrainingList(data,(result) => {
+            res.json({ code: 0, data: result, msg: '获取数据成功' })
+        })
+    }).catch(err => {
+        res.json({ err: -1, msg: 'token非法' });
+    })
+})
+//获取企业自己岗位投递列表
 router.post('/getDeliveryRecordList', (req, res) => {
     jwt.checkToken(req.headers.authorization).then(res1 => {
         
@@ -95,9 +113,8 @@ router.post('/getDeliveryRecordList', (req, res) => {
         res.json({ err: -1, msg: 'token非法' });
     })
 })
-//获取企业列表
+//获取所有企业列表
 router.post('/getCompanyList', (req, res) => {
-  
         companymodel.getCompanyList((result) => {
             console.log(result)
             res.json({ code: 0, data: result, msg: '获取数据成功' })
@@ -114,7 +131,6 @@ router.post('/getTrainingInfo', (req, res) => {
 
 })
 //获取招聘信息详情
-
 router.post('/getRecruitmentInfo', (req, res) => {
     let data=req.body;
     companymodel.getRecruitmentInfo(data,(result) => {
@@ -123,5 +139,5 @@ router.post('/getRecruitmentInfo', (req, res) => {
     })
 
 })
-// postRecruitment
+
 module.exports = router;

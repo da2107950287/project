@@ -5,7 +5,8 @@ class userModel extends dbBase {
         super();
         this.table = '';
     }
-    Login(info, callback) {
+    //登陆l
+    login(info, callback) {
         if (info.radio == 1) {
             this.table = 'student'
         } else if (info.radio == 2) {
@@ -15,8 +16,6 @@ class userModel extends dbBase {
         }
         let sql = `select * from ${this.table} where username = ? `;
         this.mydb.query(sql, [info.username], (err, result) => {
-            console.log(sql)
-            console.log(info.username)
             if (err) {
                 callback(err);
             } else {
@@ -24,24 +23,23 @@ class userModel extends dbBase {
             }
         })
     }
-    Register(userinfo, callback) {
-        console.log(userinfo)
+    //注册
+    register(info, callback) {
+        this.table='company'
         let data = [];
         let fieldstring = [];
         let field = [];
-        for (const key in userinfo) {
-            if (userinfo.hasOwnProperty(key)) {
+        for (const key in info) {
+            if (info.hasOwnProperty(key)) {
                 field.push("?");
-                data.push(userinfo[key]);
+                data.push(info[key]);
                 fieldstring.push(key);
             }
         }
-        let sql = `insert into company (${fieldstring.join(",")}) values (${field.join(",")})`;
-        // this.test();
+        let sql = `insert into ${this.table} (${fieldstring.join(",")}) values (${field.join(",")})`;
         this.mydb.query(sql, data, (err, result) => {
             if(err){
                 callback(err);
-                console.log(err)
             }else{
 
              

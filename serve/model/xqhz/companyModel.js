@@ -167,6 +167,20 @@ class companyModel extends dbBase {
 
         })
     }
+    getSelfTrainingList(data,callback){
+        this.table = 'training';
+        console.log(data.cid)
+        let sql = `select * from ${this.table} where cid= ?`;
+        this.mydb.query(sql,[data.cid],(err, result) => {
+            if (err) {
+                callback(err)
+            } else {
+                console.log(result)
+                callback(result)
+            }
+
+        })
+    }
     getDeliveryRecordList(data,callback){
         let sql = `select recruitment.rec_position,delivery.delivery_time,student.username,resume.filename,resume.url from recruitment,student,delivery,resume
         where delivery.rid=recruitment.rid and student.sid=delivery.sid and resume.sid=delivery.sid and cid = ?`;

@@ -4,7 +4,19 @@ const userModel = require('../../model/sysadmin/userModel');
 const JwtUtil = require('../../tool/jwt');
 let usermodel = new userModel();
 let jwt = new JwtUtil();
-
+router.post('/login', (req, res) => {
+    let data = req.body;
+    usermodel.login(data, (result) => {
+        if (result.length == 0) {
+            res.json({ msg: "用户名不存在！" })
+        } else if (result[0].password != data.password) {
+            res.json({ msg: "密码错误！" })
+        } else {
+            let token = jwt.createToken({ aid: result[0].aid })
+            res.json({ code: 0, msg: "登录成功！", token: token })
+        }
+    })
+})
 //获取学生列表
 router.post('/getStudentList', (req, res) => {
     usermodel.getStudentList((result) => {
@@ -12,26 +24,26 @@ router.post('/getStudentList', (req, res) => {
     })
 })
 //删除学生信息
-router.post('/delStudent',(req,res)=>{
-    let data=req.body.sid;
-    usermodel.delStudent(data,(result)=>{
-       if(result.affectedRows){
-           res.json({code:0,msg:'删除成功'})
-       }else{
-           res.json({code:1,msg:'删除失败，请重新操作！'})
-       }
+router.post('/delStudent', (req, res) => {
+    let data = req.body.sid;
+    usermodel.delStudent(data, (result) => {
+        if (result.affectedRows) {
+            res.json({ code: 0, msg: '删除成功' })
+        } else {
+            res.json({ code: 1, msg: '删除失败，请重新操作！' })
+        }
 
     })
 })
 //修改学生信息
-router.post('/editStudent',(req,res)=>{
-    let data=req.body;
-    usermodel.editStudent(data,(result)=>{
-    if(result.affectedRows){
-        res.json({code:0,msg:'编辑成功'})
-    }else{
-        res.json({code:1,msg:'编辑视频，请重新操作！'})
-    }
+router.post('/editStudent', (req, res) => {
+    let data = req.body;
+    usermodel.editStudent(data, (result) => {
+        if (result.affectedRows) {
+            res.json({ code: 0, msg: '编辑成功' })
+        } else {
+            res.json({ code: 1, msg: '编辑视频，请重新操作！' })
+        }
     })
 })
 //获取公司列表
@@ -42,47 +54,54 @@ router.post('/getCompanyList', (req, res) => {
 })
 //获取公司信息
 router.post('/getCompanyInfo', (req, res) => {
-    let data=req.body;
-    usermodel.getCompanyInfo(data,(result) => {
+    let data = req.body;
+    usermodel.getCompanyInfo(data, (result) => {
         console.log(result[0])
         res.json(result[0])
     })
 })
 //删除公司信息
-router.post('/delCompany',(req,res)=>{
+router.post('/delCompany', (req, res) => {
     console.log(req.query)
-    usermodel.delCompany(req.body,(result)=>{
+    usermodel.delCompany(req.body, (result) => {
         console.log(result)
-       if(result.affectedRows){
-           res.json({code:0,msg:'删除成功'})
-       }else{
-           res.json({code:1,msg:'删除失败，请重新操作！'})
-       }
+        if (result.affectedRows) {
+            res.json({ code: 0, msg: '删除成功' })
+        } else {
+            res.json({ code: 1, msg: '删除失败，请重新操作！' })
+        }
 
     })
 })
 //修改公司信息
-router.post('/editCompany',(req,res)=>{
-    let data=req.body;
-    usermodel.editCompany(data,(result)=>{
-    if(result.affectedRows){
-        res.json({code:0,msg:'编辑成功'})
-    }else{
-        res.json({code:1,msg:'编辑视频，请重新操作！'})
-    }
+router.post('/editCompany', (req, res) => {
+    let data = req.body;
+    usermodel.editCompany(data, (result) => {
+        if (result.affectedRows) {
+            res.json({ code: 0, msg: '编辑成功' })
+        } else {
+            res.json({ code: 1, msg: '编辑视频，请重新操作！' })
+        }
     })
 })
 
-router.post('/modifyApprovalStatus',(req,res)=>{
-    let data=req.body;
+router.post('/modifyApprovalStatus', (req, res) => {
+    let data = req.body;
     console.log(data.cid)
-    usermodel.modifyApprovalStatus(data,(result)=>{
-    if(result.affectedRows){
-        res.json({code:0,msg:'编辑成功'})
-        
-    }else{
-        res.json({code:1,msg:'编辑视频，请重新操作！'})
-    }
+    usermodel.modifyApprovalStatus(data, (result) => {
+        if (result.affectedRows) {
+            res.json({ code: 0, msg: '编辑成功' })
+
+        } else {
+            res.json({ code: 1, msg: '编辑视频，请重新操作！' })
+        }
+    })
+})
+
+//获取管理员列表
+router.post('/getAdminList', (req, res) => {
+    usermodel.getAdminList((result) => {
+        res.json({data:result})
     })
 })
 module.exports = router;

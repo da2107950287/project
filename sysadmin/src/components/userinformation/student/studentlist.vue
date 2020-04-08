@@ -2,7 +2,7 @@
   <div>
     <div class="container">
       <div class="handle-box">
-        <el-upload
+        <!-- <el-upload
           class="upload-demo"
           action
           :on-change="handleChange"
@@ -10,16 +10,18 @@
           :limit="limitUpload"
           accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
           :auto-upload="false"
-        >
-          <el-button size="small" type="primary">导入</el-button>
+        > -->
+           <!-- <div slot="tip" class="el-upload__tip">只 能 上 传 xlsx / xls 文 件</div> -->
           <!-- <div slot="tip" class="el-upload__tip">只 能 上 传 xlsx / xls 文 件</div> -->
-        </el-upload>
+        <!-- </el-upload> -->
+        <el-button size="small" type="primary" @click="getExcel(tableData)">导出</el-button>
+        <!-- <div @click="getExcel(res)">导出</div> -->
         <!-- <el-button
           type="primary"
           icon="el-icon-delete"
           class="handle-del mr10"
           @click="delAllSelection"
-        >批量删除</el-button> -->
+        >批量删除</el-button>-->
         <el-input v-model="sno" placeholder="学号" class="handle-input mr10"></el-input>
         <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
       </div>
@@ -190,6 +192,22 @@ export default {
         reader.readAsBinaryString(f);
       }
     },
+    //导出
+    getExcel(res) {
+      require.ensure([], () => {
+        const {
+          export_json_to_excel
+        } = require("../../../assets/js/Excel/Export2Excel");
+        const tHeader = ["ID", "学号", "密码", "学院", "专业"];
+        const filterVal = ["sid", "sno", "password", "academy", "major"];
+        const list = res;
+        const data = this.formatJson(filterVal, list);
+        export_json_to_excel(tHeader, data, "学生列表");
+      });
+    },
+    formatJson(filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => v[j]));
+    },
     // 触发搜索按钮
     handleSearch() {
       this.pageIndex = 1;
@@ -202,12 +220,11 @@ export default {
         type: "warning"
       })
         .then(() => {
-    
           this.$axios
             .post("/sysadmin/user/delStudent", { sid: row.sid })
             .then(res => {
               console.log(res);
-                    this.tableData.splice(index, 1);
+              this.tableData.splice(index, 1);
               this.$message.success("删除成功");
             })
             .catch(err => {
@@ -219,7 +236,7 @@ export default {
     // 多选操作
     handleSelectionChange(val) {
       this.multipleSelection = val;
-      console.log(val)
+      console.log(val);
     },
     //批量删除
     delAllSelection() {
@@ -227,7 +244,7 @@ export default {
       let str = "";
       this.delList = this.delList.concat(this.multipleSelection);
       for (let i = 0; i < length; i++) {
-          // this.tableData.splice(index, 1);
+        // this.tableData.splice(index, 1);
         str += this.multipleSelection[i].sno + " ";
       }
       this.$message.error(`删除了${str}`);
@@ -256,7 +273,7 @@ export default {
     // 查看个人信息详情
     handleSee(index, row) {
       console.log(row);
-    this.$router.push({path:'/studentInfo',query:{row}})
+      this.$router.push({ path: "/studentInfo", query: { row } });
     },
     // 分页导航
     handlePageChange(val) {

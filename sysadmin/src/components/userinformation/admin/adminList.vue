@@ -2,7 +2,7 @@
   <div>
     <div class="container">
       <div class="handle-box">
-        <el-input v-model="sno" placeholder="学号" class="handle-input mr10"></el-input>
+        <el-input v-model="aid" placeholder="ID" class="handle-input mr10"></el-input>
         <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
       </div>
       <el-table
@@ -14,7 +14,7 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="60" align="center"></el-table-column>
-        <el-table-column prop="sid" label="ID" align="center" sortable></el-table-column>
+        <el-table-column prop="aid" label="ID" align="center" sortable></el-table-column>
         <el-table-column prop="username" label="用户名" align="center"></el-table-column>
         <el-table-column prop="password" label="密码" align="center"></el-table-column>
         <el-table-column label="操作" width="200" align="center">
@@ -70,7 +70,7 @@ export default {
   data() {
     return {
       data: [],
-      sno: "",
+      aid: "",
       pageIndex: 1, //当前页码
       pageSize: 10, //每页的条数
       limitUpload: 1,
@@ -81,7 +81,8 @@ export default {
       pageTotal: 0,
       form: {},
       idx: -1,
-      id: -1
+      id: -1,
+      
     };
   },
   methods: {
@@ -158,12 +159,13 @@ export default {
       this.pageIndex = val;
       this.getList();
     },
-    //获取数据
+    //获取管理员列表
     getData() {
       this.$axios
-        .post("/sysadmin/user/getStudentList", {})
+        .post("/sysadmin/user/getAdminList", {})
         .then(res => {
           this.data = res.data;
+          console.log(this.data)
           this.getList();
         })
         .catch(err => {
@@ -173,7 +175,7 @@ export default {
     // 处理数据
     getList() {
       // es6过滤得到满足搜索条件的展示数据list
-      let list = this.data.filter((item, index) => item.sno.includes(this.sno));
+      let list = this.data.filter((item, index) => item.aid.includes(this.aid));
 
       this.tableData = list.filter(
         (item, index) =>

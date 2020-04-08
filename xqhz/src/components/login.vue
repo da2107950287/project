@@ -83,7 +83,6 @@ export default {
           this.$message(res.msg);
           localStorage.setItem("token", res.data.token);
           localStorage.setItem("role", res.data.role);
-          console.log(9999)
           this.$router.push({ path: "/home" });
         })
         .catch(err => {

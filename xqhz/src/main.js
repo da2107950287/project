@@ -14,8 +14,7 @@ Vue.prototype.$axios = axios;
 Vue.use(ElementUI);
 Vue.use(vueSwiper)//使用插件
 
-axios.defaults.baseURL = "http://localhost:81";
-// axios.defaults.baseURL='https://mock.yonyoucloud.com/mock/4628/localhost';
+
 // 导航守卫
 // 使用 router.beforeEach 注册一个全局前置守卫，判断用户是否登陆
 // router.beforeEach((to, from, next) => {

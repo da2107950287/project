@@ -2,16 +2,17 @@ const express = require('express');
 const router = express.Router();
 const userModel = require('../../model/xqhz/userModel');
 const JwtUtil = require('../../tool/jwt');
+let jwt = new JwtUtil();
 let usermodel = new userModel();
+//用户登陆
 router.post('/login', (req, res) => {
     let data = req.body;
-    usermodel.Login(data, (result) => {
+    usermodel.login(data, (result) => {
         if (result.length == 0) {
             res.json({ msg: "用户名不存在！" })
         } else if (result[0].password != data.password) {
             res.json({ msg: "密码错误！" })
         } else {
-            let jwt = new JwtUtil();
             let token;
             if (data.radio == 1) {
                 result[0].role = 'student'
@@ -38,7 +39,7 @@ router.post('/login', (req, res) => {
 //企业注册
 router.post('/register', (req, res) => {
     let data = req.body;
-    usermodel.Register(data, (result) => {
+    usermodel.register(data, (result) => {
         res.json({ msg: "注册成功" })
     })
 })
