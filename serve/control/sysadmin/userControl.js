@@ -13,7 +13,7 @@ router.post('/login', (req, res) => {
             res.json({ msg: "密码错误！" })
         } else {
             let token = jwt.createToken({ aid: result[0].aid })
-            res.json({ code: 0, msg: "登录成功！", token: token })
+            res.json({ code: 0, msg: "登录成功！", token: token ,username:data.username})
         }
     })
 })

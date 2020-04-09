@@ -26,15 +26,15 @@
       </el-header>
       <el-container class="content">
         <el-aside width="200px">
-          <el-menu>
+          <el-menu  router>
             <el-submenu index="1">
               <template slot="title">
                 <i class="el-icon-message"></i>用户信息管理
               </template>
               <el-menu-item-group>
-                <el-menu-item index="1-1" @click="go('/studentList')">学生信息</el-menu-item>
-                <el-menu-item index="1-2" @click="go('/companyList')">企业信息</el-menu-item>
-                <el-menu-item index="1-3" @click="go('/adminList')">管理员信息</el-menu-item>
+                <el-menu-item index="studentList" >学生信息</el-menu-item>
+                <el-menu-item index="companyList">企业信息</el-menu-item>
+                <el-menu-item index="adminList">管理员信息</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
             <el-submenu index="2">
@@ -42,7 +42,7 @@
                 <i class="el-icon-menu"></i>招聘信息管理
               </template>
               <el-menu-item-group>
-                <el-menu-item index="2-1" @click="go('/recruitmentList')">招聘信息</el-menu-item>
+                <el-menu-item index="recruitmentList">招聘信息</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
             <el-submenu index="3">
@@ -50,7 +50,7 @@
                 <i class="el-icon-menu"></i>培训信息管理
               </template>
               <el-menu-item-group>
-                <el-menu-item index="3-1"  @click="go('/trainingList')">培训信息</el-menu-item>
+                <el-menu-item index="trainingList">培训信息</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
 
@@ -67,7 +67,7 @@
                 <i class="el-icon-message"></i>咨询信息管理
               </template>
               <el-menu-item-group>
-                <el-menu-item index="1-1" @click="go('/consultList')">咨询信息</el-menu-item>
+                <el-menu-item index="consultList">咨询信息</el-menu-item>
                
               </el-menu-item-group>
             </el-submenu>
@@ -89,22 +89,17 @@ export default {
     return {
       collapse: false,
       fullscreen: false,
-      name: "linxin",
-      message: 2
+      name: "管理员",
     };
   },
   computed: {
     username() {
-      let username = localStorage.getItem("ms_username");
+      let username = localStorage.getItem("username");
       return username ? username : this.name;
     }
   },
   methods: {
-    go(url) {
-      this.$router.replace(url).catch(err => {
-        err;
-      });
-    },
+    
     // 用户名下拉菜单选择事件
     handleCommand(command) {
       if (command == "loginout") {
@@ -117,9 +112,6 @@ export default {
       this.collapse = !this.collapse;
       // bus.$emit('collapse', this.collapse);
     }
-  },
-  created() {
-    //   thisthis
   },
   mounted() {
     if (document.body.clientWidth < 1500) {

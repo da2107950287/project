@@ -73,10 +73,13 @@ export default {
       this.$axios
         .post("/sysadmin/user/login", this.loginForm)
         .then(res => {
-          if (res.code == 0) {
-            this.$message(res.msg)
-            localStorage.setItem("token", res.token);
+          if (res.data.code == 0) {
+            this.$message.success(res.data.msg)
+            localStorage.setItem("token", res.data.token);
+            localStorage.setItem("username",res.data.username)
             this.$router.push({ path: "/home" });
+          }else{
+            this.$message.error(res.data.msg)
           }
         })
         .catch(err => {
