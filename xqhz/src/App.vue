@@ -19,6 +19,7 @@ html,body{
    background-image: url('../src/assets/img/bgc.jpg');
   background-size: cover;
   background-attachment: fixed;
+  color:#333;
 }
 #app{
   height: 100%;

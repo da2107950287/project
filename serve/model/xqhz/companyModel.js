@@ -131,7 +131,19 @@ class companyModel extends dbBase {
     }
     getTrainingList(callback) {
         this.table = 'training'
-        let sql = `select * from ${this.table} where status=1 `;
+        let sql = `select * from ${this.table} where status = 1 limit 10`;
+        this.mydb.query(sql, (err, result) => {
+            if (err) {
+                callback(err)
+            } else {
+                callback(result)
+            }
+
+        })
+    }
+    getAllTrainingList(callback) {
+        this.table = 'training'
+        let sql = `select * from ${this.table} where status = 1 `;
         this.mydb.query(sql, (err, result) => {
             if (err) {
                 callback(err)
@@ -144,7 +156,19 @@ class companyModel extends dbBase {
     //获取企业招聘头低低记录
     getRecruitmentList(callback) {
         this.table = 'recruitment'
-        let sql = `select recruitment.*,company.* from recruitment,company where recruitment.status= 1 and recruitment.cid=company.cid`;
+        let sql = `select recruitment.*,company.* from recruitment,company where recruitment.status= 1 and recruitment.cid=company.cid limit 10`;
+        this.mydb.query(sql, (err, result) => {
+            if (err) {
+                callback(err)
+            } else {
+                callback(result)
+            }
+
+        })
+    }
+    getAllRecruitmentList(callback) {
+        this.table = 'recruitment'
+        let sql = `select recruitment.*,company.* from recruitment,company where recruitment.status= 1 and recruitment.cid=company.cid `;
         this.mydb.query(sql, (err, result) => {
             if (err) {
                 callback(err)
@@ -182,7 +206,7 @@ class companyModel extends dbBase {
         })
     }
     getDeliveryRecordList(data,callback){
-        let sql = `select recruitment.rec_position,delivery.delivery_time,student.username,resume.filename,resume.url from recruitment,student,delivery,resume
+        let sql = `select recruitment.rec_position,recruitment.rid,delivery.delivery_time,student.username,resume.filename,resume.url from recruitment,student,delivery,resume
         where delivery.rid=recruitment.rid and student.sid=delivery.sid and resume.sid=delivery.sid and cid = ?`;
         this.mydb.query(sql,[data],(err, result) => {
             console.log(result)
@@ -195,7 +219,20 @@ class companyModel extends dbBase {
 
         })
     }
-     
+    getApplyRecordList(data,callback){
+        let sql = `select training.*,entry.entry_time,student.username from training,student,entry
+        where entry.tid=training.tid and student.sid=entry.sid and cid = ?`;
+        this.mydb.query(sql,[data],(err, result) => {
+            console.log(result)
+            console.log(sql)
+            if (err) {
+                callback(err)
+            } else {
+                callback(result)
+            }
+
+        })
+    }
     getCompanyList(callback) {
         this.table = 'company'
         let sql = `select * from ${this.table} where 1 limit 12 `;

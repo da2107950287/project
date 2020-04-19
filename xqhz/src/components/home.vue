@@ -69,12 +69,13 @@
       </div>
       <div class="panel-body">
         <div class="company-box">
-          <div
-            class="post-sort"
-            style="width:33%"
+          <a
+            class="post-sort company"
+            style="width:33%;text-decoration: none;"
             v-for="(item,index) in companyList"
             :key="index"
-          >{{item.rec_name}}</div>
+            :href="item.rec_page"
+          >{{item.rec_name}}</a>
         </div>
       </div>
     </div>
@@ -107,9 +108,9 @@ export default {
           prevEl: ".swiper-button-prev"
         },
         //自动轮播
-        // autoplay: {
-        //   delay: 2000
-        // },
+        autoplay: {
+          delay: 2000
+        },
         //开启循环模式
         loop: true
         //开启鼠标滚轮控制Swiper切换
@@ -136,32 +137,37 @@ export default {
     };
   },
   methods: {
+    //查看更多
     seeMore(keypath) {
       this.$router.push({ path: keypath });
     },
+    //获取培训信息列表
     getTrainingList() {
       this.$axios
         .post("/xqhz/company/getTrainingList", {})
         .then(res => {
-          console.log(res.data)
+          console.log(res.data);
           this.trainingList = res.data;
         })
         .catch(err => {
           console.log(err);
         });
     },
+    //去培训信息详情页
     getTrainingInfo(tid) {
       this.$router.push({
         path: "/trainingInfo",
-        query: {tid}
+        query: { tid }
       });
     },
+    //去招聘信息详情页
     getRecruitmentInfo(rid) {
       this.$router.push({
         path: "/recruitmentInfo",
-        query: {rid}
+        query: { rid }
       });
     },
+    //获取培训信息列表
     getRecruitmentList() {
       this.$axios
         .post("/xqhz/company/getRecruitmentList", {})
@@ -172,17 +178,18 @@ export default {
           console.log(err);
         });
     },
+    //获取公司列表
     getCompanyList() {
       this.$axios
         .post("/xqhz/company/getCompanyList", {})
         .then(res => {
           this.companyList = res.data;
-          
         })
         .catch(err => {
           console.log(err);
         });
-    }
+    },
+   
   },
   created() {
     this.getTrainingList();
@@ -231,16 +238,17 @@ li {
       > div:last-child {
         display: flex;
         flex-direction: column;
-        cursor: pointer;
+        cursor: default;
       }
     }
   }
   .panel {
     margin-top: 20px;
-    background-color: #ffffff;
+    background-color: #fafbfd;
     border: 1px solid #efefef;
-    border-radius: 4px;
-
+    // border-radius: 4px;
+    box-shadow: #ccc 0 0px 4px;
+    padding-bottom: 30px;
     .panel-heading {
       color: #333333;
       background-color: #fbfbfb;
@@ -259,12 +267,12 @@ li {
         font-size: 12px;
         color: #60b0f4;
         text-align: center;
-        cursor: pointer;
+        cursor: default;
       }
     }
     .panel-body {
-      padding: 0 20px;
-      box-shadow: #ccc 0 0px 4px;
+      padding: 0 30px;
+      // box-shadow: #ccc 0 0px 4px;
       .table {
         width: 100%;
         max-width: 100%;
@@ -290,12 +298,15 @@ li {
           td {
             line-height: 1.42857143;
             vertical-align: top;
-            border-bottom: 2px dotted #f6f6f6;
+            border-bottom: 2px dotted #f1f1f1;
           }
           .post-sort {
             color: #4a90e6;
-            cursor: pointer;
+            cursor: default;
           }
+          .post-sort:hover{
+          color:#FF4F00
+        }
         }
       }
       .company-box {
@@ -309,6 +320,10 @@ li {
           overflow: hidden;
           white-space: nowrap;
           text-overflow: ellipsis;
+          cursor: default;
+        }
+        .post-sort:hover{
+          color:#FF4F00
         }
       }
     }
@@ -345,7 +360,7 @@ li {
       padding-bottom: 10px;
       font-size: 16px;
       color: #34495e;
-      cursor: pointer;
+      cursor: default;
     }
   }
   .el-tabs__item {

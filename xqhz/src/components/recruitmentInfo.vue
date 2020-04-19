@@ -9,7 +9,7 @@
         <li>
           <div>单位名称：</div>
           <div>
-            <a href>{{info.rec_name}}</a>
+            <a :href="info.rec_page">{{info.rec_name}}</a>
           </div>
         </li>
         <li>
@@ -55,9 +55,8 @@
           </el-tab-pane>
         </el-tabs>
       </ul>
-      <div  class="submit_btn">
-      <el-button type="primary" @click="delivery">立即投递</el-button>
-
+      <div class="submit_btn">
+        <el-button type="primary" @click="delivery">立即投递</el-button>
       </div>
     </div>
   </div>
@@ -71,69 +70,47 @@ export default {
   },
   methods: {
     delivery() {
-      // selectIsdelivery
       this.$axios
         .post("/xqhz/recruitment/selectIsDelivery", { rid: this.info.rid })
         .then(res => {
           if (res.code == 0) {
-            this.$message(res.msg)
-          }else{
+            this.$message(res.msg);
+          } else {
             this.$axios
               .post("/xqhz/recruitment/delivery", { rid: this.info.rid })
               .then(res => {
-                this.$message(res.msg)
+                this.$message(res.msg);
               })
               .catch(err => {
                 console.log(err);
               });
           }
-         
         })
         .catch(err => {
           console.log(err);
         });
     },
-    getRecruitmentInfo(rid){
-      this.$axios.post('/xqhz/company/getRecruitmentInfo',{rid}).then(res=>{
-        this.info=res.data
-      }).catch(err=>{
-        console.log(err)
-      })
-    },
-      canActivate (transition) {
-        console.log(transition,"======上一个页面的url信息=======");
-        transition.next();
-      }
+    getRecruitmentInfo(rid) {
+      this.$axios
+        .post("/xqhz/company/getRecruitmentInfo", { rid })
+        .then(res => {
+          this.info = res.data;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   },
-  route: {
-  //  data() {
-  //   this.$root.showLoading();
-  //   return this.fetchCertificates().then((res) => {
-  //    this.$root.dismissLoading();
-  //    if (res.error) return this.$root.toastError(res.error);
-  //    if(res.data.certificates.length >0){
-  //     return res.data;
-  //    }else{
-  //     console.log(this.$route ,"----当前页面的url信息----");
-  //    }
-  //   });
-  //  },
-   canActivate (transition) {
-    console.log(transition,"======上一个页面的url信息=======");
-    transition.next();
-   }
-  },
-    
+
   created() {
     this.getRecruitmentInfo(this.$route.query.rid);
-   console.log(this.$route)
-  
-    
   }
 };
 </script>
 <style lang='scss' scoped>
-ul,ol,li{
+ul,
+ol,
+li {
   margin: 0;
   padding: 0;
 }
@@ -149,7 +126,7 @@ ul,ol,li{
       li {
         display: flex;
         justify-content: flex-start;
-        padding: 5px;
+        padding: 10px;
         div:first-child {
           font-weight: 600;
           color: #34495e;
@@ -171,11 +148,15 @@ ul,ol,li{
         margin-top: 10px;
       }
     }
-     .submit_btn {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-      }
+    .submit_btn {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
   }
+}
+.el-tabs--border-card > .el-tabs__content {
+  color: #333;
 }
 </style>

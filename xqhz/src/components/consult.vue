@@ -3,21 +3,27 @@
     <div class="page">
       <div class="header">
         <h3 class="title">咨询中心</h3>
-        <div>
-          <el-button type="text" @click="dialogFormVisible = true" class="btn">+ 发布咨询</el-button>
-          <el-dialog title="发布咨询" :visible.sync="dialogFormVisible">
-            <el-input
-              type="textarea"
-              :autosize="{ minRows: 2, maxRows: 4}"
-              placeholder="请输入内容"
-              v-model="textarea"
-              show-word-limit="100"
-            ></el-input>
-            <div slot="footer" class="dialog-footer">
-              <el-button @click="dialogFormVisible = false">取 消</el-button>
-              <el-button type="primary" @click="postConsult">确 定</el-button>
-            </div>
-          </el-dialog>
+        <div class="handle-box">
+          <div class="handle-box">
+            <el-input v-model="keyword" placeholder="请输入搜索内容" class="handle-input mr10"></el-input>
+            <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
+          </div>
+          <div>
+            <el-button type="text" @click="dialogFormVisible = true" class="btn">+ 发布咨询</el-button>
+            <el-dialog title="发布咨询" :visible.sync="dialogFormVisible">
+              <el-input
+                type="textarea"
+                :autosize="{ minRows: 2, maxRows: 4}"
+                placeholder="请输入内容"
+                v-model="textarea"
+                show-word-limit="100"
+              ></el-input>
+              <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="postConsult">确 定</el-button>
+              </div>
+            </el-dialog>
+          </div>
         </div>
       </div>
       <hr />
@@ -44,7 +50,8 @@ export default {
       dialogFormVisible: false,
       textarea: "",
       consultContent: [],
-      selected: -1
+      selected: -1,
+      keyword:"",
     };
   },
   methods: {
@@ -77,7 +84,18 @@ export default {
         .catch(err => {
           console.log(err);
         });
-    }
+    },
+     handleSearch() {
+       this.$axios
+        .post("/xqhz/consult/search", {keyword:this.keyword})
+        .then(res => {
+          this.consultContent = res.data;
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
   },
   created() {
     this.getConsultList();
@@ -100,9 +118,15 @@ li {
     padding: 10px 50px;
     box-shadow: 2px 2px 5px 0 #666;
     .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      .handle-box {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .handle-input{
+          margin-right: 10px;
+        }
+        
+      }
       .btn {
         padding: 9px 13px;
         font-size: 13px;

@@ -3,7 +3,7 @@
     <div class="login_box">
       <!-- 头像区域 -->
       <div class="avatar_box">
-        <img src="../assets/img/top.png" alt />
+        <img src="../assets/img/avator.jpg" alt />
       </div>
       <!-- 登录表单区域 -->
       <el-form
@@ -20,19 +20,19 @@
         </el-radio-group>
         <!-- 用户名 -->
         <el-form-item prop="username">
-          <el-input v-model="loginForm.username" prefix-icon="iconfont icon-user"></el-input>
+          <el-input v-model="loginForm.username" prefix-icon="el-icon-user" placeholder="请输入账号"></el-input>
         </el-form-item>
         <!-- 密码 -->
         <el-form-item prop="password">
           <el-input
             v-model="loginForm.password"
-            prefix-icon="iconfont icon-3702mima"
+            prefix-icon="el-icon-lock"
             type="password"
             show-password
-            
+            placeholder="请输入密码"
           ></el-input>
         </el-form-item>
-      
+
         <!-- 按钮区域 -->
         <el-form-item class="btns">
           <el-button type="primary" @click="login">登录</el-button>
@@ -48,24 +48,23 @@
 export default {
   data() {
     return {
-    
       // 这是登录表单的数据绑定对象
       loginForm: {
-        username: "admin",
-        password: "123456",
-        radio:1,
+        username: "",
+        password: "",
+        radio: 1
       },
       // 这是表单的验证规则对象
       loginFormRules: {
         // 验证用户名是否合法
         username: [
-        //   { required: true, message: "请输入登录名称", trigger: "blur" },
-        //   { min: 3, max: 10, message: "长度在 3 到 10 个字符", trigger: "blur" }
+          { required: true, message: "请输入登录名称", trigger: "blur" },
+          { min: 3, max: 10, message: "长度在 3 到 10 个字符", trigger: "blur" }
         ],
         // 验证密码是否合法
         password: [
-        //   { required: true, message: "请输入登录密码", trigger: "blur" },
-        //   { min: 6, max: 15, message: "长度在 6 到 15 个字符", trigger: "blur" }
+          { required: true, message: "请输入登录密码", trigger: "blur" },
+          { min: 6, max: 15, message: "长度在 6 到 15 个字符", trigger: "blur" }
         ]
       }
     };
@@ -79,7 +78,6 @@ export default {
       this.$axios
         .post("/xqhz/user/login", this.loginForm)
         .then(res => {
-          // if(res.code)
           this.$message(res.msg);
           localStorage.setItem("token", res.data.token);
           localStorage.setItem("role", res.data.role);
@@ -95,7 +93,9 @@ export default {
 
 <style lang="scss" scoped>
 .login_container {
-  background-color: #ccc;
+  background-image: url('../assets/img/login_bgc.jpg') ;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
   height: 100%;
 }
 
@@ -135,14 +135,17 @@ export default {
   width: 100%;
   padding: 0 20px;
   box-sizing: border-box;
-  .el-radio-group{
-      margin-bottom: 10px;
+  .el-radio-group {
+    margin-bottom: 10px;
   }
 }
+.el-input{
+  //  font-size: 16px;
+}
+
 
 .btns {
-display: flex;
-justify-content: flex-end;
-
+  display: flex;
+  justify-content: flex-end;
 }
 </style>

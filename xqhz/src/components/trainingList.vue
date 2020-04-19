@@ -11,11 +11,12 @@
       class="table"
       ref="multipleTable"
       header-cell-class-name="table-header"
-      @selection-change="handleSelectionChange"
+   
     >
+       <!-- @selection-change="handleSelectionChange" -->
       <el-table-column label="课程名" align="center" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span class="active" @click="getTrainingInfo(scope.row.tid)">{{scope.row.tid}}{{ scope.row.class_name }}</span>
+          <span class="active" @click="getTrainingInfo(scope.row.tid)">{{ scope.row.class_name }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="class_teacher" label="培训讲师" align="center"></el-table-column>
@@ -49,18 +50,16 @@ export default {
   methods: {
     getTrainingList() {
       this.$axios
-        .post("/xqhz/company/getTrainingList", {})
+        .post("/xqhz/company/getAllTrainingList", {})
         .then(res => {
           this.data = res.data;
-          console.log(this.data)
           this.getList();
         })
         .catch(err => {
           console.log(err);
         });
     },
-    getTrainingInfo(data) {
-      console.log(tid)
+    getTrainingInfo(tid) {
       this.$router.push({
         path: "/trainingInfo",
         query: { tid: tid }
@@ -107,7 +106,9 @@ li {
 .home {
   margin: 50px 150px;
   background-color: #ffffff;
-  padding: 20px;
+   box-shadow: 2px 2px 5px 0 #666;
+   padding: 20px 50px 50px;
+ 
   .handle-box {
     height: 35px;
     margin-bottom: 20px;
@@ -121,9 +122,17 @@ li {
       padding: 11px;
     }
   }
+  .pagination{
+    margin-top: 20px;
+    text-align: center;
+  }
   .table{
     .active{
       color:#4a90e6;
+      cursor: default;
+    }
+    .active:hover{
+      color:#FF4F00
     }
   }
 }

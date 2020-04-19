@@ -43,6 +43,8 @@ app.use('/xqhz/student',require('./control/xqhz/studentControl'));
 app.use('/xqhz/training',require('./control/xqhz/trainingControl'));
 app.use('/xqhz/recruitment',require('./control/xqhz/recruitmentControl'));
 app.use('/xqhz/consult',require('./control/xqhz/consultControl'));
+// app.use('/xqhz/home',require('./control/xqhz/homeControl'))
+
 app.use('/xqhz/upload',require('./control/xqhz/uploadControl'))
 app.use('/uploads', express.static(__dirname+'/uploads'));
 //上传个人头像图片

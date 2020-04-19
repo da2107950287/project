@@ -1,36 +1,10 @@
 <template>
   <div class="continer">
     <div class="aside">
-      <div @click="show(1)">个人简历</div>
-      <div @click="show(2)">简历投递管理</div>
+      <div @click="show(1)" :class="[isShow==1?'selected':'']">个人简历</div>
+      <div @click="show(2)" :class="[isShow==2?'selected':'']">招聘投递记录</div>
     </div>
     <div v-if="isShow==1" class="resume">
-      <!-- class="upload-container"
-        ref="upload"
-        action="http://localhost:81/xqhz/upload/"
-        :on-preview="handlePreview"
-        :on-remove="handleRemove"
-        list-type="picture-card"
-        :limit="1"
-        :before-upload="beforeAvatarUpload"
-        :auto-upload="false"
-        :on-success="handleSucess"
-      :on-error="handleError"-->
-      <!-- <el-upload
-   
-      >
-      <i class="el-icon-upload"></i>
-      <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-      <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>-->
-      <!-- <el-button slot="trigger" size="small" type="primary">s</el-button>
-        <el-button
-          style="margin-left: 10px;"
-          size="small"
-          type="success"
-          @click="submitUpload"
-        >上传到服务器</el-button>
-      <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过10M</div>-->
-      <!-- </el-upload> -->
       <p class="my-resume">我的简历</p>
       <div class="handle">
         <el-upload
@@ -41,16 +15,17 @@
           :show-file-list="false"
           :data="token"
           :on-success="handleSucess"
-          :before-upload="beforeAvatarUpload"
+       
         >
           <i class="el-icon-upload"></i>
           <div class="el-upload__text">
             <em>上传简历附件</em>
           </div>
-          <!-- <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div> -->
         </el-upload>
+         <!-- <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div> -->
         <div class="del-resume" @click="delSelfResume">删除简历</div>
       </div>
+     
       <div v-show="fileType === 'pdf'&&src!=''">
         <pdf
           class="pdf"
@@ -69,7 +44,6 @@
             :class="{grey: currentPage==pageCount}"
           >下一页</span>
         </p>
-        <!-- // 自己引入就可以使用,这里我的需求是做了分页功能,如果不需要分页功能,只要src就可以了 -->
       </div>
       <div v-show="src==''" class="none">暂无简历，请上传简历</div>
     </div>
@@ -93,11 +67,8 @@
                 >{{scope.row.rec_position}}</div>
               </template>
             </el-table-column>
-
             <el-table-column prop="rec_name" label="投递公司" align="center"></el-table-column>
             <el-table-column prop="delivery_time" label="投递时间" align="center"></el-table-column>
-
-            
           </el-table>
           <div class="pagination">
             <el-pagination
@@ -126,7 +97,7 @@ export default {
       isShow: 1,
       pageIndex: 1,
       pageSize: 10,
-      pageTotal: 1,
+      pageTotal: 0,
       data: [],
       tableData: [],
       filename: "",
@@ -149,6 +120,7 @@ export default {
         this.getSelfDeliveryList();
       }
     },
+    //删除简历
     delSelfResume() {
       this.$axios
         .post("/xqhz/student/delSelfResume", {})
@@ -165,13 +137,12 @@ export default {
       this.pageIndex = val;
       this.getList();
     },
-    //获取数据
+    //获取投递岗位记录数据
     getSelfDeliveryList() {
       this.$axios
         .post("/xqhz/student/getSelfDeliveryList", {})
         .then(res => {
           this.data = res.data;
-          console.log(this.data);
           this.getList();
         })
         .catch(err => {
@@ -194,28 +165,22 @@ export default {
           index < this.pageIndex * this.pageSize &&
           index >= this.pageSize * (this.pageIndex - 1)
       );
-      console.log(this.tableData);
       this.pageTotal = list.length;
     },
-    handleEdit() {
-      this.editVisible = true;
-    },
+    //获取招聘详情
     getRecruitmentInfo(rid) {
-        console.log(rid)
       this.$router.push({
         path: "/recruitmentInfo",
         query: { rid: rid }
       });
     },
+    //对简历上一页下一页的处理
     changePdfPage(val) {
-      // console.log(val)
       if (val === 0 && this.currentPage > 1) {
         this.currentPage--;
-        // console.log(this.currentPage)
       }
       if (val === 1 && this.currentPage < this.pageCount) {
         this.currentPage++;
-        // console.log(this.currentPage)
       }
     },
 
@@ -224,16 +189,16 @@ export default {
       this.currentPage = 1; // 加载的时候先加载第一页
     },
 
-    submitUpload() {
-      this.$refs.upload.submit();
-    },
-    handleRemove(file, fileList) {
-      fileList.splice(file, 1);
-      console.log(file, fileList);
-    },
-    handlePreview(file) {
-      console.log(file);
-    },
+    // submitUpload() {
+    //   this.$refs.upload.submit();
+    // },
+    // handleRemove(file, fileList) {
+    //   fileList.splice(file, 1);
+    //   console.log(file, fileList);
+    // },
+    // handlePreview(file) {
+    //   console.log(file);
+    // },
     //图片上传前
     beforeAvatarUpload(file) {
       console.log(file);
@@ -249,19 +214,11 @@ export default {
       }
       return isJPG && isLt2M;
     },
-    //上传成功过后
+    //上传简历成功过后
     handleSucess(response, file, fileList) {
-      console.log(99);
-      console.log(response);
       if (response.code == 0) {
         let data = response.data;
-
-        // let file = {};
-        // file.name = data.name;
-        // file.url = self.$store.state.imgurlhttp + data.url;
-        // self.fileList[0] = file;
         this.src = data.url;
-        console.log(this.src);
         return;
       } else {
         this.$notify({
@@ -274,7 +231,6 @@ export default {
     },
     //上传失败
     handleError(err, file, fileList) {
-      console.log(err);
       this.$notify({
         title: "失败",
         message: "上传失败",
@@ -282,6 +238,7 @@ export default {
         duration: 2000
       });
     },
+    //显示pdf简历
     getSelfResume() {
       this.$axios
         .post("/xqhz/student/getSelfResume", {})
@@ -323,6 +280,10 @@ li {
       min-width: 150px;
       cursor: pointer;
       color: #505459;
+    }
+     .selected {
+      background-color: #ff6b45;
+      color: #fff;
     }
   }
   .resume {
@@ -404,10 +365,17 @@ li {
       padding: 10px 50px;
     }
   }
+  .active{
+      color:#4a90e6;
+      cursor: default;
+    }
+    .active:hover{
+      color:#FF4F00
+    }
 }
-.el-dialog {
-  overflow: scroll;
-  white-space: nowrap;
-  height: 500px;
-}
+// .el-dialog {
+//   overflow: scroll;
+//   white-space: nowrap;
+//   height: 500px;
+// }
 </style>

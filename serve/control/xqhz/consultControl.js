@@ -19,4 +19,13 @@ router.post('/postConsult', (req, res) => {
     })
 
 })
+router.post('/search', (req, res) => {
+    let data=req.body;
+    console.log(data.keyword)
+    consultmodel.search(data,(result) => {
+        res.json({ code: 0, msg: '操作成功',data:result })
+
+    })
+
+})
     module.exports = router;

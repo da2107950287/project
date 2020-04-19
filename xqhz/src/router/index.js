@@ -16,7 +16,7 @@ let router = new Router({
     {
       path: '/', redirect: '/home', name: 'index', meta: { title: '' }, component: () => import('@/components/index'),
       children: [
-        { path: '/home', name: 'home', meta: { title: '首页' }, component: () => import('@/components/home') },
+        { path: '/home', name: 'home', meta: { title: '首页',role:['company','student','admin']  }, component: () => import('@/components/home') },
         //学生
         { path: '/manageResume', name: 'manageResume', meta: { title: '简历管理', role: ['student'] }, component: () => import('@/components/student/manageResume') },
         // { path: '/resume', name: 'resume', meta: { title: '简历',roles:['0'] },component: () => import('@/components/student/resume') },
@@ -28,18 +28,18 @@ let router = new Router({
         { path: '/recruitment', name: 'recruitment', meta: { title: '招聘信息', role: ['company'] }, component: () => import('@/components/company/recruitment') },
         { path: '/training', name: 'training', meta: { title: '培训信息', role: ['company'] }, component: () => import('@/components/company/training') },
         { path: '/resumelist', name: 'resumelist', meta: { title: '简历管理', role: ['company'] }, component: () => import('@/components/company/resumelist') },
-        { path: '/recruitmentInfo', name: 'recruitmentInfo', meta: { title: '招聘信息详情' }, component: () => import('@/components/recruitmentInfo') },
-        { path: '/recruitmentList', name: 'recruitmentList', meta: { title: '培训信息详情' }, component: () => import('@/components/recruitmentList') },
-        { path: '/showResume', name: 'showResume', meta: { title: '培训信息详情' }, component: () => import('@/components/showResume') },
-        
-        
-        { path: '/trainingInfo', name: 'trainingInfo', meta: { title: '培训信息详情' }, component: () => import('@/components/trainingInfo') },
-        { path: '/trainingList', name: 'trainingList', meta: { title: '培训信息详情' }, component: () => import('@/components/trainingList') },
+        { path: '/recruitmentInfo', name: 'recruitmentInfo', meta: { title: '招聘信息详情', role: ['company', 'student', 'admin'] }, component: () => import('@/components/recruitmentInfo') },
+        { path: '/recruitmentList', name: 'recruitmentList', meta: { title: '培训信息详情', role: ['company', 'student', 'admin'] }, component: () => import('@/components/recruitmentList') },
+        { path: '/showResume', name: 'showResume', meta: { title: '培训信息详情',role: ['company', 'student', 'admin']  }, component: () => import('@/components/showResume') },
 
-        //学校
-        { path: '/profile', name: 'profile', meta: { title: '学校简介' }, component: () => import('@/components/school/profile') },
+
+        { path: '/trainingInfo', name: 'trainingInfo', meta: { title: '培训信息详情',role: ['company', 'student', 'admin'] }, component: () => import('@/components/trainingInfo') },
+        { path: '/trainingList', name: 'trainingList', meta: { title: '培训信息列表',role: ['company', 'student', 'admin']  }, component: () => import('@/components/trainingList') },
+
+        //学校简介
+        { path: '/profile', name: 'profile', meta: { title: '学校简介', role: ['company', 'student', 'admin'] }, component: () => import('@/components/school/profile') },
         //咨询
-        { path: '/consult', name: 'consult', meta: { title: '咨询' }, component: () => import('@/components/consult') },
+        { path: '/consult', name: 'consult', meta: { title: '咨询', role: ['company', 'student', 'admin'] }, component: () => import('@/components/consult') },
 
 
       ]

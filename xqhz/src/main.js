@@ -17,35 +17,33 @@ Vue.use(vueSwiper)//使用插件
 axios.defaults.baseURL = "http://localhost:81"
 // 导航守卫
 // 使用 router.beforeEach 注册一个全局前置守卫，判断用户是否登陆
-// router.beforeEach((to, from, next) => {
-//   let token = localStorage.getItem('token');
-//   let role=localStorage.getItem("role")
-//   if (to.path === '/login'||to.path==='/home'||to.path==='/register') {
-//     next();
-//   } else {
+router.beforeEach((to, from, next) => {
+  let token = localStorage.getItem('token');
+  let role = localStorage.getItem("role")
+  if (to.path === '/login' || to.path === '/register') {
+    next();
+  } else {
+    if (token === null || token === '') {
+      next('/login');
+    } else {
+      if (to.meta.role.length !== 0) {
+        let arr = to.meta.role.filter((item) => {
+          return role === item
+        })
+        if (arr.length == 0) {
+          alert('对不起，你没有权限访问')
+        } else {
+          next();
+        }
+      }
+    }
+  }
+});
 
-//     if (token === null || token === '') {
-//       next('/login');
-//     } else {
-//       if (to.meta.role.length !== 0) {
-//         for (let i = 0; i < to.meta.role.length; i++) {
-//           if (role === to.meta.role[i]) {
-//             next()
-//             break;
-//           } else{
-//             alert('对不起，你没有权限')
-//           }
-//         }
-//     }
-//     }
-//   }
-// });
-/* eslint-disable no-new */
 axios.interceptors.request.use(
   config => {
     if (localStorage.getItem("token")) {
       config.headers.authorization = localStorage.getItem("token");
-      // console.log(localStorage.getItem("token"))
     }
     return config
   },
@@ -54,7 +52,6 @@ axios.interceptors.request.use(
   })
 // axios 响应拦截器
 axios.interceptors.response.use(response => {
-  // console.log(response)
   return response.data;
 }, function (error) {
   return Promise.reject(error);

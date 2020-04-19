@@ -52,7 +52,7 @@ class studentModel extends dbBase {
         this.table = 'delivery'
         console.log(info.sid)
         let sql = `select  recruitment.rec_position,recruitment.rid,delivery.delivery_time,
-        company.rec_name from company,delivery,recruitment
+        company.rec_name,company.rec_page from company,delivery,recruitment,resume
         where delivery.rid=recruitment.rid and 
         company.cid=recruitment.cid and delivery.sid = ? and resume.sid =?`;
         this.mydb.query(sql, [info.sid,info.sid], (err, result) => {

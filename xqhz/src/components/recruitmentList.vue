@@ -1,8 +1,8 @@
 <template>
   <div class="home">
-    <h3>培训信息</h3>
+    <h3>招聘信息</h3>
     <div class="handle-box">
-      <el-input v-model="rec_position" placeholder="请输入课程名" class="handle-input mr10"></el-input>
+      <el-input v-model="rec_position" placeholder="请输入职位名称" class="handle-input mr10"></el-input>
       <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
     </div>
     <el-table
@@ -49,10 +49,9 @@ export default {
   methods: {
     getTrainingList() {
       this.$axios
-        .post("/xqhz/company/getRecruitmentList", {})
+        .post("/xqhz/company/getAllRecruitmentList", {})
         .then(res => {
           this.data = res.data;
-          console.log(this.data)
           this.getList();
         })
         .catch(err => {
@@ -60,7 +59,6 @@ export default {
         });
     },
     getRecruitmentInfo(rid) {
-    //   console.log(tid)
       this.$router.push({
         path: "/recruitmentInfo",
         query: { rid: rid }
@@ -107,7 +105,8 @@ li {
 .home {
   margin: 50px 150px;
   background-color: #ffffff;
-  padding: 20px;
+   box-shadow: 2px 2px 5px 0 #666;
+  padding: 20px 50px 50px;
   .handle-box {
     height: 35px;
     margin-bottom: 20px;
@@ -124,6 +123,10 @@ li {
   .table{
     .active{
       color:#4a90e6;
+      cursor: default;
+    }
+    .active:hover{
+      color:#FF4F00
     }
   }
 }

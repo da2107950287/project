@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <div class="aside">
-      <div @click="show(1)" :class="[isShow==1?'active':'']">培训报名记录</div>
-      <div @click="show(2)" :class="[isShow==2?'active':'']">培训成绩列表</div>
+      <div @click="show(1)" :class="[isShow==1?'selected':'']">培训报名记录</div>
+      <div @click="show(2)" :class="[isShow==2?'selected':'']">培训成绩列表</div>
     </div>
     <div class="training-entry-list" v-if="isShow==1">
       <h3>培训报名记录</h3>
@@ -188,7 +188,7 @@ console.log(res.data)
       cursor: pointer;
       color: #505459;
     }
-    .active {
+    .selected {
       background-color: #ff6b45;
       color: #fff;
     }
@@ -234,7 +234,7 @@ cursor: pointer;
 .pagination {
   margin-top: 10px;
 }
-// .active {
+// .selected {
 //   color: red;
 //   cursor: pointer;
 // }

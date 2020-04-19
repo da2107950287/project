@@ -30,8 +30,17 @@ class consultModel extends dbBase{
         })
     }
     getConsultList(callback){
-        let sql =`select * from ${this.table} where answer is not null `;
+        let sql =`select * from ${this.table} where status=1`;
         this.mydb.query(sql,(err,result)=>{
+          callback(result)       
+        })
+    }
+    search(data,callback){
+        data.keyword="%"+data.keyword+"%";
+      
+        let sql =`select * from ${this.table} where (question like ? or answer like ? ) and status=1 `;
+        this.mydb.query(sql,[data.keyword,data.keyword],(err,result)=>{
+           
           callback(result)       
         })
     }

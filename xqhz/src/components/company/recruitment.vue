@@ -1,9 +1,9 @@
 <template>
   <div class="continer">
     <div class="aside">
-      <div @click="show(1)">发布招聘信息</div>
-      <div @click="show(2)">招聘信息列表</div>
-      <div @click="show(3)">培训投递列表</div>
+      <div @click="show(1)" :class="[isShow==1?'selected':'']">发布招聘信息</div>
+      <div @click="show(2)" :class="[isShow==2?'selected':'']">招聘信息列表</div>
+      <div @click="show(3)" :class="[isShow==3?'selected':'']">岗位投递列表</div>
     </div>
     <div class="page" v-if="isShow==1">
       <div class="header">
@@ -35,8 +35,7 @@
             <el-input clearable v-model="ruleForm.rec_work_place"></el-input>
           </el-form-item>
           <el-form-item label="职位描述：" prop="rec_content">
-            <!-- <el-input  clearable v-model="ruleForm.rec_content"></el-input> -->
-            <editor-bar v-model="ruleForm.rec_content" :isClear="isClear" @change="change"></editor-bar>
+            <editor-bar v-model="ruleForm.rec_content" :isClear="isClear" ></editor-bar>
           </el-form-item>
           <el-form-item class="btns">
             <el-button v-if="isPost==true" type="danger" @click="postRecruitment">发布</el-button>
@@ -49,7 +48,16 @@
       <div class="header">
         <h3>招聘信息列表</h3>
         <div class="handle-box">
-          <el-input v-model="postion" placeholder="职位名称" class="handle-input mr10"></el-input>
+          <el-select v-model="status" placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+          <el-input v-model="postion" placeholder="请输入职位名称" class="handle-input mr10"></el-input>
+
           <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
         </div>
         <hr />
@@ -63,16 +71,16 @@
           >
             <el-table-column label="职位名称" align="center" show-overflow-tooltip>
               <template slot-scope="scope">
-                <div @click="getTrainingInfo(scope.row)" class="active">{{scope.row.rec_position}}</div>
+                <div @click="getRecruitmentInfo(scope.row.rid)" class="active">{{scope.row.rec_position}}</div>
               </template>
             </el-table-column>
             <el-table-column prop="rec_time" label="招聘时间" align="center"></el-table-column>
             <el-table-column prop="rec_place_name" label="招聘地点" align="center"></el-table-column>
-            <el-table-column prop="status" label="状态" align="center"></el-table-column>
+            <el-table-column prop="statusText" label="状态" align="center"></el-table-column>
 
             <el-table-column label="操作" width="200" align="center">
               <template slot-scope="scope">
-                <el-button type="text" icon="el-icon-view" @click="handleSee( scope.row)">查看</el-button>
+                <el-button type="text" icon="el-icon-edit" @click="handleEdit( scope.row)">编辑</el-button>
                 <el-button
                   type="text"
                   icon="el-icon-delete"
@@ -97,16 +105,11 @@
     </div>
     <div class="resume-list" v-if="isShow==3">
       <div class="header">
-        <h3>培训投递列表</h3>
+        <h3>岗位投递列表</h3>
 
         <div class="handle-box">
-          <!-- <el-button
-          type="primary"
-          icon="el-icon-delete"
-          class="handle-del mr10"
-          @click="delAllSelection"
-          >批量删除</el-button>-->
-          <el-input v-model="postion" placeholder="职位名称" class="handle-input mr10"></el-input>
+        
+          <el-input v-model="postion" placeholder="请输入职位名称" class="handle-input mr10"></el-input>
           <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
         </div>
         <hr />
@@ -118,25 +121,20 @@
             ref="multipleTable"
             header-cell-class-name="table-header"
           >
-            <!-- <el-table-column prop="id" label="ID" align="center"></el-table-column> -->
-            <!-- <el-table-column prop="class_name" label="课程名" align="center"></el-table-column> -->
-            <el-table-column label="职位名称" align="center">
+          
+            <el-table-column label="职位名称" align="center" show-overflow-tooltip>
               <template slot-scope="scope">
-                <div @click="getTrainingInfo(scope.row)" class="active">{{scope.row.rec_position}}</div>
+                <div @click="getRecruitmentInfo(scope.row.rid)" class="active">{{scope.row.rec_position}}</div>
               </template>
             </el-table-column>
-            <!-- <el-table-column prop="" label="" align="center"></el-table-column> -->
+      
             <el-table-column prop="username" label="投递人" align="center"></el-table-column>
-            <!-- <el-table-column prop="filename" label="简历" align="center"></el-table-column> -->
             <el-table-column label="简历" align="center">
               <template slot-scope="scope">
                 <div @click="showResume(scope.row.url)" class="active">{{scope.row.filename}}</div>
               </template>
             </el-table-column>
             <el-table-column prop="delivery_time" label="投递时间" align="center"></el-table-column>
-            <!-- <el-table-column prop="status" label="状态" align="center"></el-table-column> -->
-            <!-- <el-table-column prop="class_introduce" label="课程介绍" align="center"></el-table-column> -->
-            <!-- <el-table-column prop="status" label="状态" align="center"></el-table-column> -->
           </el-table>
           <div class="pagination">
             <el-pagination
@@ -178,7 +176,26 @@ export default {
       tableData: [],
       isClear: false,
       data: [],
-      isPost: true
+      isPost: true,
+      status: -1,
+      options: [
+        {
+          value: -1,
+          label: "全部"
+        },
+        {
+          value: 0,
+          label: "未审核"
+        },
+        {
+          value: 1,
+          label: "审核已通过"
+        },
+        {
+          value: 2,
+          label: "审核未通过"
+        }
+      ]
     };
   },
   methods: {
@@ -193,9 +210,7 @@ export default {
         this.getDeliveryRecordList();
       }
     },
-    change(val) {
-      console.log(val);
-    },
+   
     showResume(url) {
       this.$router.push({ path: "/showResume", query: { url: url } });
     },
@@ -228,9 +243,19 @@ export default {
     },
     getList() {
       this.tableData = [];
-      let list = this.data.filter((item, index) =>
-        item.rec_position.includes(this.postion)
-      );
+      let list = this.data.filter((item, index) => {
+       
+          if (this.status === 0 || this.status === 1 || this.status === 2) {
+            return (
+              this.status === item.status &&
+              item.rec_position.includes(this.postion)
+            );
+          } else {
+            return true && item.rec_position.includes(this.postion);
+          }
+       
+      });
+       console.log(list)
       list.forEach((item, index) => {
         if (item.delivery_time) {
           item.delivery_time = item.delivery_time
@@ -241,6 +266,13 @@ export default {
           item.rec_time = item.rec_time
             .replace(/T/g, " ")
             .replace(/\.[\d]{3}Z/, "");
+        }
+        if (item.status == 0) {
+          this.$set(item, "statusText", "待审核");
+        } else if (item.status == 1) {
+          this.$set(item, "statusText", "审核已通过");
+        } else {
+          this.$set(item, "statusText", "审核未通过");
         }
       });
       this.tableData = list.filter(
@@ -271,11 +303,17 @@ export default {
       this.pageIndex = 1;
       this.getList();
     },
-    handleSee(data) {
+    handleEdit(data) {
       this.ruleForm = data;
       this.isShow = 1;
       this.isPost = false;
-    }
+    },
+    getRecruitmentInfo(rid) {
+      this.$router.push({
+        path: "/recruitmentInfo",
+        query: {rid }
+      });
+    },
   },
   created() {
     this.getSelfRecruitmentList();
@@ -304,6 +342,10 @@ export default {
       cursor: pointer;
       color: #505459;
     }
+    .selected {
+      background-color: #ff6b45;
+      color: #fff;
+    }
   }
   .page {
     margin: 0 auto;
@@ -330,18 +372,22 @@ export default {
     background-color: #fff;
   }
 }
-.el-input {
-  width: 300px;
-}
+.active{
+      color:#4a90e6;
+      cursor: default;
+    }
+    .active:hover{
+      color:#FF4F00
+    }
 .el-input__inner,
 .el-input {
   width: 300px;
-  height: 35px;
-  display: inline-block;
+  // height: 35px;
+  // display: inline-block;
 }
 
-.handle-input {
-  width: 300px;
-  display: inline-block;
-}
+// .handle-input {
+//   width: 300px;
+//   display: inline-block;
+// }
 </style>

@@ -15,7 +15,7 @@
       >
         <!-- 用户名 -->
         <el-form-item prop="username">
-          <el-input v-model="loginForm.username" ></el-input>
+          <el-input v-model="loginForm.username" prefix-icon="el-icon-user" placeholder="请输入账号" ></el-input>
         </el-form-item>
         <!-- 密码 -->
         <el-form-item prop="password">
@@ -23,6 +23,8 @@
             v-model="loginForm.password"
             type="password"
             show-password
+            prefix-icon="el-icon-lock"
+            placeholder="请输入密码"
           ></el-input>
         </el-form-item>
         <!-- 按钮区域 -->
@@ -46,8 +48,8 @@ export default {
     return {
       // 这是登录表单的数据绑定对象
       loginForm: {
-        username: "admin",
-        password: "123456"
+        username: "",
+        password: ""
       },
       // 这是表单的验证规则对象
       loginFormRules: {
@@ -129,6 +131,9 @@ export default {
   width: 100%;
   padding: 0 20px;
   box-sizing: border-box;
+  .el-input__icon{
+    font-size: 20px;
+  }
 }
 .btns {
   display: flex;
