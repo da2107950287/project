@@ -8,7 +8,7 @@ let jwt = new JwtUtil();
 //获取培训信息列表
 router.post('/getRecruitmentList', (req, res) => {
     recruitmentmodel.getRecruitmentList((result) => {
-        console.log(result)
+       
         res.json(result)
     })
 })
@@ -55,5 +55,16 @@ router.post('/modifyApprovalStatus',(req,res)=>{
     }
     })
 })
+//批量删除
+router.post('/delAllRecruitment',(req,res)=>{
+    let data=req.body;
+    recruitmentmodel.delAllRecruitment(data,(result)=>{
+    //    if(result.affectedRows){
+    //        res.json({code:0,msg:'删除成功'})
+    //    }else{
+    //        res.json({code:1,msg:'删除失败，请重新操作！'})
+    //    }
 
+    })
+})
 module.exports = router;

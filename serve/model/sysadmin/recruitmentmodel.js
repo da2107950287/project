@@ -76,6 +76,20 @@ class recruitmentModel extends dbBase{
 
     }
 
+    delAllRecruitment(data,callback){
+            console.log("data",data)
+            console.log(data.data.length)
 
+            let sql = `delete from ${this.table} where rid = ?`;
+            for(let i=0;i<data.data.length;i++){
+              
+                let sql = `delete from ${this.table} where rid = ?`;
+            }
+            this.mydb.query(sql,[data.data[i].rid],(err,result)=>{
+                    
+                callback(result)
+            })
+            
+        }
 }
 module.exports=recruitmentModel;

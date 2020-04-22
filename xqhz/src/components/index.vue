@@ -1,6 +1,6 @@
 <template>
   <div>
-    <img src="../assets/img/top.png" class="top-img">
+    <img src="../assets/img/top.png" class="top-img" />
     <el-menu
       :default-active="activeIndex"
       class="el-menu-demo"
@@ -29,11 +29,10 @@
         <el-menu-item index="profile">学校简介</el-menu-item>
       </el-submenu>
       <el-menu-item index="consult">留言咨询</el-menu-item>
-      
+
       <el-menu-item index="register" class="right">注册</el-menu-item>
       <el-menu-item index="login" class="right">登录</el-menu-item>
     </el-menu>
-    <!-- <div class="blank-box"></div> -->
     <router-view></router-view>
   </div>
 </template>
@@ -44,24 +43,19 @@ export default {
       activeIndex: "home"
     };
   },
-  methods: {
-    
-  }
+  methods: {}
 };
 </script>
 <style scoped>
-
-.top-img{
+.top-img {
   width: 550px;
 }
 
-.blank-box{
-  height:60px;
+.blank-box {
+  height: 60px;
 }
 .el-menu.el-menu--horizontal {
-  padding:0 150px;
+  padding: 0 150px;
 }
-.right{
-  
-}
+
 </style>

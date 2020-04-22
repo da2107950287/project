@@ -23,14 +23,22 @@ export default {
     sendAjax() {
       var fd = new FormData(); //创建form对象
       fd.append("file", this.file); //通过append向form对象添加数据
-        this.$axios.post('/xqhz/student/test',fd).then(res=>{
-            console.log(res)
-        }).catch(err=>{
-            console.log(err)
+      this.$axios
+        .post("/xqhz/student/test", fd)
+        .then(res => {
+          console.log(res);
         })
-    } 
+        .catch(err => {
+          console.log(err);
+        });
+    }
   }
-}
+};
 </script>
 <style scoped>
+</style>
+<style scoped>
+.t {
+  width: 100px;
+}
 </style>

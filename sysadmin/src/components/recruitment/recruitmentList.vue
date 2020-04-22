@@ -129,13 +129,23 @@ export default {
     },
     //批量删除
     delAllSelection() {
+      console.log(this.multipleSelection)
+      
       const length = this.multipleSelection.length;
       let str = "";
+      console.log(this.delList)
       this.delList = this.delList.concat(this.multipleSelection);
+      console.log(this.delList)
+      this.$axios.post('sysadmin/recruitment/delAllRecruitment',{data:this.delList}).then(res=>{
+        console.log(res)
+      }).catch(err=>{
+        console.log(error)
+      })
       for (let i = 0; i < length; i++) {
         // this.tableData.splice(index, 1);
         str += this.multipleSelection[i].class_name + " ";
       }
+      
       this.$message.error(`删除了${str}`);
       this.multipleSelection = [];
     },

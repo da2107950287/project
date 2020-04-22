@@ -12,7 +12,7 @@ import 'swiper/dist/css/swiper.css'
 Vue.config.productionTip = false;
 Vue.prototype.$axios = axios;
 Vue.use(ElementUI);
-Vue.use(vueSwiper)//使用插件
+Vue.use(vueSwiper)//使用轮播插件
 
 axios.defaults.baseURL = "http://localhost:81"
 // 导航守卫
@@ -31,10 +31,16 @@ router.beforeEach((to, from, next) => {
           return role === item
         })
         if (arr.length == 0) {
-          alert('对不起，你没有权限访问')
+          ElementUI.Message({
+            message: '对不起，你没有权限',
+            type:'error'
+        });
+         
         } else {
           next();
         }
+      }else{
+        next()
       }
     }
   }
@@ -52,7 +58,7 @@ axios.interceptors.request.use(
   })
 // axios 响应拦截器
 axios.interceptors.response.use(response => {
-  return response.data;
+  return Promise.resolve(response.data);
 }, function (error) {
   return Promise.reject(error);
 });

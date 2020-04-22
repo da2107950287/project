@@ -27,7 +27,6 @@
         header-cell-class-name="table-header"
         @selection-change="handleSelectionChange"
       >
-        <!-- <el-table-column type="selection" width="60" align="center"></el-table-column> -->
         <el-table-column prop="cid" label="ID" width="150" align="center"></el-table-column>
         <el-table-column prop="question" label="问题" align="center" show-overflow-tooltip></el-table-column>
 
@@ -171,7 +170,7 @@ export default {
         .post("/sysadmin/consult/editConsult", this.form)
         .then(res => {
           if (res.data.code == 0) {
-            this.$message(res.data.msg);
+            this.$message.success(res.data.msg);
           }
         })
         .catch(err => {
@@ -202,15 +201,15 @@ export default {
     // 处理数据
     getList() {
       // es6过滤得到满足搜索条件的展示数据list
-      console.log(this.status);
       let list = this.data.filter((item, index) => {
         if (this.status === 0 || this.status === 1) {
+          
           return this.status === item.status;
         } else {
           return true;
         }
       });
-      console.log(list);
+     
       list.forEach(item => {
         if (item.status == 0) {
           this.$set(item, "statusText", "待回复");
