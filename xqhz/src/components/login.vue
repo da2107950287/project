@@ -44,7 +44,7 @@
 </template>
 
 <script>
-// import instance from '../assets/js/axios'
+
 export default {
   data() {
     return {

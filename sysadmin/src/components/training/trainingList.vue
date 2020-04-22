@@ -18,7 +18,7 @@
             :value="item.value"
           ></el-option>
         </el-select>
-        <el-input v-model="class_name" placeholder="课程名" class="handle-input mr10"></el-input>
+        <el-input v-model="class_name" placeholder="课程名或公司名称" class="handle-input mr10"></el-input>
         <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
       </div>
       <el-table
@@ -182,7 +182,7 @@ export default {
     },
     // 查看个人信息详情
     handleSee(tid) {
-      this.$router.push({ path: "/trainingInfo", query: { tid } });
+      // this.$router.push({ path: "/trainingInfo", query: { tid } });
     },
     // 分页导航
     handlePageChange(val) {
@@ -207,12 +207,13 @@ export default {
       console.log(this.status);
       let list = this.data.filter((item, index) => {
         if (this.status === 0 || this.status === 1 || this.status === 2) {
-          
-          return this.status === item.status&&item.class_name.includes(this.class_name);
+          console.log(item.class_teacher.includes(this.class_name))
+          return this.status === item.status&&(item.class_name.includes(this.class_name)||item.class_teacher.includes(this.class_name));
         } else {
-          return true&&item.class_name.includes(this.class_name);
+          return true&&(item.class_name.includes(this.class_name)||item.class_teacher.includes(this.class_name));
         }
       });
+     
       list.forEach((item, index) => {
         if (item.status == 0) {
           this.$set(item, "statusText", "待审核");

@@ -26,7 +26,7 @@
       </el-header>
       <el-container class="content">
         <el-aside width="200px">
-          <el-menu :default-active="activeIndex" router>
+          <el-menu :default-active="this.$route.name" router>
             <el-menu-item index="home">
               <template>
                 <i class="el-icon-s-home"></i>首页
@@ -94,9 +94,10 @@ export default {
       collapse: false,
       fullscreen: false,
       name: "管理员",
-      activeIndex: "home"
+      // activeIndex: this.$router.path
     };
   },
+  
   computed: {
     username() {
       let username = localStorage.getItem("username");
@@ -121,6 +122,7 @@ export default {
     if (document.body.clientWidth < 1500) {
       this.collapseChage();
     }
+    console.log(this.$route.path)
   },
   components: {
     Vheader

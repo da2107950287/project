@@ -15,7 +15,7 @@
       >
         <!-- 用户名 -->
         <el-form-item prop="username">
-          <el-input v-model="loginForm.username" prefix-icon="el-icon-user" placeholder="请输入账号" ></el-input>
+          <el-input v-model="loginForm.username" prefix-icon="el-icon-user" placeholder="请输入账号"></el-input>
         </el-form-item>
         <!-- 密码 -->
         <el-form-item prop="password">
@@ -28,7 +28,17 @@
           ></el-input>
         </el-form-item>
         <!-- 按钮区域 -->
+<el-form-item >
+  <el-input placeholder="请输入验证码" style="width:200px">
+<div class="code" @click="refreshCode">
+    <s-identify :identifyCode="identifyCode"></s-identify>
+   </div>
 
+
+   
+  </el-input>
+   
+</el-form-item>
         <div class="btns">
           <div class="forget-password" @click="$ruter.push('/forgetPassword')">忘记密码？</div>
           <div>
@@ -42,7 +52,7 @@
 </template>
 
 <script>
-// import instance from '../assets/js/axios'
+import SIdentify from './identify'
 export default {
   data() {
     return {
@@ -51,6 +61,8 @@ export default {
         username: "",
         password: ""
       },
+      identifyCodes: "ABCDEFGHIJKLIMNOPQRSTUVWSYZ1234567890",
+      identifyCode: "",
       // 这是表单的验证规则对象
       loginFormRules: {
         // 验证用户名是否合法
@@ -76,18 +88,39 @@ export default {
         .post("/sysadmin/user/login", this.loginForm)
         .then(res => {
           if (res.data.code == 0) {
-            this.$message.success(res.data.msg)
+            this.$message.success(res.data.msg);
             localStorage.setItem("token", res.data.token);
-            localStorage.setItem("username",res.data.username)
+            localStorage.setItem("username", res.data.username);
             this.$router.push({ path: "/home" });
-          }else{
-            this.$message.error(res.data.msg)
+          } else {
+            this.$message.error(res.data.msg);
           }
         })
         .catch(err => {
           console.log(err);
         });
+    },
+    randomNum(min, max) {
+      return Math.floor(Math.random() * (max - min) + min);
+    },
+    refreshCode() {
+      this.identifyCode = "";
+      this.makeCode(this.identifyCodes, 4);
+    },
+    makeCode(o, l) {
+      for (let i = 0; i < l; i++) {
+        this.identifyCode += this.identifyCodes[
+          this.randomNum(0, this.identifyCodes.length)
+        ];
+      }
+      console.log(this.identifyCode);
     }
+  },mounted() {
+    this.identifyCode = "";
+    this.makeCode(this.identifyCodes, 4);
+  }, 
+  components:{
+    SIdentify
   }
 };
 </script>
@@ -131,8 +164,12 @@ export default {
   width: 100%;
   padding: 0 20px;
   box-sizing: border-box;
-  .el-input__icon{
-    font-size: 20px;
+  .el-input {
+  
+    .el-input__prefix{
+      font-size: 30px;
+      color: #000;
+    }
   }
 }
 .btns {
