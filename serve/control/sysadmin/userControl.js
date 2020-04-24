@@ -13,9 +13,22 @@ router.post('/login', (req, res) => {
             res.json({ msg: "密码错误！" })
         } else {
             let token = jwt.createToken({ aid: result[0].aid })
-            res.json({ code: 0, msg: "登录成功！", token: token ,username:data.username})
+            res.json({ code: 0, msg: "登录成功！", token: token, username: data.username })
         }
     })
+})
+//批量添加学生里列表
+router.post('/addStudentList', (req, res) => {
+    console.log('addStudentList')
+    let data=req.body.data;
+    usermodel.addStudentList(data, (result) => {
+        if(result.affectedRows){
+            res.json({code:0,msg: '导入学生列表成功' })
+        }else{
+            res.json({code:1,msg:'导入学生列表失败'})
+        }
+    })
+
 })
 //获取学生列表
 router.post('/getStudentList', (req, res) => {
@@ -27,6 +40,18 @@ router.post('/getStudentList', (req, res) => {
 router.post('/delStudent', (req, res) => {
     let data = req.body.sid;
     usermodel.delStudent(data, (result) => {
+        if (result.affectedRows) {
+            res.json({ code: 0, msg: '删除成功' })
+        } else {
+            res.json({ code: 1, msg: '删除失败，请重新操作！' })
+        }
+
+    })
+})
+
+router.post('/delMultStudent', (req, res) => {
+    let data = req.body.data;
+    usermodel.delMultStudent(data, (result) => {
         if (result.affectedRows) {
             res.json({ code: 0, msg: '删除成功' })
         } else {
@@ -101,7 +126,7 @@ router.post('/modifyApprovalStatus', (req, res) => {
 //获取管理员列表
 router.post('/getAdminList', (req, res) => {
     usermodel.getAdminList((result) => {
-        res.json({data:result})
+        res.json({ data: result })
     })
 })
 module.exports = router;

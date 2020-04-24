@@ -74,9 +74,9 @@
           <li>
             <span>审核状态：</span>
             <el-radio-group v-model="info.status">
-              <el-radio :label="0">待审核</el-radio>
-              <el-radio :label="1">审核已通过</el-radio>
-              <el-radio :label="2">审核未通过</el-radio>
+              <el-radio :label=0>待审核</el-radio>
+              <el-radio :label=1>审核已通过</el-radio>
+              <el-radio :label=2>审核未通过</el-radio>
             </el-radio-group>
           </li>
         </ul>

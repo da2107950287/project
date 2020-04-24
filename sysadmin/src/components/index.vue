@@ -17,7 +17,7 @@
                   <i class="el-icon-caret-bottom"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item divided command="loginout">退出登录</el-dropdown-item>
+                  <el-dropdown-item command="loginout">退出登录</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </div>
@@ -77,7 +77,7 @@
             </el-submenu>
           </el-menu>
         </el-aside>
-        <el-container>
+        <el-container class="el-main">
           <el-main>
             <router-view></router-view>
           </el-main>
@@ -134,7 +134,6 @@ export default {
   height: 100%;
   .main {
     height: 100%;
-
     .content {
       .el-aside {
         ul {
@@ -142,6 +141,7 @@ export default {
           
         }
       }
+    
     }
   }
 }
@@ -197,6 +197,7 @@ export default {
   background-color: #e9eef3;
   color: #333;
   text-align: center;
+  // overflow: scroll;
 }
 
 body > .el-container {

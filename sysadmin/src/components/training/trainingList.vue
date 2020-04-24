@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="container">
-      <h3>培训信息列表</h3>
-      <hr style="margin-bottom:25px"/>
+      <h3 style="text-align:left">培训信息列表</h3>
+      <hr style="margin-bottom:25px;"/>
       <div class="handle-box">
         <el-button
           type="primary"

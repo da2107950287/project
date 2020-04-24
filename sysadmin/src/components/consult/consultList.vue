@@ -15,6 +15,7 @@
             :key="item.value"
             :label="item.label"
             :value="item.value"
+            @change="handleSearch"
           ></el-option>
         </el-select>
         <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>

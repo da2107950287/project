@@ -5,15 +5,47 @@ class userModel extends dbBase {
         this.table = '';
     }
     //登录
-    login(loginInfo,callback){   
-        this.table='admin'     
-        let sql=`select * from ${this.table} where username = ? `;
-        this.mydb.query(sql,[loginInfo.username],(err,result)=>{
-            if(err){              
+    login(loginInfo, callback) {
+        this.table = 'admin'
+        let sql = `select * from ${this.table} where username = ? `;
+        this.mydb.query(sql, [loginInfo.username], (err, result) => {
+            if (err) {
                 callback(err);
-            }else{
+            } else {
                 callback(result);
-            }            
+            }
+        })
+    }
+    //添加学生列表
+    addStudentList(info, callback) {
+
+        this.table = 'student'
+        let data = [];
+        let fieldstring = [];
+        let field = [];
+        let arr = [];
+        let sql;
+        info.forEach((item, index) => {
+            for (const key in item) {
+                if (item.hasOwnProperty(key)) {
+                    field.push("?");
+                    data.push(item[key]);
+                    fieldstring.push(key);
+                }
+               
+            }
+            arr.push("(" + field + ")");
+            field = []
+            fieldstring = Array.from(new Set(fieldstring))
+            sql = `insert into ${this.table} (${fieldstring.join(",")}) values ${arr.join(",")}`;
+        });
+        this.mydb.query(sql, data, (err, result) => {
+            if (err) {
+                console.log(err)
+                callback(err)
+            } else {               
+                callback(result);
+            }
         })
     }
     //获取学生列表
@@ -30,6 +62,17 @@ class userModel extends dbBase {
         this.table = 'student';
         let sql = `delete from ${this.table} where sid = ?`;
         this.mydb.query(sql, [data], (err, result) => {
+            callback(result)
+        })
+    }
+    delMultStudent(info, callback) {
+        this.table = 'student';
+        let field=[];
+        info.forEach((item, index) => {         
+            field.push(item.sid)
+        });
+       let sql = `delete from ${this.table} where sid in (${field})`;
+        this.mydb.query(sql,(err, result) => {
             callback(result)
         })
     }
@@ -135,19 +178,19 @@ class userModel extends dbBase {
         })
 
     }
-  //获取管理员列表
-  getAdminList(callback) {
-    this.table = 'admin'
-    let sql = `select * from ${this.table} where 1 `;
-    this.mydb.query(sql, (err, result) => {
-        callback(result)
-    })
-}
+    //获取管理员列表
+    getAdminList(callback) {
+        this.table = 'admin'
+        let sql = `select * from ${this.table} where 1 `;
+        this.mydb.query(sql, (err, result) => {
+            callback(result)
+        })
+    }
 
 
 
 
 
-    
+
 }
 module.exports = userModel;
