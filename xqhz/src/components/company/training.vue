@@ -1,52 +1,16 @@
 <template>
   <div class="continer">
     <div class="aside">
-      <div @click="show(1)" :class="[isShow==1?'selected':'']">发布培训信息</div>
-      <div @click="show(2)" :class="[isShow==2?'selected':'']">培训信息列表</div>
+      <div @click="show(1)" :class="[isShow==1?'selected':'']">培训信息列表</div>
+
+      <div @click="show(2)" :class="[isShow==2?'selected':'']">发布培训信息</div>
       <div @click="show(3)" :class="[isShow==3?'selected':'']">培训报名列表</div>
+      <div @click="show(4)" :class="[isShow==4?'selected':'']">成绩列表</div>
     </div>
     <div class="page" v-if="isShow==1">
-      <div class="header">
-        <h3 class="title">培训信息</h3>
-      </div>
-      <hr />
-      <div class="set-note">
-        <el-form :model="ruleForm" ref="ruleForm" label-width="110px" class="demo-ruleForm">
-          <!-- :rules="rules" -->
-          <el-form-item label="课程名：" prop="class_name">
-            <el-input clearable v-model="ruleForm.class_name"></el-input>
-          </el-form-item>
-          <el-form-item label="培训讲师：" prop="class_teacher">
-            <el-input clearable v-model="ruleForm.class_teacher"></el-input>
-          </el-form-item>
-          <el-form-item label="培训时间：" prop="class_time">
-            <el-date-picker
-              v-model="ruleForm.class_time"
-              type="datetimerange"
-              range-separator="-"
-              value-format="yyyy-MM-dd 00:00:00"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-            ></el-date-picker>
-          </el-form-item>
-          <el-form-item label="培训地点：" prop="class_place">
-            <el-input clearable v-model="ruleForm.class_place"></el-input>
-          </el-form-item>
-          <el-form-item label="培训内容：" prop="class_content">
-            <!-- <el-input  clearable v-model="ruleForm.class_content"></el-input> -->
-            <editor-bar v-model="ruleForm.class_content" :isClear="isClear" @change="change"></editor-bar>
-          </el-form-item>
-          <el-form-item class="btns">
-            <el-button v-if="isPost==true" type="danger" @click="postTraining">发布</el-button>
-            <el-button v-else type="danger">修改</el-button>
-          </el-form-item>
-        </el-form>
-      </div>
-    </div>
-    <div class="page" v-if="isShow==2">
       <h3>培训信息列表</h3>
       <div class="handle-box">
-        <el-select v-model="status" placeholder="请选择">
+        <el-select v-model="status" @change="handleSearch" placeholder="请选择">
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -54,8 +18,7 @@
             :value="item.value"
           ></el-option>
         </el-select>
-        <el-input v-model="class_name" placeholder="请输入职位名称" class="handle-input mr10"></el-input>
-
+        <el-input v-model="class_name" placeholder="请输入课程名" class="handle-input mr10"></el-input>
         <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
       </div>
       <hr />
@@ -76,10 +39,10 @@
           <el-table-column prop="class_time" label="培训时间" align="center"></el-table-column>
           <el-table-column prop="class_place" label="培训地址" align="center"></el-table-column>
           <el-table-column prop="statusText" label="状态" align="center"></el-table-column>
-
           <el-table-column label="操作" width="200" align="center">
             <template slot-scope="scope">
-              <el-button type="text" icon="el-icon-edit" @click="handleEdit( scope.row)">编辑</el-button>
+              <el-button type="text" icon="el-icon-view" @click="handleSee(scope.row)">查看</el-button>
+              <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.row)">编辑</el-button>
               <el-button
                 type="text"
                 icon="el-icon-delete"
@@ -101,6 +64,43 @@
         </div>
       </div>
     </div>
+    <div class="page" v-if="isShow==2">
+      <div class="header">
+        <h3 class="title">培训信息</h3>
+      </div>
+      <hr />
+      <div class="set-note">
+        <el-form :model="ruleForm" ref="ruleForm" label-width="110px" class="demo-ruleForm">
+          <el-form-item label="课程名：" prop="class_name">
+            <el-input clearable v-model="ruleForm.class_name"></el-input>
+          </el-form-item>
+          <el-form-item label="培训讲师：" prop="class_teacher">
+            <el-input clearable v-model="ruleForm.class_teacher"></el-input>
+          </el-form-item>
+          <el-form-item label="培训时间：" prop="class_time">
+            <el-date-picker
+              v-model="ruleForm.class_time"
+              type="datetimerange"
+              range-separator="至"
+              value-format="yyyy-MM-dd 00:00:00"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+            ></el-date-picker>
+          </el-form-item>
+          <el-form-item label="培训地点：" prop="class_place">
+            <el-input clearable v-model="ruleForm.class_place"></el-input>
+          </el-form-item>
+          <el-form-item label="培训内容：" prop="class_content">
+            <editor-bar v-model="ruleForm.class_content" :isClear="isClear" @change="change"></editor-bar>
+          </el-form-item>
+          <el-form-item class="btns">
+            <el-button type="danger" @click="postTraining">发布</el-button>
+            <!-- <el-button v-else type="danger">修改</el-button> -->
+          </el-form-item>
+        </el-form>
+      </div>
+    </div>
+
     <div class="page" v-if="isShow==3">
       <h3>培训报名列表</h3>
       <div class="handle-box">
@@ -110,9 +110,10 @@
             :key="item.value"
             :label="item.label"
             :value="item.value"
+            @change="handleSearch"
           ></el-option>
         </el-select>
-        <el-input v-model="class_name" placeholder="请输入职位名称" class="handle-input mr10"></el-input>
+        <el-input v-model="class_name" placeholder="请输入课程名" class="handle-input mr10"></el-input>
 
         <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
       </div>
@@ -132,8 +133,17 @@
           </el-table-column>
           <el-table-column prop="class_teacher" label="讲师" align="center"></el-table-column>
           <el-table-column prop="class_time" label="培训时间" align="center"></el-table-column>
-          <!-- <el-table-column prop="class_place" label="培训地址" align="center"></el-table-column> -->
-          <el-table-column prop="entry_time" label="报名时间" align="center"></el-table-column>
+          <el-table-column label="操作" width="200" align="center">
+            <template slot-scope="scope">
+              <el-button type="text" icon="el-icon-edit" @click="handleSeeList(scope.row)">查1看</el-button>
+              <el-button
+                type="text"
+                icon="el-icon-delete"
+                class="red"
+                @click="handleDelete(scope.$index, scope.row)"
+              >删除</el-button>
+            </template>
+          </el-table-column>
         </el-table>
         <div class="pagination">
           <el-pagination
@@ -147,6 +157,56 @@
         </div>
       </div>
     </div>
+    <el-dialog title="培训信息" :visible.sync="editVisible" width="60%">
+      <el-form label-width="100px">
+        <el-form-item label="课程名">
+          <el-input v-model="form.class_name" type="input"></el-input>
+          <!-- <div>{{form.class_name}}</div> -->
+        </el-form-item>
+        <el-form-item label="讲师">
+          <el-input v-model="form.class_teacher" type="input"></el-input>
+          <!-- <div>{{form.class_teacher}}</div> -->
+        </el-form-item>
+        <el-form-item label="培训时间">
+          <!-- <el-input v-model="form.class_time" type="input"></el-input> -->
+          <el-date-picker
+            v-model="form.class_time"
+            type="datetimerange"
+            range-separator="至"
+            value-format="yyyy-MM-dd 00:00:00"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+          ></el-date-picker>
+        </el-form-item>
+        <!-- <div>{{form.class_time}}</div> -->
+        <el-form-item label="培训地址">
+          <!-- <div></div> -->
+          <el-input v-model="form.class_place" type="input"></el-input>
+        </el-form-item>
+        <el-form-item label="培训内容">
+          <!-- <div>{form.class_content}}</div> -->
+          <editor-bar v-model="form.class_content" :isClear="isClear" @change="change"></editor-bar>
+          <!-- <el-input v-model="form.class_content" type="textarea" show-word-limit maxlength="100"></el-input> -->
+        </el-form-item>
+        <!-- <el-form-item label="状态">
+          <div>{{form.status}}</div>
+          <el-input v-model="form.status" type="input"></el-input>
+        </el-form-item>-->
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="editVisible = false">取 消</el-button>
+        <el-button type="primary" @click="saveEdit">确 定</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog title="报名列表" :visible.sync="listVisible" width="60%">
+      <el-table :data="dialogTable" border style="width: 100%">
+        <el-table-column prop="username" label="学号" width="180"></el-table-column>
+        <el-table-column prop="name" label="姓名" width="180"></el-table-column>
+        <el-table-column prop="entry_time" label="报名时间" width="180"></el-table-column>
+
+        <el-table-column prop="score" label="成绩" width="180"></el-table-column>
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -154,7 +214,10 @@ import EditorBar from "../wangEditor/wangEditor";
 export default {
   data() {
     return {
+      editVisible: false,
+      listVisible: false,
       isShow: 1,
+      form: {},
       ruleForm: {
         class_name: "", //课程名
         class_teacher: "", //培训讲师
@@ -163,9 +226,13 @@ export default {
         class_content: "" //课程介绍
       },
       tableData: [],
+      dialogTable: [],
       pageIndex: 1, //默认显示第一页
       pageSize: 10, //默认每页数据量
       pageTotal: 0,
+      dialogPageIndex: 1,
+      dialogPageSize: 10,
+      dialogPageTotal: 0,
       isClear: false,
       class_name: "",
       isPost: true,
@@ -191,19 +258,19 @@ export default {
     };
   },
   methods: {
-    show(index) {
-      this.isShow = index;
-      if (index == 1) {
-        this.ruleForm =  {
-        class_name: "", //课程名
-        class_teacher: "", //培训讲师
-        class_time: "", //培训时间
-        class_place: "", //培训地点
-        class_content: "" //课程介绍
-        }
-      } else if (index == 2) {
+    show(type) {
+      this.isShow = type;
+      if (type == 2) {
         this.getSelfTrainingList();
-      } else if (index == 3) {
+      } else if (type == 2) {
+        this.ruleForm = {
+          class_name: "", //课程名
+          class_teacher: "", //培训讲师
+          class_time: "", //培训时间
+          class_place: "", //培训地点
+          class_content: "" //课程介绍
+        };
+      } else if (type == 3) {
         this.getApplyRecordList();
       }
     },
@@ -214,15 +281,48 @@ export default {
     edit() {
       this.disabled = false;
     },
+    saveEdit() {},
+    // handleEdit(data) {
+    //   console.log(data);
+    //   this.ruleForm = data;
+    //   this.isShow = 1;
+    //   this.isPost = false;
+    // },
     handleEdit(data) {
+      this.editVisible = true;
+
+      var arr = data.class_time.split("至");
+      data.class_time = arr;
+      this.form = data;
+    },
+    handleSee(data) {
       console.log(data);
-      this.ruleForm = data;
-      this.isShow = 1;
-      this.isPost = false;
+      this.listVisible = true;
+      this.$axios
+        .post("/xqhz/company/getApplyRecordList", { tid: data.tid })
+        .then(res => {
+          this.data=res.data;
+          this.getDialogList()
+        });
+    },
+     getDialogList() {
+      this.data.forEach((item, index) => {
+        if (item.entry_time) {
+          item.entry_time = item.entry_time
+            .replace(/T/g, " ")
+            .replace(/\.[\d]{3}Z/, "");
+        }
+      });
+      this.dialogTable = this.data.filter(
+        (item, index) =>
+          index < this.dialogPageIndex * this.dialogPageSize &&
+          index >= this.dialogPageSize * (this.dialogPageIndex - 1)
+      );
+      this.dialogPageTotal = this.data.length;
     },
     postTraining() {
-      console.log(this.ruleForm);
-      this.ruleForm.class_time = this.ruleForm.class_time.join("-");
+      console.log(this.ruleForm.class_time);
+      this.ruleForm.class_time = this.ruleForm.class_time.join("至");
       this.$axios
         .post("/xqhz/company/postTraining", this.ruleForm)
         .then(res => {
@@ -255,19 +355,20 @@ export default {
           console.log(err);
         });
     },
-    getApplyRecordList() {
-      this.$axios
-        .post("/xqhz/company/getApplyRecordList", {})
-        .then(res => {
-          this.data = res.data;
-          this.getList();
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    },
+    // getApplyRecordList() {
+    //   this.$axios
+    //     .post("/xqhz/company/getApplyRecordList", {})
+    //     .then(res => {
+    //       this.data = res.data;
+    //       this.getList();
+    //     })
+    //     .catch(err => {
+    //       console.log(err);
+    //     });
+    // },
     // 处理数据
     getList() {
+      console.log(888);
       // es6过滤得到满足搜索条件的展示数据list
       this.tableData = [];
       let list = this.data.filter((item, index) => {
@@ -302,11 +403,14 @@ export default {
       this.pageTotal = list.length;
     },
     handleSearch() {
+      console.log(88);
       this.pageIndex = 1;
       this.getList();
     }
   },
-
+  created() {
+    this.getSelfTrainingList();
+  },
   components: {
     EditorBar
   }

@@ -195,11 +195,11 @@ class studentModel extends dbBase {
                 if (result.length != 0) {
                     let delSql = `delete from ${this.table}  where sid=?`
                     this.mydb.query(delSql, [info.sid], (err, result) => {
-                        // if (err) {
-                        //     callback(err)
-                        // } else {
-                        //     callback(result)
-                        // }
+                        if (err) {
+                            callback(err)
+                        } else {
+                            callback(result)
+                        }
 
                     })
                 }

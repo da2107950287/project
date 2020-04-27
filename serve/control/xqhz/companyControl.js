@@ -95,7 +95,7 @@ router.post('/getAllRecruitmentList', (req, res) => {
 router.post('/getSelfRecruitmentList', (req, res) => {
     jwt.checkToken(req.headers.authorization).then(res1 => {
         console.log(res1.cid)
-        companymodel.getSelfRecruitmentList(res1.cid,(result) => {
+        companymodel.getSelfRecruitmentList(res1.cid, (result) => {
             console.log(result)
             res.json({ code: 0, data: result, msg: '获取数据成功' })
         })
@@ -106,9 +106,9 @@ router.post('/getSelfRecruitmentList', (req, res) => {
 //获取企业自己的培训信息
 router.post('/getSelfTrainingList', (req, res) => {
     jwt.checkToken(req.headers.authorization).then(res1 => {
-        let data={};
-        data.cid=res1.cid;
-        companymodel.getSelfTrainingList(data,(result) => {
+        let data = {};
+        data.cid = res1.cid;
+        companymodel.getSelfTrainingList(data, (result) => {
             res.json({ code: 0, data: result, msg: '获取数据成功' })
         })
     }).catch(err => {
@@ -117,10 +117,11 @@ router.post('/getSelfTrainingList', (req, res) => {
 })
 //获取企业自己岗位投递列表
 router.post('/getDeliveryRecordList', (req, res) => {
+    let data = req.body.rid;
     jwt.checkToken(req.headers.authorization).then(res1 => {
-        
-        companymodel.getDeliveryRecordList(res1.cid,(result) => {
-            console.log(result)
+        // data.cid=res1.cid
+        companymodel.getDeliveryRecordList(data, (result) => {
+
             res.json({ code: 0, data: result, msg: '获取数据成功' })
         })
     }).catch(err => {
@@ -128,10 +129,11 @@ router.post('/getDeliveryRecordList', (req, res) => {
     })
 })
 router.post('/getApplyRecordList', (req, res) => {
+    let data = req.body;
+    console.log(data)
     jwt.checkToken(req.headers.authorization).then(res1 => {
-        
-        companymodel.getApplyRecordList(res1.cid,(result) => {
-            console.log(result)
+        companymodel.getApplyRecordList(data, (result) => {
+            console.log(result, 99)
             res.json({ code: 0, data: result, msg: '获取数据成功' })
         })
     }).catch(err => {
@@ -140,16 +142,16 @@ router.post('/getApplyRecordList', (req, res) => {
 })
 //获取所有企业列表
 router.post('/getCompanyList', (req, res) => {
-        companymodel.getCompanyList((result) => {
-            console.log(result)
-            res.json({ code: 0, data: result, msg: '获取数据成功' })
-        })
-    
+    companymodel.getCompanyList((result) => {
+        console.log(result)
+        res.json({ code: 0, data: result, msg: '获取数据成功' })
+    })
+
 })
 //获取培训信息详情
 router.post('/getTrainingInfo', (req, res) => {
-    let data=req.body;
-    companymodel.getTrainingInfo(data,(result) => {
+    let data = req.body;
+    companymodel.getTrainingInfo(data, (result) => {
         console.log(result)
         res.json({ code: 0, data: result[0], msg: '获取数据成功' })
     })
@@ -157,9 +159,16 @@ router.post('/getTrainingInfo', (req, res) => {
 })
 //获取招聘信息详情
 router.post('/getRecruitmentInfo', (req, res) => {
-    let data=req.body;
-    companymodel.getRecruitmentInfo(data,(result) => {
-        // console.log(result)
+    let data = req.body;
+    companymodel.getRecruitmentInfo(data, (result) => {
+        res.json({ code: 0, data: result[0], msg: '获取数据成功' })
+    })
+
+})
+//企业删除招聘信息
+router.post('/delRecruitment', (req, res) => {
+    let data = req.body;
+    companymodel.delRecruitment(data, (result) => {
         res.json({ code: 0, data: result[0], msg: '获取数据成功' })
     })
 

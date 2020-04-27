@@ -9,15 +9,20 @@
           @click="delAllSelection"
         >批量删除</el-button>-->
         <!-- <el-input v-model="status" placeholder="课程名" class="handle-input mr10"></el-input> -->
-        <el-select v-model="status" placeholder="请选择">
+        <el-select v-model="status" placeholder="请选择" @change="handleSearch">
           <el-option
             v-for="item in options"
             :key="item.value"
             :label="item.label"
             :value="item.value"
-            @change="handleSearch"
           ></el-option>
         </el-select>
+        <el-input
+          v-model="keyWord"
+          placeholder="请输入搜索关键字"
+          class="handle-input mr10"
+          @keyup.enter.native="handleSearch"
+        ></el-input>
         <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
       </div>
       <el-table
@@ -98,6 +103,7 @@ export default {
       editVisible: false,
       pageTotal: null,
       form: {},
+      keyWord: "",
       options: [
         {
           value: -1,
@@ -117,6 +123,7 @@ export default {
   methods: {
     // 触发搜索按钮
     handleSearch() {
+      console.log(7777);
       this.pageIndex = 1;
       this.getList();
     },
@@ -130,7 +137,7 @@ export default {
           this.$axios
             .post("/sysadmin/consult/delConsult", { cid: row.cid })
             .then(res => {
-              console.log(res)
+              console.log(res);
               if (res.data.code == 0) {
                 this.tableData.splice(index, 1);
                 this.$message.success(res.data.msg);
@@ -202,15 +209,24 @@ export default {
     // 处理数据
     getList() {
       // es6过滤得到满足搜索条件的展示数据list
-      let list = this.data.filter((item, index) => {
+      let list1 = this.data.filter((item, index) => {
         if (this.status === 0 || this.status === 1) {
+          return
           
-          return this.status === item.status;
+          this.status === item.status && item.question.includes(this.keyWord);
         } else {
-          return true;
+          return true && item.question.includes(this.keyWord);
         }
       });
-     
+      let list2 = this.data.filter((item, index) => {
+        if (this.status === 0 || this.status === 1) {
+          return
+          this.status === item.status && item.answer.includes(this.keyWord);
+        } else {
+          return true && item.answer.includes(this.keyWord);
+        }
+      });
+      let list = list1.concat(list2);
       list.forEach(item => {
         if (item.status == 0) {
           this.$set(item, "statusText", "待回复");
@@ -266,5 +282,8 @@ export default {
   margin: auto;
   width: 40px;
   height: 40px;
+}
+.pagination {
+  margin-top: 10px;
 }
 </style>

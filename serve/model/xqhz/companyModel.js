@@ -206,12 +206,13 @@ class companyModel extends dbBase {
         })
     }
     getDeliveryRecordList(data,callback){
-        let sql = `select recruitment.rec_position,recruitment.rid,delivery.delivery_time,student.username,resume.filename,resume.url from recruitment,student,delivery,resume
-        where delivery.rid=recruitment.rid and student.sid=delivery.sid and resume.sid=delivery.sid and cid = ?`;
+        let sql = `SELECT delivery.*,student.*,resume.* FROM recruitment,student,delivery,resume 
+        WHERE delivery.sid=resume.sid and student.sid=delivery.sid and recruitment.rid=delivery.rid AND delivery.rid=?`;
         this.mydb.query(sql,[data],(err, result) => {
             console.log(result)
             console.log(sql)
             if (err) {
+                console
                 callback(err)
             } else {
                 callback(result)
@@ -220,9 +221,8 @@ class companyModel extends dbBase {
         })
     }
     getApplyRecordList(data,callback){
-        let sql = `select training.*,entry.entry_time,student.username from training,student,entry
-        where entry.tid=training.tid and student.sid=entry.sid and cid = ?`;
-        this.mydb.query(sql,[data],(err, result) => {
+        let sql = `select entry.entry_time,student.* from student,entry where student.sid=entry.sid and entry.tid=?`;
+        this.mydb.query(sql,[data.tid],(err, result) => {
             console.log(result)
             console.log(sql)
             if (err) {
@@ -268,6 +268,13 @@ class companyModel extends dbBase {
                 callback(result)
             }
 
+        })
+    }
+    delRecruitment(data,callback) {
+        this.table='recruitment'
+        let sql = `delete from ${this.table} where rid = ?`;
+        this.mydb.query(sql, [data.rid], (err, result) => {
+            callback(result);
         })
     }
 }
