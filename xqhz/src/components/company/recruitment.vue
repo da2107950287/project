@@ -11,7 +11,7 @@
       <div class="header">
         <h3>招聘信息列表</h3>
         <div class="handle-box">
-          <el-select v-model="status" placeholder="请选择">
+          <el-select v-model="status" @change="handleSearch" placeholder="请选择">
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -335,16 +335,15 @@ export default {
       this.tableData = [];
       let list = this.data.filter((item, index) => {
         if (this.status === 0 || this.status === 1 || this.status === 2) {
-          return (
-            this.status === item.status &&
-            item.rec_position.includes(this.postion)
-          );
+            return  this.status === item.status && item.rec_position.includes(this.postion);
         } else {
           return true && item.rec_position.includes(this.postion);
         }
       });
+      console.log(list)
       //  console.log(list)
       list.forEach((item, index) => {
+        console.log(item)
         if (item.delivery_time) {
           item.delivery_time = item.delivery_time
             .replace(/T/g, " ")
@@ -363,12 +362,14 @@ export default {
           this.$set(item, "statusText", "审核未通过");
         }
       });
+
       this.tableData = list.filter(
         (item, index) =>
           index < this.pageIndex * this.pageSize &&
           index >= this.pageSize * (this.pageIndex - 1)
       );
       this.pageTotal = list.length;
+      console.log(this.tableData)
     },
     // //获取招聘投递列表
     // getDeliveryRecordList() {
@@ -513,7 +514,9 @@ export default {
   // height: 35px;
   // display: inline-block;
 }
-
+.pagination{
+  margin-top: 10px;
+}
 // .handle-input {
 //   width: 300px;
 //   display: inline-block;

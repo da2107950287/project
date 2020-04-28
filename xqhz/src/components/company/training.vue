@@ -2,7 +2,6 @@
   <div class="continer">
     <div class="aside">
       <div @click="show(1)" :class="[isShow==1?'selected':'']">培训信息列表</div>
-
       <div @click="show(2)" :class="[isShow==2?'selected':'']">发布培训信息</div>
       <div @click="show(3)" :class="[isShow==3?'selected':'']">培训报名列表</div>
       <div @click="show(4)" :class="[isShow==4?'selected':'']">成绩列表</div>
@@ -200,12 +199,29 @@
     </el-dialog>
     <el-dialog title="报名列表" :visible.sync="listVisible" width="60%">
       <el-table :data="dialogTable" border style="width: 100%">
-        <el-table-column prop="username" label="学号" width="180"></el-table-column>
-        <el-table-column prop="name" label="姓名" width="180"></el-table-column>
-        <el-table-column prop="entry_time" label="报名时间" width="180"></el-table-column>
+        <el-table-column prop="username" label="学号"></el-table-column>
+        <el-table-column prop="name" label="姓名"></el-table-column>
+        <el-table-column prop="entry_time" label="报名时间"></el-table-column>
 
-        <el-table-column prop="score" label="成绩" width="180"></el-table-column>
+        <el-table-column prop="score" label="成绩">
+          <template slot-scope="scope">
+            <!-- <div v-if="scope.row.score">{{scope.row.score}}</div> -->
+            <el-input size="small" v-model="scope.row.score" style="width:200px"></el-input>
+          </template>
+        </el-table-column>
       </el-table>
+
+      <div class="pagination">
+        <el-pagination
+          background
+          layout="total, prev, pager, next"
+          :current-page="dialogPageIndex"
+          :page-size="dialogPageSize"
+          :total="dialogPageTotal"
+          @current-change="handleDialogPageChange"
+        ></el-pagination>
+      </div>
+      <el-button type="danger" @click="saveScore">保存</el-button>
     </el-dialog>
   </div>
 </template>
@@ -278,6 +294,15 @@ export default {
       this.class_content = val;
       console.log(val);
     },
+    saveScore() {
+      
+         this.$axios
+        .post("/xqhz/company/saveScore", { data:this.dialogTable})
+        .then(res => {
+          this.data = res.data;
+          this.getDialogList();
+        });
+    },
     edit() {
       this.disabled = false;
     },
@@ -301,11 +326,11 @@ export default {
       this.$axios
         .post("/xqhz/company/getApplyRecordList", { tid: data.tid })
         .then(res => {
-          this.data=res.data;
-          this.getDialogList()
+          this.data = res.data;
+          this.getDialogList();
         });
     },
-     getDialogList() {
+    getDialogList() {
       this.data.forEach((item, index) => {
         if (item.entry_time) {
           item.entry_time = item.entry_time
@@ -343,6 +368,10 @@ export default {
       this.pageIndex = val;
       this.getList();
     },
+    handleDialogPageChange(val) {
+      this.dialogPageIndex = val;
+      this.getDialogList();
+    },
     //获取数据
     getSelfTrainingList() {
       this.$axios
@@ -368,7 +397,7 @@ export default {
     // },
     // 处理数据
     getList() {
-      console.log(888);
+      // console.log(888);
       // es6过滤得到满足搜索条件的展示数据list
       this.tableData = [];
       let list = this.data.filter((item, index) => {
@@ -401,6 +430,7 @@ export default {
           index >= this.pageSize * (this.pageIndex - 1)
       );
       this.pageTotal = list.length;
+      console.log(this.tableData);
     },
     handleSearch() {
       console.log(88);
@@ -475,5 +505,8 @@ export default {
 .el-input__inner,
 .el-input {
   width: 300px;
+}
+.pagination {
+  margin-top: 10px;
 }
 </style>

@@ -173,5 +173,19 @@ router.post('/delRecruitment', (req, res) => {
     })
 
 })
+router.post('/saveScore', (req, res) => {
+    console.log('saveScore')
+    console.log(req.body)
+    let data=req.body.data;
+companymodel.saveScore(data, (result) => {
+    console.log(result)
+        if(result.affectedRows){
+            res.json({code:0,msg: '导入学生列表成功' })
+        }else{
+            res.json({code:1,msg:'导入学生列表失败'})
+        }
+    })
+
+})
 
 module.exports = router;

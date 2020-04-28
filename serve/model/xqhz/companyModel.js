@@ -221,7 +221,7 @@ class companyModel extends dbBase {
         })
     }
     getApplyRecordList(data,callback){
-        let sql = `select entry.entry_time,student.* from student,entry where student.sid=entry.sid and entry.tid=?`;
+        let sql = `select entry.*,student.* from student,entry where student.sid=entry.sid and entry.tid=?`;
         this.mydb.query(sql,[data.tid],(err, result) => {
             console.log(result)
             console.log(sql)
@@ -230,7 +230,6 @@ class companyModel extends dbBase {
             } else {
                 callback(result)
             }
-
         })
     }
     getCompanyList(callback) {
@@ -276,6 +275,41 @@ class companyModel extends dbBase {
         this.mydb.query(sql, [data.rid], (err, result) => {
             callback(result);
         })
+    }
+    saveScore(info, callback) {
+        // UPDATE 表名称 SET 列名称 = 新值 WHERE 列名称 = 某值
+        this.table = 'score'
+        let data = [];
+        let fieldstring = [];
+        let field = [];
+        let arr = [];
+        let sql;
+        info.forEach((item, index) => {
+            for (const key in item) {
+                if (item.hasOwnProperty(key)) {
+                    field.push("?");
+                    data.push(item[key]);
+                    fieldstring.push(key);
+                }
+               
+            }
+            arr.push("(" + field + ")");
+            field = []
+            fieldstring = Array.from(new Set(fieldstring))
+            sql = `insert into ${this.table} (${fieldstring.join(",")}) values ${arr.join(",")}`;
+        });
+        this.mydb.query(sql, data, (err, result) => {
+            if (err) {
+                console.log(err)
+                callback(err)
+            } else {               
+                callback(result);
+            }
+        })
+       
+
+        
+
     }
 }
 module.exports = companyModel;

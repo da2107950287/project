@@ -107,8 +107,8 @@ export default {
       this.$axios
         .post("/xqhz/student/getEntryTrainList", {})
         .then(res => {
+        
           this.data = res.data;
-          console.log(res.data, 99999999999);
           this.getList();
         })
         .catch(err => {

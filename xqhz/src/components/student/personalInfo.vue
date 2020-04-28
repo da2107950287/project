@@ -8,14 +8,15 @@
       <div class="set-note">
         <el-form ref="ruleForm" label-width="60px" class="demo-ruleForm">
           <el-form-item label="学号：" prop="sno">
-            <div class="content">{{ruleForm.sno}}</div>
-          </el-form-item>
-          <el-form-item label="姓名：" prop="username">
             <div class="content">{{ruleForm.username}}</div>
           </el-form-item>
-          <el-form-item label="密码：" prop="password">
+            <el-form-item label="密码：" prop="password">
             <div class="content">{{ruleForm.password}}</div>
           </el-form-item>
+          <el-form-item label="姓名：" prop="username">
+            <div class="content">{{ruleForm.name}}</div>
+          </el-form-item>
+        
           <el-form-item label="学院：" prop="academy">
             <div class="content">{{ruleForm.academy}}</div>
           </el-form-item>
@@ -27,13 +28,13 @@
           </el-form-item>
         </el-form>
       </div>
-      <el-dialog title="基本信息" :visible.sync="editVisible" width="40%" class="base-informaion">
+      <el-dialog title="修改个人信息" :visible.sync="editVisible" width="40%" class="base-informaion">
         <el-form :model="ruleForm" ref="ruleForm" label-width="60px" class="demo-ruleForm">
-          <el-form-item label="学号：" prop="sno">
-            <el-input clearable v-model="ruleForm.sno"></el-input>
-          </el-form-item>
-          <el-form-item label="姓名：" prop="username">
+          <el-form-item label="学号：" prop="username">
             <el-input clearable v-model="ruleForm.username"></el-input>
+          </el-form-item>
+          <el-form-item label="姓名：" prop="name">
+            <el-input clearable v-model="ruleForm.name"></el-input>
             <div></div>
           </el-form-item>
           <el-form-item label="密码：" prop="password">
