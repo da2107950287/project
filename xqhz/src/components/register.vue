@@ -187,8 +187,11 @@ export default {
         this.$axios
           .post("/xqhz/user/register", this.ruleForm)
           .then(res => {
-            console.log(res);
-            // this.$router.push({ path: "/login" });
+            if(res.code==0){
+              this.$message.success(res.msg)
+            }else{
+              this.$message.error(res.msg)
+            }
           })
           .catch(err => {
             console.log(err);

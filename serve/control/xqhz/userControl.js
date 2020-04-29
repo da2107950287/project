@@ -40,7 +40,13 @@ router.post('/login', (req, res) => {
 router.post('/register', (req, res) => {
     let data = req.body;
     usermodel.register(data, (result) => {
-        res.json({ msg: "注册成功" })
+        console.log(result.affectedRows)
+        if(result.affectedRows){
+            res.json({code:0, msg: "操作成功" })
+        }else{
+            res.json({code:1,msg:'操作失败'})
+        }
+        
     })
 })
 

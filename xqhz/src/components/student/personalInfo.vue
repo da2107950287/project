@@ -81,7 +81,6 @@ export default {
         this.$axios
           .post("/xqhz/student/editStudentInfo", this.ruleForm)
           .then(res => {
-           
             this.$message(res.msg);
           })
           .catch(err => {

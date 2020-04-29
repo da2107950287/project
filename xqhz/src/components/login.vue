@@ -32,22 +32,24 @@
             placeholder="请输入密码"
           ></el-input>
         </el-form-item>
-        
+
         <el-form-item prop="verifycode">
           <div class="identifybox">
-            <el-input placeholder="请输入验证码" style="width:50%;margin-right:20px" v-model="loginForm.verifycode"></el-input>
+            <el-input
+              placeholder="请输入验证码"
+              style="width:50%;margin-right:20px"
+              v-model="loginForm.verifycode"
+            ></el-input>
 
             <div @click="refreshCode">
               <s-identify :identifyCode="identifyCode"></s-identify>
             </div>
-           
           </div>
         </el-form-item>
 
         <!-- 按钮区域 -->
         <el-form-item class="btns">
           <el-button type="primary" @click="login" style="width:360px">登录</el-button>
-         
         </el-form-item>
       </el-form>
     </div>
@@ -59,14 +61,14 @@ import SIdentify from "./identify";
 export default {
   data() {
     const validateVerifycode = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请输入验证码'))
+      if (value === "") {
+        callback(new Error("请输入验证码"));
       } else if (value !== this.identifyCode) {
-        callback(new Error('验证码不正确!'))
+        callback(new Error("验证码不正确!"));
       } else {
-        callback()
+        callback();
       }
-    }
+    };
 
     return {
       // 这是登录表单的数据绑定对象
@@ -74,23 +76,24 @@ export default {
         username: "",
         password: "",
         radio: 1,
-        verifycode:''
+        verifycode: ""
       },
       // 这是表单的验证规则对象
       loginFormRules: {
         // 验证用户名是否合法
         username: [
           { required: true, message: "请输入账号", trigger: "blur" },
-          // { min: 3, max: 10, message: "长度在 3 到 10 个字符", trigger: "blur" }
+          { min: 6, max: 12, message: "长度在 6到 12个字符", trigger: "blur" }
         ],
         // 验证密码是否合法
         password: [
           { required: true, message: "请输入密码", trigger: "blur" },
-          // { min: 6, max: 15, message: "长度在 6 到 15 个字符", trigger: "blur" }
+          { min: 6, max: 15, message: "长度在 6 到 15 个字符", trigger: "blur" }
         ],
+        //验证验证码
         verifycode: [
-          { required: true, trigger: 'blur', validator: validateVerifycode }
-        ],
+          { required: true, trigger: "blur", validator: validateVerifycode }
+        ]
       },
       identifyCodes: "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ",
       identifyCode: ""
@@ -114,7 +117,6 @@ export default {
           this.randomNum(0, this.identifyCodes.length)
         ];
       }
-      console.log(this.identifyCode)
     },
 
     // 点击重置按钮，重置登录表单
@@ -122,23 +124,21 @@ export default {
       this.$refs.loginFormRef.resetFields();
     },
     login() {
-this.$refs.loginFormRef.validate(valid =>{
-  if(valid){
- this.$axios
-        .post("/xqhz/user/login", this.loginForm)
-        .then(res => {
-          this.$message(res.msg);
-          localStorage.setItem("token", res.data.token);
-          localStorage.setItem("role", res.data.role);
-          this.$router.push({ path: "/home" });
-        })
-        .catch(err => {
-          console.log(err);
-        });
-  }
-
-})
-     
+      this.$refs.loginFormRef.validate(valid => {
+        if (valid) {
+          this.$axios
+            .post("/xqhz/user/login", this.loginForm)
+            .then(res => {
+              this.$message(res.msg);
+              localStorage.setItem("token", res.data.token);
+              localStorage.setItem("role", res.data.role);
+              this.$router.push({ path: "/home" });
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        }
+      });
     }
   },
   created() {
@@ -200,7 +200,6 @@ this.$refs.loginFormRef.validate(valid =>{
 }
 .identifybox {
   display: flex;
-  
 }
 
 .btns {

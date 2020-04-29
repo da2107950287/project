@@ -190,7 +190,6 @@ export default {
   created() {
     this.$axios.post("/xqhz/company/getCoInfo").then(res => {
       this.ruleForm = res.data;
-      console.log(res.data);
     });
   },components:{
     EditorBar

@@ -295,13 +295,20 @@ export default {
       console.log(val);
     },
     saveScore() {
-      
-         this.$axios
-        .post("/xqhz/company/saveScore", { data:this.dialogTable})
-        .then(res => {
-          this.data = res.data;
-          this.getDialogList();
-        });
+  
+      this.dialogTable.map((item, index) => {
+        let data = {};
+        data.eid = this.dialogTable.eid;
+        data.sid = this.dialogTable.sid;
+        data.score = this.dialogTable.score;
+        return data;
+      });
+      console.log(this.dialogTable);
+
+      this.$axios.post("/xqhz/company/saveScore", { data: data }).then(res => {
+        this.data = res.data;
+        this.getDialogList();
+      });
     },
     edit() {
       this.disabled = false;

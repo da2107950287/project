@@ -278,6 +278,7 @@ class companyModel extends dbBase {
     }
     saveScore(info, callback) {
         // UPDATE 表名称 SET 列名称 = 新值 WHERE 列名称 = 某值
+        console.log(info)
         this.table = 'score'
         let data = [];
         let fieldstring = [];
@@ -291,7 +292,6 @@ class companyModel extends dbBase {
                     data.push(item[key]);
                     fieldstring.push(key);
                 }
-               
             }
             arr.push("(" + field + ")");
             field = []

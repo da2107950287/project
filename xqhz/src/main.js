@@ -35,7 +35,6 @@ router.beforeEach((to, from, next) => {
             message: '对不起，你没有权限',
             type:'error'
         });
-         
         } else {
           next();
         }
