@@ -16,9 +16,8 @@ class userModel extends dbBase {
             }
         })
     }
-    //添加学生列表
+    //批量添加学生信息
     addStudentList(info, callback) {
-
         this.table = 'student'
         let data = [];
         let fieldstring = [];
@@ -32,7 +31,6 @@ class userModel extends dbBase {
                     data.push(item[key]);
                     fieldstring.push(key);
                 }
-               
             }
             arr.push("(" + field + ")");
             field = []
@@ -41,20 +39,22 @@ class userModel extends dbBase {
         });
         this.mydb.query(sql, data, (err, result) => {
             if (err) {
-                console.log(err)
                 callback(err)
-            } else {               
+            } else {
                 callback(result);
             }
         })
     }
     //获取学生列表
     getStudentList(callback) {
-
         this.table = 'student'
         let sql = `select * from ${this.table} where 1 `;
         this.mydb.query(sql, (err, result) => {
-            callback(result)
+            if (err) {
+                callback(err)
+            } else {
+                callback(result)
+            }
         })
     }
     //删除学生
@@ -67,33 +67,45 @@ class userModel extends dbBase {
     }
     delMultStudent(info, callback) {
         this.table = 'student';
-        let field=[];
-        info.forEach((item, index) => {         
+        let field = [];
+        info.forEach((item, index) => {
             field.push(item.sid)
         });
-       let sql = `delete from ${this.table} where sid in (${field})`;
-        this.mydb.query(sql,(err, result) => {
+        let sql = `delete from ${this.table} where sid in (${field})`;
+        this.mydb.query(sql, (err, result) => {
             callback(result)
         })
     }
     //编辑学生信息
-    editStudent(data, callback) {
+    editStudent(info, callback) {
         // UPDATE 表名称 SET 列名称 = 新值 WHERE 列名称 = 某值
         this.table = 'student'
-        let string1 = [];
-        let string2 = [];
-        for (const key in data) {
-            if (data.hasOwnProperty(key)) {
-                let value = key + "=?"
-                string1.push(value);
-                string2.push(data[key]);
+        let data = [];
+        let fieldstring = [];
+        let field = [];
+        let arr=[]
 
+        for (const key in info) {
+            if (info.hasOwnProperty(key)) {
+                field.push("?");
+                data.push(info[key]);
+                fieldstring.push(key)
+                arr.push(`${key}=?`)
             }
         }
-        string2.push(data.sid);
-        let sql = `update ${this.table} set ${string1.join(",")} where sid=?`;
-        this.mydb.query(sql, string2, function (err, result) {
+      
+        // console.log('string3',string3)
+        // string2.push(data.sid);
+        // INSERT INTO tablename(field1,field2, field3, ...) VALUES(value1, value2, value3, ...) ON DUPLICATE KEY UPDATE field1=value1,field2=value2, field3=value3, ...;
+        let sql = `INSERT INTO ${this.table} (${fieldstring.join(",")}) values (${field.join(",")}) ON DUPLICATE KEY UPDATE ${arr.join(',')}`;
+        this.mydb.query(sql, data.concat(data), function (err, result) {
+            if(err){
+                console.log(err)
+            }else{
+                console.log(result)
+            }
             callback(result);
+
         })
 
     }

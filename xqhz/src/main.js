@@ -17,6 +17,13 @@ Vue.use(vueSwiper)//使用轮播插件
 axios.defaults.baseURL = "http://localhost:81"
 // 导航守卫
 // 使用 router.beforeEach 注册一个全局前置守卫，判断用户是否登陆
+// router.beforeEach((to,from,next)=>{
+//   let token=localStorage.getItem('token');
+//   let role=localStorage.getItem('role');
+//   if(token===null||token==""){
+
+//   }
+// })
 router.beforeEach((to, from, next) => {
   let token = localStorage.getItem('token');
   let role = localStorage.getItem("role")
@@ -26,13 +33,14 @@ router.beforeEach((to, from, next) => {
     if (token === null || token === '') {
       next('/login');
     } else {
+      //权限
       if (to.meta.role.length !== 0) {
         let arr = to.meta.role.filter((item) => {
           return role === item
         })
         if (arr.length == 0) {
           ElementUI.Message({
-            message: '对不起，你没有权限',
+            message: '请先登录后，再操作',
             type:'error'
         });
         } else {

@@ -17,26 +17,24 @@ router.post('/login', (req, res) => {
         }
     })
 })
-//批量添加学生里列表
+//批量添加学生信息
 router.post('/addStudentList', (req, res) => {
-    console.log('addStudentList')
     let data=req.body.data;
     usermodel.addStudentList(data, (result) => {
-        if(result.affectedRows){
-            res.json({code:0,msg: '导入学生列表成功' })
+        if(result.insertId){
+            res.json({code:0,msg: '添加成功' })
         }else{
-            res.json({code:1,msg:'导入学生列表失败'})
+            res.json({code:1,msg:'添加失败，请重新操作'})
         }
     })
-
 })
-//获取学生列表
+//获取学生信息列表
 router.post('/getStudentList', (req, res) => {
     usermodel.getStudentList((result) => {
-        res.json(result)
+        res.json({code:0,msg:'已获取数据',data:result});
     })
 })
-//删除学生信息
+//删除一条学生信息
 router.post('/delStudent', (req, res) => {
     let data = req.body.sid;
     usermodel.delStudent(data, (result) => {
@@ -45,10 +43,9 @@ router.post('/delStudent', (req, res) => {
         } else {
             res.json({ code: 1, msg: '删除失败，请重新操作！' })
         }
-
     })
 })
-
+//批量删除学生信息
 router.post('/delMultStudent', (req, res) => {
     let data = req.body.data;
     usermodel.delMultStudent(data, (result) => {
@@ -65,9 +62,9 @@ router.post('/editStudent', (req, res) => {
     let data = req.body;
     usermodel.editStudent(data, (result) => {
         if (result.affectedRows) {
-            res.json({ code: 0, msg: '编辑成功' })
+            res.json({ code: 0, msg: '操作成功' })
         } else {
-            res.json({ code: 1, msg: '编辑视频，请重新操作！' })
+            res.json({ code: 1, msg: '操作失败，请重新操作' })
         }
     })
 })

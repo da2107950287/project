@@ -29,7 +29,7 @@
           <el-menu :default-active="this.$route.name" router>
             <el-menu-item index="home">
               <template>
-                <i class="el-icon-s-home"></i>首页
+              首 页
               </template>
             </el-menu-item>
             <el-submenu index="2">
@@ -94,7 +94,6 @@ export default {
       collapse: false,
       fullscreen: false,
       name: "管理员",
-      // activeIndex: this.$router.path
     };
   },
   
@@ -115,14 +114,7 @@ export default {
     // 侧边栏折叠
     collapseChage() {
       this.collapse = !this.collapse;
-      // bus.$emit('collapse', this.collapse);
     }
-  },
-  mounted() {
-    if (document.body.clientWidth < 1500) {
-      this.collapseChage();
-    }
-    console.log(this.$route.path)
   },
   components: {
     Vheader
