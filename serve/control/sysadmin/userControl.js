@@ -4,6 +4,7 @@ const userModel = require('../../model/sysadmin/userModel');
 const JwtUtil = require('../../tool/jwt');
 let usermodel = new userModel();
 let jwt = new JwtUtil();
+<<<<<<< HEAD
 // router.post('/login', (req, res) => {
 //     let data = req.body;
 //     usermodel.login(data, (result) => {
@@ -17,15 +18,37 @@ let jwt = new JwtUtil();
 //         }
 //     })
 // })
+=======
+router.post('/login', (req, res) => {
+    let data = req.body;
+    usermodel.login(data, (result) => {
+        if (result.length == 0) {
+            res.json({ msg: "用户名不存在！" })
+        } else if (result[0].password != data.password) {
+            res.json({ msg: "密码错误！" })
+        } else {
+            let token = jwt.createToken({ aid: result[0].aid })
+            res.json({ code: 0, msg: "登录成功！", token: token, username: data.username })
+        }
+    })
+})
+>>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
 //批量添加学生信息
 router.post('/addStudentList', (req, res) => {
     let data=req.body.data;
     usermodel.addStudentList(data, (result) => {
+<<<<<<< HEAD
         console.log(888888,result.affectedRows)
         if(result.affectedRows){
             res.json({code:0,msg: '导入学生信息成功！' })
         }else{
             res.json({code:1,msg:'导入失败，请重新操作'})
+=======
+        if(result.insertId){
+            res.json({code:0,msg: '添加成功' })
+        }else{
+            res.json({code:1,msg:'添加失败，请重新操作'})
+>>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
         }
     })
 })
@@ -64,6 +87,7 @@ router.post('/editStudent', (req, res) => {
     usermodel.editStudent(data, (result) => {
         if (result.affectedRows) {
             res.json({ code: 0, msg: '操作成功' })
+<<<<<<< HEAD
         } else {
             res.json({ code: 1, msg: '操作失败，请重新操作' })
         }
@@ -106,6 +130,10 @@ router.post('/delAdmin', (req, res) => {
             res.json({ code: 0, msg: '删除成功' })
         } else {
             res.json({ code: 1, msg: '删除失败，请重新操作！' })
+=======
+        } else {
+            res.json({ code: 1, msg: '操作失败，请重新操作' })
+>>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
         }
     })
 })

@@ -106,14 +106,22 @@ export default {
             .post("/sysadmin/user/login", this.loginForm)
             .then(res => {
               if (res.data.code == 0) {
+<<<<<<< HEAD
                 
                 this.$alert(res.data.msg);
                 alert(999999)
+=======
+                this.$alert(res.data.msg);
+>>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
                 localStorage.setItem("token", res.data.token);
                 localStorage.setItem("username", res.data.username);
                 this.$router.push({ path: "/home" });
               } else {
+<<<<<<< HEAD
                 this.$message.error(res.data.msg);
+=======
+                this.$alert(res.data.msg);
+>>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
               }
             })
             .catch(err => {

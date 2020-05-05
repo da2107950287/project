@@ -2,10 +2,16 @@
   <div class="continer">
     <div class="aside">
       <div @click="show(1)" :class="[isShow==1?'selected':'']">培训信息列表</div>
+<<<<<<< HEAD
       <div @click="show(3)" :class="[isShow==3?'selected':'']">培训报名列表</div>
 
       <div @click="show(2)" :class="[isShow==2?'selected':'']">发布培训信息</div>
       <!-- <div @click="show(4)" :class="[isShow==4?'selected':'']">成绩列表</div> -->
+=======
+      <div @click="show(2)" :class="[isShow==2?'selected':'']">发布培训信息</div>
+      <div @click="show(3)" :class="[isShow==3?'selected':'']">培训报名列表</div>
+      <div @click="show(4)" :class="[isShow==4?'selected':'']">成绩列表</div>
+>>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
     </div>
     <div class="page" v-if="isShow==1">
       <h3>培训信息列表</h3>
@@ -18,12 +24,16 @@
             :value="item.value"
           ></el-option>
         </el-select>
+<<<<<<< HEAD
         <el-input
           v-model="keywords"
           placeholder="请输入课程名"
           class="handle-input mr10"
           @keyup.enter.native="handleSearch"
         ></el-input>
+=======
+        <el-input v-model="class_name" placeholder="请输入课程名" class="handle-input mr10"></el-input>
+>>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
         <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
       </div>
       <!-- <hr /> -->
@@ -47,9 +57,14 @@
           <el-table-column prop="statusText" label="状态" align="center"></el-table-column>
           <el-table-column label="操作" width="200" align="center">
             <template slot-scope="scope">
+<<<<<<< HEAD
               <!-- <el-button type="text" icon="el-icon-view" @click="handleSeeInfo(scope.row)">查看</el-button> -->
               <el-button type="text" icon="el-icon-view" @click="handleEdit(scope.row)">查看</el-button>
               <!-- <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.row)">编辑</el-button> -->
+=======
+              <el-button type="text" icon="el-icon-view" @click="handleSee(scope.row)">查看</el-button>
+              <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.row)">编辑</el-button>
+>>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
               <el-button
                 type="text"
                 icon="el-icon-delete"
@@ -73,10 +88,17 @@
     </div>
     <div class="page" v-if="isShow==2">
       <div class="header">
+<<<<<<< HEAD
         <h3 class="title">发布培训信息</h3>
       </div>
       <!-- <hr /> -->
       <div style="margin-top:10px">
+=======
+        <h3 class="title">培训信息</h3>
+      </div>
+      <hr />
+      <div class="set-note">
+>>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
         <el-form :model="ruleForm" ref="ruleForm" label-width="110px" class="demo-ruleForm">
           <el-form-item label="课程名：" prop="class_name">
             <el-input clearable v-model="ruleForm.class_name"></el-input>
@@ -120,12 +142,16 @@
             @change="handleSearch"
           ></el-option>
         </el-select>
+<<<<<<< HEAD
         <el-input
           v-model="keywords"
           placeholder="请输入课程名"
           class="handle-input mr10"
           @keyup.enter.native="handleSearch"
         ></el-input>
+=======
+        <el-input v-model="class_name" placeholder="请输入课程名" class="handle-input mr10"></el-input>
+>>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
 
         <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
       </div>
@@ -148,13 +174,22 @@
           <el-table-column prop="class_time" label="培训时间" align="center"></el-table-column>
           <el-table-column label="操作" width="200" align="center">
             <template slot-scope="scope">
+<<<<<<< HEAD
               <el-button type="text" icon="el-icon-edit" @click="handleSee(scope.row)">查看</el-button>
               <!-- <el-button
+=======
+              <el-button type="text" icon="el-icon-edit" @click="handleSeeList(scope.row)">查1看</el-button>
+              <el-button
+>>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
                 type="text"
                 icon="el-icon-delete"
                 class="red"
                 @click="handleDelete(scope.$index, scope.row)"
+<<<<<<< HEAD
               >删除</el-button>-->
+=======
+              >删除</el-button>
+>>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
             </template>
           </el-table-column>
         </el-table>
@@ -170,7 +205,11 @@
         </div>
       </div>
     </div>
+<<<<<<< HEAD
     <el-dialog title="培训信息" :visible.sync="editVisible" width="70%">
+=======
+    <el-dialog title="培训信息" :visible.sync="editVisible" width="60%">
+>>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
       <el-form label-width="100px">
         <el-form-item label="课程名">
           <el-input v-model="form.class_name" type="input"></el-input>
@@ -211,11 +250,19 @@
         <el-button type="primary" @click="saveEdit">确 定</el-button>
       </span>
     </el-dialog>
+<<<<<<< HEAD
     <el-dialog title="培训报名列表" :visible.sync="listVisible" width="60%">
+=======
+    <el-dialog title="报名列表" :visible.sync="listVisible" width="60%">
+>>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
       <el-table :data="dialogTable" border style="width: 100%">
         <el-table-column prop="username" label="学号"></el-table-column>
         <el-table-column prop="name" label="姓名"></el-table-column>
         <el-table-column prop="entry_time" label="报名时间"></el-table-column>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
         <el-table-column prop="score" label="成绩">
           <template slot-scope="scope">
             <!-- <div v-if="scope.row.score">{{scope.row.score}}</div> -->
@@ -233,9 +280,14 @@
           :total="dialogPageTotal"
           @current-change="handleDialogPageChange"
         ></el-pagination>
+<<<<<<< HEAD
            <el-button type="danger" @click="saveScore" style="margin-top:10px">保存</el-button>
       </div>
    
+=======
+      </div>
+      <el-button type="danger" @click="saveScore">保存</el-button>
+>>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
     </el-dialog>
   </div>
 </template>
@@ -296,6 +348,7 @@ export default {
   },
   methods: {
     show(type) {
+<<<<<<< HEAD
       if (type == 1) {
         this.getSelfTrainingList();
       } else if (type == 2) {
@@ -307,6 +360,21 @@ export default {
         //   class_content: "" //课程介绍
       } else if (type == 3) {
         this.getSelfTrainingList();
+=======
+      this.isShow = type;
+      if (type == 2) {
+        this.getSelfTrainingList();
+      } else if (type == 2) {
+        this.ruleForm = {
+          class_name: "", //课程名
+          class_teacher: "", //培训讲师
+          class_time: "", //培训时间
+          class_place: "", //培训地点
+          class_content: "" //课程介绍
+        };
+      } else if (type == 3) {
+        this.getApplyRecordList();
+>>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
       }
       this.isShow = type;
     },
@@ -315,6 +383,7 @@ export default {
       console.log(val);
     },
     saveScore() {
+<<<<<<< HEAD
       console.log(this.dialogTable);
       let _this = this;
       let data = this.dialogTable.map((item, index) => {
@@ -325,6 +394,18 @@ export default {
         data.score = parseInt(item.score)
         return data;
       });
+=======
+  
+      this.dialogTable.map((item, index) => {
+        let data = {};
+        data.eid = this.dialogTable.eid;
+        data.sid = this.dialogTable.sid;
+        data.score = this.dialogTable.score;
+        return data;
+      });
+      console.log(this.dialogTable);
+
+>>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
       this.$axios.post("/xqhz/company/saveScore", { data: data }).then(res => {
         this.data = res.data;
         this.getDialogList();
@@ -347,6 +428,7 @@ export default {
       data.class_time = arr;
       this.form = data;
     },
+<<<<<<< HEAD
     // handleSeeInfo(data){
     //   this.editVisible=true;
     //   this.form=data;
@@ -383,12 +465,20 @@ export default {
     handleSee(data) {
       console.log(data);
 
+=======
+    handleSee(data) {
+      console.log(data);
+      this.listVisible = true;
+>>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
       this.$axios
         .post("/xqhz/company/getApplyRecordList", { tid: data.tid })
         .then(res => {
           this.data = res.data;
           this.getDialogList();
+<<<<<<< HEAD
           this.listVisible = true;
+=======
+>>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
         });
     },
     getDialogList() {
@@ -569,6 +659,9 @@ export default {
 }
 .pagination {
   margin-top: 10px;
+<<<<<<< HEAD
   text-align: center;
+=======
+>>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
 }
 </style>

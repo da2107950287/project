@@ -42,9 +42,15 @@ router.post('/register', (req, res) => {
     usermodel.register(data, (result) => {
         console.log(result.affectedRows)
         if(result.affectedRows){
+<<<<<<< HEAD
             res.json({code:0, msg: "操作成功，请等待管理员！" })
         }else{
             res.json({code:1,msg:'操作失败，你已注册，请勿重复注册！'})
+=======
+            res.json({code:0, msg: "操作成功" })
+        }else{
+            res.json({code:1,msg:'操作失败'})
+>>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
         }
         
     })

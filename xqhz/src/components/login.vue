@@ -84,7 +84,11 @@ export default {
         // 验证用户名是否合法
         username: [
           { required: true, message: "请输入账号", trigger: "blur" },
+<<<<<<< HEAD
           // { min: 6, max: 12, message: "长度在 6到 12个字符", trigger: "blur" }
+=======
+          { min: 6, max: 12, message: "长度在 6到 12个字符", trigger: "blur" }
+>>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
         ],
         // 验证密码是否合法
         password: [
@@ -130,6 +134,7 @@ export default {
           this.$axios
             .post("/xqhz/user/login", this.loginForm)
             .then(res => {
+<<<<<<< HEAD
               this.$alert(res.msg);
               localStorage.setItem("token", res.data.token);
               localStorage.setItem("role", res.data.role);
@@ -138,6 +143,12 @@ export default {
               }else{
                 this.$router.push({ path: "/home" });
               }
+=======
+              this.$message(res.msg);
+              localStorage.setItem("token", res.data.token);
+              localStorage.setItem("role", res.data.role);
+              this.$router.push({ path: "/home" });
+>>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
             })
             .catch(err => {
               console.log(err);

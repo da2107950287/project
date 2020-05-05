@@ -18,7 +18,11 @@
           :auto-upload="false"
           :show-file-list="false"
         >
+<<<<<<< HEAD
           <el-button type="primary">批量导入学生</el-button>
+=======
+          <el-button type="primary">批量添加学生</el-button>
+>>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
         </el-upload>
          
       </div>
@@ -198,7 +202,10 @@ export default {
             .then(res => {
               _this.$message.success(res.data.msg);
               if (res.data.code === 0) {
+<<<<<<< HEAD
                 _this.$alert("学生信息导入成功")
+=======
+>>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
                 _this.getStudentList();
               }
             })
@@ -260,7 +267,11 @@ export default {
             .post("/sysadmin/user/delStudent", { sid: row.sid })
             .then(res => {
               this.tableData.splice(index, 1);
+<<<<<<< HEAD
                this.$alert(res.data.msg);
+=======
+               this.$message.success(res.data.msg);
+>>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
               if (res.data.code == 0) {
                 this.getStudentList();
               }
@@ -310,9 +321,14 @@ export default {
         .post("/sysadmin/user/editStudent", this.form)
         .then(res => {
           console.log(this.form)
+<<<<<<< HEAD
                this.$alert(res.data.msg);
           if (res.code === 0) {
             this.$alert(res.msg);
+=======
+          if (res.code === 0) {
+            this.$message.success(res.msg);
+>>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
             this.getStudentList()
           }
         })

@@ -15,13 +15,20 @@
         <el-form ref="ruleForm" label-width="60px" class="demo-ruleForm" size="mini">
           <el-form-item label="学号：" prop="sno">
             <div class="content">{{ruleForm.username}}</div>
+<<<<<<< HEAD
+          </el-form-item>
+          <el-form-item label="姓名：" prop="username">
+            <div class="content">{{ruleForm.name}}</div>
+=======
+>>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
+          </el-form-item>
+            <el-form-item label="密码：" prop="password">
+            <div class="content">{{ruleForm.password}}</div>
           </el-form-item>
           <el-form-item label="姓名：" prop="username">
             <div class="content">{{ruleForm.name}}</div>
           </el-form-item>
-          <el-form-item label="密码：" prop="password">
-            <div class="content">{{ruleForm.password}}</div>
-          </el-form-item>
+        
           <el-form-item label="学院：" prop="academy">
             <div class="content">{{ruleForm.academy}}</div>
           </el-form-item>
@@ -144,6 +151,7 @@ export default {
     },
     confirm() {
       this.editVisible = false;
+<<<<<<< HEAD
       this.$axios
         .post("/xqhz/student/editStudentInfo", this.ruleForm)
         .then(res => {
@@ -152,6 +160,16 @@ export default {
         .catch(err => {
           console.log(err);
         });
+=======
+        this.$axios
+          .post("/xqhz/student/editStudentInfo", this.ruleForm)
+          .then(res => {
+            this.$message(res.msg);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+>>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
     },
     getStudentInfo() {
       this.$axios.post("/xqhz/student/getStudentInfo").then(res => {

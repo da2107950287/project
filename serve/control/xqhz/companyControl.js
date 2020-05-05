@@ -175,9 +175,14 @@ router.post('/getCompanyList', (req, res) => {
 //获取培训信息详情
 router.post('/getTrainingInfo', (req, res) => {
     let data = req.body;
+<<<<<<< HEAD
     console.log(data.tid)
     companymodel.getTrainingInfo(data, (result) => {
         console.log(result, 999)
+=======
+    companymodel.getTrainingInfo(data, (result) => {
+        console.log(result)
+>>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
         res.json({ code: 0, data: result[0], msg: '获取数据成功' })
     })
 
@@ -194,18 +199,23 @@ router.post('/getRecruitmentInfo', (req, res) => {
 router.post('/delRecruitment', (req, res) => {
     let data = req.body;
     companymodel.delRecruitment(data, (result) => {
+<<<<<<< HEAD
         if(result.affectedRows){
             res.json({ code: 0,msg: '删除成功' })
         }else{
             res.json({ code: 1,msg:'删除失败，请重新操作！' })
 
         }
+=======
+        res.json({ code: 0, data: result[0], msg: '获取数据成功' })
+>>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
     })
 
 })
 router.post('/saveScore', (req, res) => {
     console.log('saveScore')
     console.log(req.body)
+<<<<<<< HEAD
     let data = req.body.data;
     companymodel.saveScore(data, (result) => {
         console.log(result)
@@ -213,6 +223,15 @@ router.post('/saveScore', (req, res) => {
             res.json({ code: 0, msg: '导入学生列表成功' })
         } else {
             res.json({ code: 1, msg: '导入学生列表失败' })
+=======
+    let data=req.body.data;
+companymodel.saveScore(data, (result) => {
+    console.log(result)
+        if(result.affectedRows){
+            res.json({code:0,msg: '导入学生列表成功' })
+        }else{
+            res.json({code:1,msg:'导入学生列表失败'})
+>>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
         }
     })
 
