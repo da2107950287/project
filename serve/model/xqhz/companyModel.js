@@ -92,16 +92,12 @@ class companyModel extends dbBase {
             }
         }
         let sql = `insert into ${this.table} (${fieldstring.join(",")}) values (${field.join(",")})`;
-        // this.test();
         this.mydb.query(sql, data, (err, result) => {
             if (err) {
-                console.log(err)
                 callback(err)
             } else {
-                console.log(sql)
                 callback(result);
             }
-            // this.end();
         })
     }
     postRecruitment(info, callback) {
@@ -117,16 +113,12 @@ class companyModel extends dbBase {
             }
         }
         let sql = `insert into ${this.table} (${fieldstring.join(",")}) values (${field.join(",")})`;
-        // this.test();
         this.mydb.query(sql, data, (err, result) => {
             if (err) {
-                console.log(err)
                 callback(err)
             } else {
-                console.log(sql)
                 callback(result);
             }
-            // this.end();
         })
     }
     getTrainingList(callback) {
@@ -206,12 +198,13 @@ class companyModel extends dbBase {
         })
     }
     getDeliveryRecordList(data,callback){
-        let sql = `select recruitment.rec_position,recruitment.rid,delivery.delivery_time,student.username,resume.filename,resume.url from recruitment,student,delivery,resume
-        where delivery.rid=recruitment.rid and student.sid=delivery.sid and resume.sid=delivery.sid and cid = ?`;
+        let sql = `SELECT delivery.*,student.*,resume.* FROM recruitment,student,delivery,resume 
+        WHERE delivery.sid=resume.sid and student.sid=delivery.sid and recruitment.rid=delivery.rid AND delivery.rid=?`;
         this.mydb.query(sql,[data],(err, result) => {
             console.log(result)
             console.log(sql)
             if (err) {
+                console
                 callback(err)
             } else {
                 callback(result)
@@ -220,9 +213,8 @@ class companyModel extends dbBase {
         })
     }
     getApplyRecordList(data,callback){
-        let sql = `select training.*,entry.entry_time,student.username from training,student,entry
-        where entry.tid=training.tid and student.sid=entry.sid and cid = ?`;
-        this.mydb.query(sql,[data],(err, result) => {
+        let sql = `select entry.*,student.* from student,entry where student.sid=entry.sid and entry.tid=?`;
+        this.mydb.query(sql,[data.tid],(err, result) => {
             console.log(result)
             console.log(sql)
             if (err) {
@@ -230,7 +222,6 @@ class companyModel extends dbBase {
             } else {
                 callback(result)
             }
-
         })
     }
     getCompanyList(callback) {
@@ -268,6 +259,83 @@ class companyModel extends dbBase {
                 callback(result)
             }
 
+        })
+    }
+    delRecruitment(data,callback) {
+        this.table='recruitment'
+        let sql = `delete from ${this.table} where rid = ?`;
+        this.mydb.query(sql, [data.rid], (err, result) => {
+            if(err){
+                console.log(err)
+            }
+            callback(result);
+        })
+    }
+    delTraining(data,callback) {
+        this.table='training';
+        let sql = `delete from ${this.table} where tid = ?`;
+        this.mydb.query(sql,[data.tid], (err, result) => {
+            if(err){
+                console.log(err)
+            }
+            callback(result);
+        })
+    }
+    // saveScore(info, callback) {
+    //     // UPDATE 表名称 SET 列名称 = 新值 WHERE 列名称 = 某值
+    //     console.log(info)
+    //     this.table = 'score'
+    //     let data = [];
+    //     let fieldstring = [];
+    //     let field = [];
+    //     let arr = [];
+    //     let sql;
+    //     info.forEach((item, index) => {
+    //         for (const key in item) {
+    //             if (item.hasOwnProperty(key)) {
+    //                 field.push("?");
+    //                 data.push(item[key]);
+    //                 fieldstring.push(key);
+    //             }
+    //         }
+    //         arr.push("(" + field + ")");
+    //         field = []
+    //         fieldstring = Array.from(new Set(fieldstring))
+    //         sql = `insert into ${this.table} (${fieldstring.join(",")}) values ${arr.join(",")}`;
+    //     });
+    //     this.mydb.query(sql, data, (err, result) => {
+    //         if (err) {
+    //             console.log(err)
+    //             callback(err)
+    //         } else {               
+    //             callback(result);
+    //         }
+    //     })
+       
+
+        
+
+    // }
+    saveScore(info, callback) {
+        this.table = 'score'
+        let data = [];
+        let fieldstring = [];
+        let field = [];
+        let arr=[]
+        info.forEach((item,index) => {
+            console.log(item)
+            for (const key in item) {
+                if (item.hasOwnProperty(key)) {
+                    field.push("?");
+                    data.push(item[key]);
+                    fieldstring.push(key)
+                    arr.push(`${key}=?`)
+                }
+            }
+        });
+       let sql = `INSERT INTO ${this.table} (${fieldstring.join(",")}) values (${field.join(",")}) ON DUPLICATE KEY UPDATE ${arr.join(',')}`;
+        this.mydb.query(sql, data.concat(data), function (err, result) {
+            callback(result);
         })
     }
 }

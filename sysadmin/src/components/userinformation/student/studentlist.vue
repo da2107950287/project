@@ -2,28 +2,39 @@
   <div>
     <div class="container">
       <div class="handle-box">
-        <el-upload
+      <div style="display:flex">
+        <div class="mr10">
+            <el-button type="danger" @click="getExcel(tableData)">导出学生列表</el-button>
+           <el-button type="primary" icon="el-icon-plus"  @click="addStudent(form)">添加学生</el-button>
+          
+        
+         </div>
+          <el-upload
           class="upload-demo"
           action
           :on-change="handleChange"
-    
           :limit="limitUpload"
           accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
           :auto-upload="false"
           :show-file-list="false"
         >
-          <el-button type="primary">批量导入学生列表</el-button>
+          <el-button type="primary">批量导入学生</el-button>
         </el-upload>
-
+         
+      </div>
         <el-button
-          type="primary"
+          type="danger"
           icon="el-icon-delete"
           class="handle-del mr10"
           @click="delAllSelection"
         >批量删除</el-button>
-        <el-input v-model="val" placeholder="学号或姓名" class="handle-input mr10" @keyup.enter.native="handleSearch"></el-input>
+        <el-input
+          v-model="val"
+          placeholder="学号或姓名"
+          class="handle-input mr10"
+          @keyup.enter.native="handleSearch"
+        ></el-input>
         <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
-        <el-button type="primary" @click="getExcel(tableData)">导出学生列表</el-button>
       </div>
       <el-table
         :data="tableData"
@@ -58,17 +69,19 @@
       <div class="pagination">
         <el-pagination
           background
-          layout="total, prev, pager, next"
+          layout="total, sizes, prev, pager, next, jumper"
           :current-page="pageIndex"
           :page-size="pageSize"
           :total="pageTotal"
+          :page-sizes="[10, 20, 50, 100]"
+          @size-change="handleSizeChange"
           @current-change="handlePageChange"
         ></el-pagination>
       </div>
     </div>
- 
+
     <!-- 编辑弹出框 -->
-    <el-dialog title="修改学生个人信息" :visible.sync="editVisible" width="30%">
+    <el-dialog :title="title" :visible.sync="editVisible" width="30%">
       <el-form :model="form" label-width="70px">
         <el-form-item label="学号">
           <el-input v-model="form.username"></el-input>
@@ -102,13 +115,14 @@ export default {
       val: "",
       pageIndex: 1, //当前页码
       pageSize: 10, //每页的条数
-       pageTotal: null,
+      pageTotal: null,
       limitUpload: 1,
       tableData: [],
       multipleSelection: [],
       delList: [],
       editVisible: false,
       form: {},
+      title:""
     };
   },
   methods: {
@@ -172,24 +186,27 @@ export default {
           let arr = [];
           this.da.map(v => {
             let obj = {};
-            obj.username = v["学号"];
+            obj.username = v["账号"];
             obj.name = v["姓名"];
             obj.password = v["密码"];
             obj.academy = v["学院"];
             obj.major = v["专业"];
             arr.push(obj);
           });
-          console.log(arr);
           _this.$axios
             .post("/sysadmin/user/addStudentList", { data: arr })
             .then(res => {
-              _this.$message.success("导入列表成功");
-              _this.getData();
+              _this.$message.success(res.data.msg);
+              if (res.data.code === 0) {
+                _this.$alert("学生信息导入成功")
+                _this.getStudentList();
+              }
             })
             .catch(err => {
-              _this.$message.error("导入列表失败");
+              console.log(err);
             });
         };
+        
         reader.readAsArrayBuffer(f);
       };
       if (rABS) {
@@ -198,13 +215,13 @@ export default {
         reader.readAsBinaryString(f);
       }
     },
-    //导出
+    //导出excel
     getExcel(res) {
       require.ensure([], () => {
         const {
           export_json_to_excel
         } = require("../../../assets/js/Excel/Export2Excel");
-        const tHeader = ["ID", "学号", "密码", "学院", "专业"];
+        const tHeader = ["ID", "学号", "姓名","密码", "学院", "专业"];
         const filterVal = [
           "sid",
           "username",
@@ -221,6 +238,12 @@ export default {
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => v[j]));
     },
+    addStudent(){
+      this.form={}
+      this.editVisible = true;
+      this.title="添加学生";
+      
+    },
     // 触发搜索按钮
     handleSearch() {
       this.pageIndex = 1;
@@ -229,17 +252,18 @@ export default {
     // 删除操作
     handleDelete(index, row) {
       // 二次确认删除
-      this.$confirm("确定要删除吗？", "提示", {
+      this.$confirm("确定要删除该数据吗？", "提示", {
         type: "warning"
       })
         .then(() => {
           this.$axios
             .post("/sysadmin/user/delStudent", { sid: row.sid })
             .then(res => {
-              console.log(res);
               this.tableData.splice(index, 1);
-              this.$message.success("删除成功");
-              this.getData();
+               this.$alert(res.data.msg);
+              if (res.data.code == 0) {
+                this.getStudentList();
+              }
             })
             .catch(err => {
               console.log(err);
@@ -247,46 +271,49 @@ export default {
         })
         .catch(() => {});
     },
-    // 多选操作
+    //多选操作
     handleSelectionChange(val) {
       this.multipleSelection = val;
-      console.log(this.multipleSelection);
     },
     //批量删除
     delAllSelection() {
       const length = this.multipleSelection.length;
       let str = "";
       this.delList = this.delList.concat(this.multipleSelection);
-      for (let i = 0; i < length; i++) {
-        // this.tableData.splice(index, 1);
-        str += this.multipleSelection[i].username + " ";
-      }
+      console.log(this.delList)
+      // for (let i = 0; i < length; i++) {
+      //   str += this.multipleSelection[i].username + " ";
+      // }
       this.$axios
         .post("/sysadmin/user/delMultStudent", { data: this.delList })
         .then(res => {
-          this.getData()
-          console.log(res);
+          if (res.data.code === 0) {
+          this.$message.success(res.data.msg);
+            this.getStudentList();
+          }
         })
         .catch(err => {
           console.log(err);
         });
-      this.$message.error(`删除了${str}`);
       this.multipleSelection = [];
     },
     // 编辑操作
     handleEdit(index, row) {
       this.form = row;
       this.editVisible = true;
+      this.title="修改学生信息"
     },
     // 保存编辑
     saveEdit() {
       this.editVisible = false;
-      console.log(this.form);
       this.$axios
         .post("/sysadmin/user/editStudent", this.form)
         .then(res => {
-          if (res.code == 0) {
-            this.$message.success(res.msg);
+          console.log(this.form)
+               this.$alert(res.data.msg);
+          if (res.code === 0) {
+            this.$alert(res.msg);
+            this.getStudentList()
           }
         })
         .catch(err => {
@@ -297,20 +324,26 @@ export default {
     handleSee(index, row) {
       this.form = row;
       this.seeVisible = true;
-      // this.$router.push({ path: "/studentInfo", query: { row } });
     },
-    // 分页导航
+    //currentPage 改变时会触发
     handlePageChange(val) {
       this.pageIndex = val;
       this.getList();
     },
-    //获取数据
-    getData() {
+    //pageSize 改变时会触发
+    handleSizeChange(val) {
+      this.pageSize = val;
+      this.getList();
+    },
+    //获取学生列表
+    getStudentList() {
       this.$axios
         .post("/sysadmin/user/getStudentList", {})
         .then(res => {
-          this.data = res.data;
-          this.getList();
+          if (res.data.code === 0) {
+            this.data = res.data.data;
+            this.getList();
+          }
         })
         .catch(err => {
           console.log(err);
@@ -319,14 +352,14 @@ export default {
     // 处理数据
     getList() {
       // es6过滤得到满足搜索条件的展示数据list
-   
       let list1 = this.data.filter((item, index) =>
         item.name.includes(this.val)
       );
-       let list2 = this.data.filter((item, index) =>
+      let list2 = this.data.filter((item, index) =>
         item.username.includes(this.val)
       );
-      let list = list1.concat(list2);
+           let list=Array.from(new Set(list1.concat(list2)));
+
       this.tableData = list.filter(
         (item, index) =>
           index < this.pageIndex * this.pageSize &&
@@ -336,7 +369,7 @@ export default {
     }
   },
   created() {
-    this.getData();
+    this.getStudentList();
   }
 };
 </script>
@@ -378,5 +411,8 @@ export default {
   margin: auto;
   width: 40px;
   height: 40px;
+}
+.pagination {
+  margin-top: 10px;
 }
 </style>

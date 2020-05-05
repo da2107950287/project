@@ -16,9 +16,10 @@ html,body{
   margin:0;
   width: 100%;
   height:100%;
-   background-image: url('../src/assets/img/bgc.jpg');
+   /* background-image: url('../src/assets/img/bgc.jpg');
   background-size: cover;
-  background-attachment: fixed;
+  background-attachment: fixed; */
+  background-color: #f0f0f0;
   color:#333;
 }
 #app{

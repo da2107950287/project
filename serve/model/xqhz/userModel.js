@@ -36,7 +36,10 @@ class userModel extends dbBase {
                 fieldstring.push(key);
             }
         }
-        let sql = `insert into ${this.table} (${fieldstring.join(",")}) values (${field.join(",")})`;
+        data.push(info['rec_name'])
+        let sql = `insert into ${this.table} (${fieldstring.join(",")}) select${field.join(",")} from dual 
+        where not exists(select rec_name from ${this.table} where rec_name=?)`;
+    
         this.mydb.query(sql, data, (err, result) => {
             if(err){
                 callback(err);

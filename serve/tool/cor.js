@@ -8,6 +8,7 @@ exports.cors = (req, res, next)=>{
         //   exit;
         // }
         next();
+        
 
     // res.header("Access-Control-Allow-Credentials", true);//session
     // 表示路由继续往下匹配

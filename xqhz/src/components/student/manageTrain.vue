@@ -6,7 +6,7 @@
     </div>
     <div class="training-entry-list" v-if="isShow==1">
       <h3>培训报名记录</h3>
-      <hr />
+      <!-- <hr /> -->
       <div>
         <el-table
           :data="tableData"
@@ -39,7 +39,7 @@
     </div>
     <div class="training-entry-list" v-if="isShow==2">
       <h3>培训成绩列表</h3>
-      <hr />
+      <!-- <hr /> -->
       <div>
         <el-table
           :data="tableData"
@@ -107,8 +107,8 @@ export default {
       this.$axios
         .post("/xqhz/student/getEntryTrainList", {})
         .then(res => {
+        
           this.data = res.data;
-          console.log(res.data, 99999999999);
           this.getList();
         })
         .catch(err => {

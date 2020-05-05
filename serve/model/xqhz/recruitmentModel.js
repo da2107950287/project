@@ -44,6 +44,18 @@ class recruitmentModel extends dbBase{
                 
         })
     }
+    selectResume(info,callback){
+        this.table='resume'
+        let sql =`select * from ${this.table} where sid=?`;
+        this.mydb.query(sql,[info.sid],(err,result)=>{
+            if(err){
+                callback(err)
+            }else{
+                callback(result) 
+            }
+                
+        })
+    }
    
 }
 module.exports=recruitmentModel;

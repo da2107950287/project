@@ -46,7 +46,7 @@
           <div>{{info.rec_place_name}}</div>
         </li>
 
-        <el-tabs type="border-card" class="bottom-box">
+        <el-tabs type="card" class="bottom-box">
           <el-tab-pane label="职位描述">
             <div v-html="info.rec_content"></div>
           </el-tab-pane>
@@ -56,7 +56,7 @@
         </el-tabs>
       </ul>
       <div class="submit_btn">
-        <el-button type="primary" @click="delivery">立即投递</el-button>
+        <el-button type="primary" @click="delivery">投递简历</el-button>
       </div>
     </div>
   </div>
@@ -71,23 +71,39 @@ export default {
   methods: {
     delivery() {
       this.$axios
-        .post("/xqhz/recruitment/selectIsDelivery", { rid: this.info.rid })
+        .post("/xqhz/recruitment/selectResume", { rid: this.info.rid })
         .then(res => {
-          if (res.code == 0) {
-            this.$message(res.msg);
+          if (res.code == 1) {
+           this.$alert('请上传简历后，再投递简历！', '提示', {
+          confirmButtonText: '确定',
+          callback: action => {
+          this.$router.push({ path: "/manageResume" });
+          }
+        });
+            
           } else {
             this.$axios
-              .post("/xqhz/recruitment/delivery", { rid: this.info.rid })
+              .post("/xqhz/recruitment/selectIsDelivery", {
+                rid: this.info.rid
+              })
               .then(res => {
-                this.$message(res.msg);
+                if (res.code == 0) {
+                   this.$alert(res.msg,'提示');
+                } else {
+                  this.$axios
+                    .post("/xqhz/recruitment/delivery", { rid: this.info.rid })
+                    .then(res => {
+                      this.$alert(res.msg,'提示');
+                    })
+                    .catch(err => {
+                      console.log(err);
+                    });
+                }
               })
               .catch(err => {
                 console.log(err);
               });
           }
-        })
-        .catch(err => {
-          console.log(err);
         });
     },
     getRecruitmentInfo(rid) {
@@ -121,25 +137,25 @@ li {
   .page {
     margin: 0 auto;
     padding: 10px 50px;
-    box-shadow: 2px 2px 5px 0 #666;
+    // box-shadow: 2px 2px 5px 0 #666;
     ul.container {
       li {
         display: flex;
         justify-content: flex-start;
         padding: 10px;
         div:first-child {
-          font-weight: 600;
-          color: #34495e;
+          // font-weight: 600;
+          color: #333;
         }
         div:last-child {
           margin-left: 3px;
-          color: #34495e;
+          color: #333;
         }
       }
       li:first-child {
         div:last-child {
           a {
-            color: #16a085;
+            color: #1e649f;
             text-decoration: none;
           }
         }

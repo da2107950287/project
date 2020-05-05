@@ -5,7 +5,7 @@
         <h3 class="title">欢迎企业注册</h3>
       </div>
       <div class="set-note">
-        <el-form :model="ruleForm" ref="ruleForm" label-width="150px" class="demo-ruleForm">
+        <el-form :model="ruleForm"  ref="ruleForm"  :rules="loginFormRules" label-width="150px" class="demo-ruleForm">
           <!-- :rules="rules" -->
           <h4>账户信息</h4>
           <hr style="margin-bottom:25px" />
@@ -176,7 +176,24 @@ export default {
         { value: "国际组织", label: "国际组织" },
         { value: "军队", label: "军队" }
       ],
-      fileList: []
+      fileList: [],
+      loginFormRules: {
+        // 验证用户名是否合法
+        username: [
+          { required: true, message: "请输入账号", trigger: "blur" },
+          // { min: 6, max: 12, message: "长度在 6到 12个字符", trigger: "blur" }
+        ],
+        // 验证密码是否合法
+        password: [
+          { required: true, message: "请输入密码", trigger: "blur" },
+          { min: 6, max: 15, message: "长度在 6 到 15 个字符", trigger: "blur" }
+        ],
+        verify_password:[
+          { required: true, message: "请输入密码", trigger: "blur" },
+          
+        ]
+        
+      },
     };
   },
   methods: {
@@ -187,8 +204,11 @@ export default {
         this.$axios
           .post("/xqhz/user/register", this.ruleForm)
           .then(res => {
-            console.log(res);
-            // this.$router.push({ path: "/login" });
+            if(res.code==0){
+              this.$message.success(res.msg)
+            }else{
+              this.$message.error(res.msg)
+            }
           })
           .catch(err => {
             console.log(err);
@@ -230,7 +250,7 @@ export default {
   .page {
     margin: 0 auto;
     padding: 10px 20px;
-    box-shadow: 2px 2px 5px 0 #666;
+    // box-shadow: 2px 2px 5px 0 #666;
     .set-note {
       margin-top: 30px;
       padding: 0 20px;

@@ -4,12 +4,11 @@ const consultModel = require('../../model/sysadmin/consultModel');
 const JwtUtil = require('../../tool/jwt');
 let consultmodel = new consultModel();
 let jwt = new JwtUtil();
-
 //获取咨询列表
 router.post('/getConsultList', (req, res) => {
     consultmodel.getConsultList((result) => {
-        console.log(result)
-        res.json(result)
+       
+        res.json({code:0,msg:'获取数据成功',data:result})
     })
 })
 // //删除学生信息
@@ -33,11 +32,12 @@ router.post('/editConsult',(req,res)=>{
     data.status=1;
     consultmodel.editConsult(data,(result)=>{
         console.log(result)
-    if(result.affectedRows){
-        res.json({code:0,msg:'编辑成功'})
-    }else{
-        res.json({code:1,msg:'编辑视频，请重新操作！'})
-    }
+        if(result.affectedRows){
+            res.json({ code: 0, msg: '回复留言咨询成功' })
+        }else{
+            res.json({ code: 1, msg: '回复留言咨询失败，请重新操作' })
+
+        }
     })
 })
 

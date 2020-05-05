@@ -190,7 +190,6 @@ export default {
   created() {
     this.$axios.post("/xqhz/company/getCoInfo").then(res => {
       this.ruleForm = res.data;
-      console.log(res.data);
     });
   },components:{
     EditorBar
@@ -206,7 +205,7 @@ export default {
   .page {
     margin: 0 auto;
     padding: 10px 50px;
-    box-shadow: 2px 2px 5px 0 #666;
+    // box-shadow: 2px 2px 5px 0 #666;
     .title{
       text-align: center;
     }

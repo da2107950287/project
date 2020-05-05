@@ -122,7 +122,7 @@ export default {
  margin: 0 auto;
     padding: 0 50px;
     // box-shadow: 2px 2px 5px 0 #666;
-    // background-color: #fff;
+    background-color: #fff;
     width: 100%;
   h3 {
     text-align: center;

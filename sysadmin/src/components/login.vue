@@ -3,7 +3,7 @@
     <div class="login_box">
       <!-- 头像区域 -->
       <div class="avatar_box">
-        <img src="../assets/img/logo.png" alt />
+        <img src="../assets/img/avator.jpg" alt />
       </div>
       <!-- 登录表单区域 -->
       <el-form
@@ -15,7 +15,12 @@
       >
         <!-- 用户名 -->
         <el-form-item prop="username">
-          <el-input v-model="loginForm.username" prefix-icon="el-icon-user" placeholder="请输入账号"></el-input>
+          <el-input
+            v-model="loginForm.username"
+            prefix-icon="el-icon-user"
+            placeholder="请输入账号"
+            @keyup.enter="login"
+          ></el-input>
         </el-form-item>
         <!-- 密码 -->
         <el-form-item prop="password">
@@ -25,25 +30,26 @@
             show-password
             prefix-icon="el-icon-lock"
             placeholder="请输入密码"
+            @keyup.enter="login"
           ></el-input>
         </el-form-item>
         <!-- 按钮区域 -->
-<el-form-item >
-  <el-input placeholder="请输入验证码" style="width:200px">
-<div class="code" @click="refreshCode">
-    <s-identify :identifyCode="identifyCode"></s-identify>
-   </div>
-
-
-   
-  </el-input>
-   
-</el-form-item>
+        <el-form-item prop="verifycode">
+          <div class="identifybox">
+            <el-input
+              placeholder="请输入验证码"
+              style="width:50%;margin-right:20px"
+              v-model="loginForm.verifycode"
+              @keyup.enter="login"
+            ></el-input>
+            <div @click="refreshCode">
+              <s-identify :identifyCode="identifyCode"></s-identify>
+            </div>
+          </div>
+        </el-form-item>
         <div class="btns">
-          <div class="forget-password" @click="$ruter.push('/forgetPassword')">忘记密码？</div>
           <div>
-            <el-button type="primary" @click="login">登录</el-button>
-            <el-button type="info" @click="resetLoginForm">重置</el-button>
+            <el-button type="primary" @click="login" style="width:360px">登录</el-button>
           </div>
         </div>
       </el-form>
@@ -52,9 +58,18 @@
 </template>
 
 <script>
-import SIdentify from './identify'
+import SIdentify from "./identify";
 export default {
   data() {
+    const validateVerifycode = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请输入验证码"));
+      } else if (value.toLowerCase() !== this.identifyCode.toLowerCase()) {
+        callback(new Error("验证码不正确!"));
+      } else {
+        callback();
+      }
+    };
     return {
       // 这是登录表单的数据绑定对象
       loginForm: {
@@ -67,59 +82,69 @@ export default {
       loginFormRules: {
         // 验证用户名是否合法
         username: [
-          { required: true, message: "请输入登录名称", trigger: "blur" },
-          { min: 3, max: 10, message: "长度在 3 到 10 个字符", trigger: "blur" }
+          { required: true, message: "请输入用户名", trigger: "blur" },
+          { min: 5, max: 10, message: "长度在 5 到 10 个字符", trigger: "blur" }
         ],
         // 验证密码是否合法
         password: [
-          { required: true, message: "请输入登录密码", trigger: "blur" },
+          { required: true, message: "请输入密码", trigger: "blur" },
           { min: 6, max: 15, message: "长度在 6 到 15 个字符", trigger: "blur" }
+        ],
+        //验证验证码
+        verifycode: [
+          { required: true, trigger: "blur", validator: validateVerifycode }
         ]
       }
     };
   },
   methods: {
-    // 点击重置按钮，重置登录表单
-    resetLoginForm() {
-      this.$refs.loginFormRef.resetFields();
-    },
+    //登录
     login() {
-      this.$axios
-        .post("/sysadmin/user/login", this.loginForm)
-        .then(res => {
-          if (res.data.code == 0) {
-            this.$message.success(res.data.msg);
-            localStorage.setItem("token", res.data.token);
-            localStorage.setItem("username", res.data.username);
-            this.$router.push({ path: "/home" });
-          } else {
-            this.$message.error(res.data.msg);
-          }
-        })
-        .catch(err => {
-          console.log(err);
-        });
+      this.$refs.loginFormRef.validate(valid => {
+        if (valid) {
+          this.$axios
+            .post("/sysadmin/user/login", this.loginForm)
+            .then(res => {
+              if (res.data.code == 0) {
+                
+                this.$alert(res.data.msg);
+                alert(999999)
+                localStorage.setItem("token", res.data.token);
+                localStorage.setItem("username", res.data.username);
+                this.$router.push({ path: "/home" });
+              } else {
+                this.$message.error(res.data.msg);
+              }
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        }
+      });
     },
+    // 生成随机数
     randomNum(min, max) {
       return Math.floor(Math.random() * (max - min) + min);
     },
+
+    // 切换验证码
     refreshCode() {
       this.identifyCode = "";
       this.makeCode(this.identifyCodes, 4);
     },
+    // 生成四位随机验证码
     makeCode(o, l) {
       for (let i = 0; i < l; i++) {
         this.identifyCode += this.identifyCodes[
           this.randomNum(0, this.identifyCodes.length)
         ];
       }
-      console.log(this.identifyCode);
     }
-  },mounted() {
-    this.identifyCode = "";
-    this.makeCode(this.identifyCodes, 4);
-  }, 
-  components:{
+  },
+  mounted() {
+    this.refreshCode();
+  },
+  components: {
     SIdentify
   }
 };
@@ -132,7 +157,7 @@ export default {
 }
 .login_box {
   width: 400px;
-  height: 300px;
+  height: 340px;
   background-color: #fff;
   border-radius: 3px;
   position: absolute;
@@ -165,8 +190,7 @@ export default {
   padding: 0 20px;
   box-sizing: border-box;
   .el-input {
-  
-    .el-input__prefix{
+    .el-input__prefix {
       font-size: 30px;
       color: #000;
     }
@@ -186,5 +210,8 @@ export default {
   .forget-password:hover {
     color: #3388ff;
   }
+}
+.identifybox {
+  display: flex;
 }
 </style>

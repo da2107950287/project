@@ -9,9 +9,9 @@ router.post('/login', (req, res) => {
     let data = req.body;
     usermodel.login(data, (result) => {
         if (result.length == 0) {
-            res.json({ msg: "用户名不存在！" })
+            res.json({ msg: "账号不存在，请注册后登录!" })
         } else if (result[0].password != data.password) {
-            res.json({ msg: "密码错误！" })
+            res.json({ msg: "密码错误，请重新输入密码！" })
         } else {
             let token;
             if (data.radio == 1) {
@@ -40,7 +40,13 @@ router.post('/login', (req, res) => {
 router.post('/register', (req, res) => {
     let data = req.body;
     usermodel.register(data, (result) => {
-        res.json({ msg: "注册成功" })
+        console.log(result.affectedRows)
+        if(result.affectedRows){
+            res.json({code:0, msg: "操作成功，请等待管理员！" })
+        }else{
+            res.json({code:1,msg:'操作失败，你已注册，请勿重复注册！'})
+        }
+        
     })
 })
 

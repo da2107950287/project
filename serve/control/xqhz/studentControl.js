@@ -128,4 +128,33 @@ router.post('/delSelfResume',(req,res)=>{
         res.json({ err: -1, msg: 'token非法' });
     })
 })
+router.post('/verifyPassword',(req,res)=>{
+    jwt.checkToken(req.headers.authorization).then(res1 => {
+        //token验证成功
+        let data={};
+        data.sid=res1.sid
+        studentmodel.verifyPassword(data, (result) => {
+            res.json({ code: 0,data:result[0], msg:'操作成功' })
+        })
+    }).catch(err => {
+        res.json({ err: -1, msg: 'token非法' });
+    })
+})
+
+router.post('/editPassword',(req,res)=>{
+    let data={};
+    console.log(res.body)
+    data.password=req.body.password;
+    jwt.checkToken(req.headers.authorization).then(res1 => {
+        //token验证成功
+        
+        data.sid=res1.sid
+        
+        studentmodel.editPassword(data, (result) => {
+            res.json({ code: 0,data:result[0], msg:'操作成功' })
+        })
+    }).catch(err => {
+        res.json({ err: -1, msg: 'token非法' });
+    })
+})
 module.exports = router;

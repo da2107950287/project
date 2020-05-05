@@ -2,12 +2,12 @@
   <div>
     <div class="container">
       <div class="handle-box">
-        <el-button
+        <!-- <el-button
           type="primary"
           icon="el-icon-delete"
           class="handle-del mr10"
           @click="delAllSelection"
-        >批量删除</el-button>
+        >批量删除</el-button> -->
         <!-- <el-input v-model="rec_name" placeholder="公司名称" class="handle-input mr10"></el-input> -->
         <el-input v-model="rec_position" placeholder="职位名称" class="handle-input mr10"></el-input>
         <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
@@ -26,25 +26,25 @@
         <el-table-column prop="rec_name" label="企业名称" align="center"></el-table-column>
         <el-table-column prop="rec_time" label="招聘时间" align="center"></el-table-column>
         <el-table-column prop="rec_place_name" label="招聘地点" align="center"></el-table-column>
-        <el-table-column prop="status" label="状态" align="center"></el-table-column>
+        <el-table-column prop="statusText" label="状态" align="center"></el-table-column>
         <el-table-column label="操作" width="200" align="center">
           <template slot-scope="scope">
             <el-button
               type="text"
               icon="el-icon-view"
               @click="handleSee(scope.row.rid)"
-            >查看</el-button>
-            <el-button
+            >审核</el-button>
+            <!-- <el-button
               type="text"
               icon="el-icon-edit"
               @click="handleEdit(scope.$index, scope.row)"
-            >编辑</el-button>
-            <el-button
+            >审核</el-button> -->
+            <!-- <el-button
               type="text"
               icon="el-icon-delete"
               class="red"
               @click="handleDelete(scope.$index, scope.row)"
-            >删除</el-button>
+            >删除</el-button> -->
           </template>
         </el-table-column>
       </el-table>
@@ -130,7 +130,6 @@ export default {
     //批量删除
     delAllSelection() {
       console.log(this.multipleSelection)
-      
       const length = this.multipleSelection.length;
       let str = "";
       console.log(this.delList)
@@ -169,9 +168,9 @@ export default {
         });
     },
     // 查看个人信息详情
-    handleSee(index, row) {
-      console.log(row);
-      this.$router.push({ path: "/recruitmentInfo", query: { row } });
+    handleSee(rid) {
+      // console.log(row);
+      this.$router.push({ path: "/recruitmentInfo", query: {rid:rid} });
     },
     // 分页导航
     handlePageChange(val) {
@@ -196,7 +195,15 @@ export default {
       let list = this.data.filter((item, index) =>
         item.rec_position.includes(this.rec_position)
       );
-
+list.forEach((item, index) => {
+        if (item.status == 0) {
+          this.$set(item, "statusText", "待审核");
+        } else if (item.status == 1) {
+          this.$set(item, "statusText", "审核已通过");
+        } else {
+          this.$set(item, "statusText", "审核未通过");
+        }
+      });
       this.tableData = list.filter(
         (item, index) =>
           index < this.pageIndex * this.pageSize &&
@@ -246,4 +253,8 @@ export default {
   width: 40px;
   height: 40px;
 }
+  .pagination{
+    margin-top: 20px;
+    text-align: center;
+  }
 </style>

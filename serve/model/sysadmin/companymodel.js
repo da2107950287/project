@@ -74,7 +74,7 @@ class companyModel extends dbBase{
         let sql = `insert into company (${fieldstring.join(",")}) values (${field.join(",")})`;
         // this.test();
         this.mydb.query(sql, data, (error, result) => {
-            console.log(result,"jjjjj")
+        
             callback(result);
             // this.end();
         })
@@ -90,6 +90,7 @@ class companyModel extends dbBase{
     //             callback(result);
     //         }            
     //     })
-    // }    
+    // } 
+  
 }
 module.exports=companyModel;

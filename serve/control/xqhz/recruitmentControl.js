@@ -26,7 +26,26 @@ router.post('/delivery', (req, res) => {
     }
     )
 })
-//是否投递简历
+//是否已经上传简历
+router.post('/selectResume', (req, res) => {
+    jwt.checkToken(req.headers.authorization).then(res1 => {
+        //token验证成功
+        let data = req.body;
+        data.sid = res1.sid;
+        recruitmentmodel.selectResume(data, (result) => {
+            if (result[0]) {
+                res.json({ code: 0, msg: '已上传简历' })
+            } else {
+                res.json({ code: 1,msg:"请上传简历后，再投递简历！" })
+            }
+        })
+    }).catch(err => {
+        console.log(err)
+        res.json({ err: -1, msg: 'token非法' });
+    }
+    )
+})
+//是否已经投递简历
 router.post('/selectIsDelivery', (req, res) => {
     jwt.checkToken(req.headers.authorization).then(res1 => {
         //token验证成功

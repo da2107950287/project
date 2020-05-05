@@ -8,8 +8,8 @@ let jwt = new JwtUtil();
 //获取培训信息列表
 router.post('/getTrainingList', (req, res) => {
     trainingmodel.getTrainingList((result) => {
-        console.log(result)
-        res.json(result)
+       
+        res.json({code:0,msg:'获取数据成功',data:result})
     })
 })
 //删除学生信息
@@ -40,18 +40,17 @@ router.post('/getTrainingInfo', (req, res) => {
     console.log(req.body)
     data.tid=req.body.tid;
     trainingmodel.getTrainingInfo(data,(result) => {
-        console.log(result[0])
-        res.json(result[0])
+       res.json({code:0,msg:'获取数据成功',data:result[0]})
     })
 })
 router.post('/modifyApprovalStatus',(req,res)=>{
     let data=req.body;
     trainingmodel.modifyApprovalStatus(data,(result)=>{
     if(result.affectedRows){
-        res.json({code:0,msg:'编辑成功'})
+        res.json({code:0,msg:'操作成功'})
         
     }else{
-        res.json({code:1,msg:'编辑失败，请重新编辑'})
+        res.json({code:1,msg:'操作失败，请重新操作！'})
     }
     })
 })

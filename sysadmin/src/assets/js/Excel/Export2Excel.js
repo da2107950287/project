@@ -2,6 +2,7 @@
 require('../../../../node_modules/script-loader!file-saver');
 require('../../../../node_modules/script-loader!./Blob');
 require('../../../../node_modules/script-loader!xlsx/dist/xlsx.core.min');
+// require('../../../../node_modules/script-loader')
 function generateArray(table) {
     var out = [];
     var rows = table.querySelectorAll('tr');

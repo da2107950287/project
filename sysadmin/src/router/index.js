@@ -12,11 +12,11 @@ export default new Router({
     { path: '/forgetPassword', name: 'forgetPassword', meta: { title: "登录" }, component: () => import('@/components/forgetPassword') },
 
     {
-    path: '/index', name: 'index', meta: { title: "主页" }, component: () => import('@/components/index'),
+    path: '/sysadminindex', name: 'sysadminindex', meta: { title: "主页" }, component: () => import('@/components/sysadminIndex'),
 
      
       children: [
-        { path: '/home', name: 'home', meta: { title: "主页" }, component: () => import('@/components/home')},
+        { path: '/sysadminhome', name: 'sysadminhome', meta: { title: "主页" }, component: () => import('@/components/sysaminHome')},
         { path: '/studentList', name: 'studentList', meta: { title: "学生列表" }, component: () => import('@/components/userInformation/student/studentList') },
         { path: '/studentInfo', name: 'studentInfo', meta: { title: "学生列表" }, component: () => import('@/components/userInformation/student/studentInfo') },
         { path: '/companyList', name: 'companyList', meta: { title: "企业列表" }, component: () => import('@/components/userInformation/company/companyList') },

@@ -17,20 +17,23 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         <div class="panel-title">培训信息</div>
-        <div class="see_more" @click="seeMore('/trainingList')">更多</div>
+        <div class="see_more" @click="seeMore('/trainingList')">查看更多</div>
       </div>
       <div class="panel-body">
         <table class="table">
-          <thead>
+          <!-- <thead>
             <tr>
               <th>课程名</th>
               <th>培训讲师</th>
               <th>培训时间</th>
             </tr>
-          </thead>
+          </thead>-->
           <tbody>
             <tr v-for="(item,index) in trainingList" :key="index">
-              <td class="post-sort" @click="getTrainingInfo(item.tid)">{{item.class_name}}</td>
+              <td class="post-sort" @click="getTrainingInfo(item.tid)">
+               
+                {{item.class_name}}
+              </td>
               <td class="post-intro">{{item.class_teacher}}</td>
               <td class="post-time">{{item.class_time}}</td>
             </tr>
@@ -42,17 +45,17 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         <div class="panel-title">招聘信息</div>
-        <div class="see_more" @click="seeMore('/recruitmentList')">更多</div>
+        <div class="see_more" @click="seeMore('/recruitmentList')">查看更多</div>
       </div>
       <div class="panel-body">
         <table class="table">
-          <thead>
+          <!-- <thead>
             <tr>
               <th>职位名称</th>
               <th>企业名称</th>
               <th>招聘日期</th>
             </tr>
-          </thead>
+          </thead>-->
           <tbody>
             <tr v-for="(item,index) in recruitmentList" :key="index">
               <td class="post-sort" @click="getRecruitmentInfo(item.rid)">{{item.rec_position}}</td>
@@ -65,7 +68,7 @@
     </div>
     <div class="panel panel-default">
       <div class="panel-heading">
-        <div class="panel-title" style="margin:0 auto; color:#333;font-size: 20px; ">企业展示</div>
+        <div class="panel-title" style="margin:0 auto; color:#333;font-size: 16px; ">企业展示</div>
       </div>
       <div class="panel-body">
         <div class="company-box">
@@ -188,8 +191,7 @@ export default {
         .catch(err => {
           console.log(err);
         });
-    },
-   
+    }
   },
   created() {
     this.getTrainingList();
@@ -244,15 +246,15 @@ li {
   }
   .panel {
     margin-top: 20px;
-    background-color: #fafbfd;
+    background-color: #fff;
     border: 1px solid #efefef;
     // border-radius: 4px;
-    box-shadow: #ccc 0 0px 4px;
+    // box-shadow: #ccc 0 0px 4px;
     padding-bottom: 30px;
     .panel-heading {
       color: #333333;
       background-color: #fbfbfb;
-      border-top: 3px solid #60b0f4;
+      // border-top: 3px solid #60b0f4;
       border-bottom: 1px solid #ddd;
       padding: 0 20px;
       height: 40px;
@@ -260,18 +262,18 @@ li {
       display: flex;
       justify-content: space-between;
       .panel-title {
-        color: #60b0f4;
+        color: #333;
       }
       .see_more {
         border: none;
         font-size: 12px;
-        color: #60b0f4;
+        color: rgb(30, 100, 159);
         text-align: center;
         cursor: default;
       }
     }
     .panel-body {
-      padding: 0 30px;
+      padding: 0 20px;
       // box-shadow: #ccc 0 0px 4px;
       .table {
         width: 100%;
@@ -280,10 +282,7 @@ li {
         background-color: #fff;
         table-layout: fixed;
         border-collapse: collapse;
-        th {
-          text-align: left;
-          border-bottom: 2px solid #f6f6f6;
-        }
+
         th,
         td {
           padding: 8px;
@@ -303,11 +302,26 @@ li {
           .post-sort {
             color: #4a90e6;
             cursor: default;
+            display: flex;
+            align-items: center;
+            i {
+              display: block;
+              height: 3px;
+              width: 3px;
+              border-radius: 50%;
+              background-color: #333;
+              margin-right: 5px;
+            }
           }
-          .post-sort:hover{
-          color:#FF4F00
+            .post-sort:hover{
+          color: #1e649f;
+          text-decoration: solid;
+          }
+          .post-time{
+           color: #999
+          }
         }
-        }
+        
       }
       .company-box {
         display: flex;
@@ -321,9 +335,10 @@ li {
           white-space: nowrap;
           text-overflow: ellipsis;
           cursor: default;
+          text-align: center;
         }
-        .post-sort:hover{
-          color:#FF4F00
+        .post-sort:hover {
+          color: #ff4f00;
         }
       }
     }

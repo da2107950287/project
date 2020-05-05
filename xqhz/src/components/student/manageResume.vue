@@ -1,8 +1,9 @@
 <template>
   <div class="continer">
     <div class="aside">
-      <div @click="show(1)" :class="[isShow==1?'selected':'']">个人简历</div>
       <div @click="show(2)" :class="[isShow==2?'selected':'']">招聘投递记录</div>
+
+      <div @click="show(1)" :class="[isShow==1?'selected':'']">个人简历</div>
     </div>
     <div v-if="isShow==1" class="resume">
       <p class="my-resume">我的简历</p>
@@ -15,17 +16,16 @@
           :show-file-list="false"
           :data="token"
           :on-success="handleSucess"
-       
         >
           <i class="el-icon-upload"></i>
           <div class="el-upload__text">
             <em>上传简历附件</em>
           </div>
         </el-upload>
-         <!-- <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div> -->
+        <!-- <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div> -->
         <div class="del-resume" @click="delSelfResume">删除简历</div>
       </div>
-     
+
       <div v-show="fileType === 'pdf'&&src!=''">
         <pdf
           class="pdf"
@@ -50,7 +50,7 @@
     <div class="resume-list" v-if="isShow==2">
       <div>
         <h3>招聘投递记录</h3>
-        <hr />
+        <!-- <hr /> -->
         <div>
           <el-table
             :data="tableData"
@@ -59,7 +59,7 @@
             ref="multipleTable"
             header-cell-class-name="table-header"
           >
-            <el-table-column label="投递职位" align="center">
+            <el-table-column label="投递岗位" align="center">
               <template slot-scope="scope">
                 <div
                   @click="getRecruitmentInfo(scope.row.rid)"
@@ -94,7 +94,7 @@ export default {
       pageCount: 0, // pdf文件总页数
       fileType: "pdf", // 文件类型
       src: "", // pdf文件地址
-      isShow: 1,
+      isShow: 2,
       pageIndex: 1,
       pageSize: 10,
       pageTotal: 0,
@@ -122,14 +122,27 @@ export default {
     },
     //删除简历
     delSelfResume() {
-      this.$axios
-        .post("/xqhz/student/delSelfResume", {})
-        .then(res => {
-          this.$message(res.msg);
-          window.location.reload();
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.$axios
+            .post("/xqhz/student/delSelfResume", {})
+            .then(res => {
+              this.$message(res.msg);
+              this.src='';
+            })
+            .catch(err => {
+              console.log(err);
+            });
         })
-        .catch(err => {
-          console.log(err);
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
         });
     },
     // 分页导航
@@ -219,6 +232,7 @@ export default {
       if (response.code == 0) {
         let data = response.data;
         this.src = data.url;
+        this.$message.success(response.message)
         return;
       } else {
         this.$notify({
@@ -251,7 +265,7 @@ export default {
     }
   },
   created() {
-    this.getSelfResume();
+    this.getSelfDeliveryList();
   },
   components: {
     pdf
@@ -281,7 +295,7 @@ li {
       cursor: pointer;
       color: #505459;
     }
-     .selected {
+    .selected {
       background-color: #ff6b45;
       color: #fff;
     }
@@ -365,17 +379,16 @@ li {
       padding: 10px 50px;
     }
   }
-  .active{
-      color:#4a90e6;
-      cursor: default;
-    }
-    .active:hover{
-      color:#FF4F00
-    }
+  .active {
+    color: #4a90e6;
+    cursor: default;
+  }
+  .active:hover {
+    color: #ff4f00;
+  }
 }
-// .el-dialog {
-//   overflow: scroll;
-//   white-space: nowrap;
-//   height: 500px;
-// }
+.pagination {
+  margin-top: 20px;
+  text-align: center;
+}
 </style>

@@ -5,12 +5,12 @@
         <h3 class="title">咨询中心</h3>
         <div class="handle-box">
           <div class="handle-box">
-            <el-input v-model="keyword" placeholder="请输入搜索内容" class="handle-input mr10"></el-input>
-            <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
+            <el-input v-model="keyword" placeholder="请输入搜索内容" class="handle-input mr10" @keyup.enter.native="handleSearch" size="small"></el-input>
+            <el-button type="primary" icon="el-icon-search" @click="handleSearch" size="small">搜索</el-button>
           </div>
           <div>
-            <el-button type="text" @click="dialogFormVisible = true" class="btn">+ 发布咨询</el-button>
-            <el-dialog title="发布咨询" :visible.sync="dialogFormVisible">
+            <el-button type="danger" @click="dialogFormVisible = true" size="small">+ 发布咨询</el-button>
+            <el-dialog title="发布留言咨询" :visible.sync="dialogFormVisible" >
               <el-input
                 type="textarea"
                 :autosize="{ minRows: 2, maxRows: 4}"
@@ -26,7 +26,7 @@
           </div>
         </div>
       </div>
-      <hr />
+      <!-- <hr /> -->
       <ul class="set-note">
         <li v-for="(item,index) in consultContent" :key="index">
           <div @click="open(item.cid)">
@@ -40,6 +40,16 @@
           </div>
         </li>
       </ul>
+      <div class="pagination">
+      <!-- <el-pagination
+        background
+        layout="total, prev, pager, next"
+        :current-page="pageIndex"
+        :page-size="pageSize"
+        :total="pageTotal"
+        @current-change="handlePageChange"
+      ></el-pagination> -->
+    </div>
       <!-- <div>暂无相关记录</div> -->
     </div>
   </div>
@@ -68,7 +78,7 @@ export default {
       this.$axios
         .post("/xqhz/consult/postConsult", { question: this.textarea })
         .then(res => {
-          this.$message(res.msg);
+           this.$alert(res.msg,'提示');
           this.textarea = "";
         })
         .catch(err => {
@@ -117,7 +127,7 @@ li {
   .page {
     margin: 0 auto;
     padding: 10px 50px;
-    box-shadow: 2px 2px 5px 0 #666;
+    // box-shadow: 2px 2px 5px 0 #666;
     .header {
       .handle-box {
         display: flex;
@@ -129,15 +139,15 @@ li {
         
       }
       .btn {
-        padding: 9px 13px;
-        font-size: 13px;
+        // padding: 9px 13px;
+        // font-size: 13px;
         color: #ffffff;
         background-color: #e74c3c;
         border-radius: 5px;
       }
     }
     ul.set-note {
-      margin: 10px 0;
+      margin: 20px 0;
       li {
         color: #005976;
         padding: 5px 10px;

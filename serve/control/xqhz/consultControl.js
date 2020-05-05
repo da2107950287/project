@@ -14,7 +14,13 @@ router.post('/getConsultList', (req, res) => {
 router.post('/postConsult', (req, res) => {
     let data=req.body;
     consultmodel.postConsult(data,(result) => {
-        res.json({ code: 0, msg: '操作成功' })
+        if(result.affectedRows){
+            res.json({ code: 0, msg: '发布留言咨询成功' })
+        }else{
+            res.json({ code: 1, msg: '发布留言咨询失败，请重新操作' })
+
+        }
+     
 
     })
 

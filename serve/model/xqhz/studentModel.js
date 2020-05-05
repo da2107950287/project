@@ -7,7 +7,6 @@ class studentModel extends dbBase {
     }
     //获取学生信息
     getStudentInfo(cid, callback) {
-
         this.table = 'student'
         let sql = `select * from ${this.table} where sid = ? `;
         this.mydb.query(sql, [cid], (err, result) => {
@@ -17,7 +16,6 @@ class studentModel extends dbBase {
     //修改学生信息
     editStudentInfo(data, callback) {
         this.table = 'student';
-        // UPDATE 表名称 SET 列名称 = 新值 WHERE 列名称 = 某值
         let string1 = [];
         let string2 = [];
         for (const key in data) {
@@ -52,9 +50,9 @@ class studentModel extends dbBase {
         this.table = 'delivery'
         console.log(info.sid)
         let sql = `select  recruitment.rec_position,recruitment.rid,delivery.delivery_time,
-        company.rec_name,company.rec_page from company,delivery,recruitment,resume
+        company.rec_name,company.rec_page from company,delivery,recruitment
         where delivery.rid=recruitment.rid and 
-        company.cid=recruitment.cid and delivery.sid = ? and resume.sid =?`;
+        company.cid=recruitment.cid and delivery.sid = ? `;
         this.mydb.query(sql, [info.sid,info.sid], (err, result) => {
             console.log(sql)
             if(err){
@@ -171,7 +169,7 @@ class studentModel extends dbBase {
     }
     getTrainScore(data, callback) {
         console.log(data)
-        let sql = ` select training.tid,training.class_name,training.class_teacher,score.score,entry.eid from training,score,entry where entry.eid=score.eid and entry.tid=training.tid and score.sid=? and score.status=1 `;
+        let sql = ` select training.tid,training.class_name,training.class_teacher,score.score,entry.eid from training,score,entry where entry.eid=score.eid and entry.tid=training.tid and score.sid=?`;
         this.mydb.query(sql, [data.sid], (err, result) => {
             if (err) {
                 callback(err)
@@ -195,11 +193,11 @@ class studentModel extends dbBase {
                 if (result.length != 0) {
                     let delSql = `delete from ${this.table}  where sid=?`
                     this.mydb.query(delSql, [info.sid], (err, result) => {
-                        // if (err) {
-                        //     callback(err)
-                        // } else {
-                        //     callback(result)
-                        // }
+                        if (err) {
+                            callback(err)
+                        } else {
+                            callback(result)
+                        }
 
                     })
                 }
@@ -256,6 +254,38 @@ class studentModel extends dbBase {
             }
 
         })
+    }
+    verifyPassword(info, callback) {
+        this.table = 'student'
+        let sql = `select password from ${this.table} where sid=? `;
+        this.mydb.query(sql, [info.sid], (err, result) => {
+            if (err) {
+                callback(err)
+            } else {
+                callback(result)
+            }
+
+        })
+    }
+    editPassword(data, callback) {
+        this.table="student";
+        // UPDATE 表名称 SET 列名称 = 新值 WHERE 列名称 = 某值
+        let string1 = [];
+        let string2 = [];
+        for (const key in data) {
+            if (data.hasOwnProperty(key)) {
+                let value = key + "=?"
+                string1.push(value);
+                string2.push(data[key]);
+
+            }
+        }
+        string2.push(data.sid);
+        let sql = `update ${this.table} set ${string1.join(",")} where sid=?`;
+        this.mydb.query(sql, string2, function (err, result) {
+            callback(result);
+        })
+
     }
 }
 

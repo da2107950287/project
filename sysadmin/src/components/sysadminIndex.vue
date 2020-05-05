@@ -3,7 +3,7 @@
     <el-container class="main">
       <el-header>
         <div class="header">
-          <div class="logo">后台管理系统</div>
+          <div class="logo">校企合作信息后台管理系统</div>
           <div class="header-right">
             <div class="header-user-con">
               <!-- 用户头像 -->
@@ -27,14 +27,15 @@
       <el-container class="content">
         <el-aside width="200px">
           <el-menu :default-active="this.$route.name" router>
-            <el-menu-item index="home">
+            <el-menu-item index="sysadminhome">
               <template>
-                <i class="el-icon-s-home"></i>首页
+              首 页
               </template>
             </el-menu-item>
             <el-submenu index="2">
               <template slot="title">
-                <i class="el-icon-message"></i>用户信息管理
+                <!-- <i class="el-icon-message"></i> -->
+                用户信息管理
               </template>
               <el-menu-item-group>
                 <el-menu-item index="studentList">学生信息</el-menu-item>
@@ -44,7 +45,8 @@
             </el-submenu>
             <el-submenu index="3">
               <template slot="title">
-                <i class="el-icon-menu"></i>招聘信息管理
+                <!-- <i class="el-icon-menu"></i> -->
+                招聘信息管理
               </template>
               <el-menu-item-group>
                 <el-menu-item index="recruitmentList">招聘信息</el-menu-item>
@@ -52,24 +54,26 @@
             </el-submenu>
             <el-submenu index="4">
               <template slot="title">
-                <i class="el-icon-menu"></i>培训信息管理
+                <!-- <i class="el-icon-menu"></i> -->
+                培训信息管理
               </template>
               <el-menu-item-group>
                 <el-menu-item index="trainingList">培训信息</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
 
-            <el-submenu index="5">
+            <!-- <el-submenu index="5">
               <template slot="title">
                 <i class="el-icon-menu"></i>简历信息管理
               </template>
               <el-menu-item-group>
                 <el-menu-item index="4-1">简历信息</el-menu-item>
               </el-menu-item-group>
-            </el-submenu>
+            </el-submenu> -->
             <el-submenu index="6">
               <template slot="title">
-                <i class="el-icon-message"></i>咨询信息管理
+                <!-- <i class="el-icon-message"></i> -->
+                咨询信息管理
               </template>
               <el-menu-item-group>
                 <el-menu-item index="consultList">咨询信息</el-menu-item>
@@ -94,7 +98,6 @@ export default {
       collapse: false,
       fullscreen: false,
       name: "管理员",
-      // activeIndex: this.$router.path
     };
   },
   
@@ -115,14 +118,7 @@ export default {
     // 侧边栏折叠
     collapseChage() {
       this.collapse = !this.collapse;
-      // bus.$emit('collapse', this.collapse);
     }
-  },
-  mounted() {
-    if (document.body.clientWidth < 1500) {
-      this.collapseChage();
-    }
-    console.log(this.$route.path)
   },
   components: {
     Vheader

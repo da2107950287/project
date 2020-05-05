@@ -7,12 +7,10 @@ Vue.use(Router)
 let router = new Router({
   mode: 'history',
   routes: [
-    { path: '/test', name: 'test', meta: { title: '登录' }, component: () => import('@/components/test') },
+   
 
     { path: '/login', name: 'login', meta: { title: '登录' }, component: () => import('@/components/login') },
     { path: '/register', name: 'register', meta: { title: '注册' }, component: () => import('@/components/register') },
-
-
     {
       path: '/', redirect: '/home', name: 'index', meta: { title: '' ,role:[]}, component: () => import('@/components/index'),
       children: [
@@ -43,7 +41,29 @@ let router = new Router({
 
 
       ]
-    }
+    },
+    {
+      path: '/sysadminindex', name: 'sysadminindex', meta: { title: "主页" }, component: () => import('@/components/sysadminIndex'),
+  
+       
+        children: [
+          { path: '/sysadminhome', name: 'sysadminhome', meta: { title: "主页",role:["admin"] }, component: () => import('@/components/sysaminHome')},
+          { path: '/sysadminStudentList', name: 'sysadminStudentList', meta: { title: "学生列表",role:["admin"]  }, component: () => import('@/components/userInformation/student/studentList') },
+          { path: '/sysadminStudentInfo', name: 'sysadminStudentInfo', meta: { title: "学生详情",role:["admin"]  }, component: () => import('@/components/userInformation/student/studentInfo') },
+          { path: '/sysadminCompanyList', name: 'sysadminCompanyList', meta: { title: "企业列表",role:["admin"]  }, component: () => import('@/components/userInformation/company/companyList') },
+          { path: '/sysadminCompanyInfo', name: 'sysadminCompanyInfo', meta: { title: "企业列表",role:["admin"]  }, component: () => import('@/components/userInformation/company/companyInfo') },
+          { path: '/sysadminAdminList', name: 'sysadminAdminList', meta: { title: "企业列表",role:["admin"]  }, component: () => import('@/components/userInformation/admin/adminList') },
+          { path: '/sysadminAdminInfo', name: 'sysadminAdminInfo', meta: { title: "企业列表",role:["admin"]  }, component: () => import('@/components/userInformation/admin/adminInfo') },
+          { path: '/sysadminTrainingList', name: 'sysadminTrainingList', meta: { title: "企业列表" ,role:["admin"] }, component: () => import('@/components/training/trainingList') },
+          { path: '/sysadminTrainingInfo', name: 'sysadminTrainingInfo', meta: { title: "企业列表",role:["admin"]  }, component: () => import('@/components/training/trainingInfo') },
+          { path: '/sysadminConsultList', name: 'sysadminConsultList', meta: { title: "企业列表",role:["admin"]  }, component: () => import('@/components/consult/consultList') },
+          // { path: '/sysadminConsultInfo', name: 'sysadminConsultInfo', meta: { title: "企业列表",role:["admin"]  }, component: () => import('@/components/consult/consultInfo') },
+          { path: '/sysadminRecruitmentList', name: 'sysadminRecruitmentList', meta: { title: "企业列表" ,role:["admin"] }, component: () => import('@/components/recruitment/recruitmentList') },
+          { path: '/sysadminRecruitmentInfo', name: 'sysadminRecruitmentInfo', meta: { title: "企业列表",role:["admin"]  }, component: () => import('@/components/recruitment/recruitmentInfo') },
+  
+        ]
+      }
+  
 
   ],
 

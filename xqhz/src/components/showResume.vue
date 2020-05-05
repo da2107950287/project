@@ -60,5 +60,6 @@ export default {
 <style scoped>
 .continer{
     margin: 50px 100px;
+    background-color: #fcfcfc;
 }
 </style>
