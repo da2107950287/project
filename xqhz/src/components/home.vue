@@ -21,13 +21,7 @@
       </div>
       <div class="panel-body">
         <table class="table">
-          <!-- <thead>
-            <tr>
-              <th>课程名</th>
-              <th>培训讲师</th>
-              <th>培训时间</th>
-            </tr>
-          </thead>-->
+    
           <tbody>
             <tr v-for="(item,index) in trainingList" :key="index">
               <td class="post-sort" @click="getTrainingInfo(item.tid)">

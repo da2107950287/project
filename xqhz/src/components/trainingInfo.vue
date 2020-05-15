@@ -18,21 +18,16 @@
           <div>培训讲师：</div>
           <div>{{info.class_teacher}}</div>
         </li>
-        <!-- <li class="content">
-          <div>讲师介绍</div>
-          <div>北京交大才子，华为、爱立信等通信巨头研发总监，10余年物联网行业工作经验，对物联网、2/3/4G无线网络、NB-IOT技术、数据通信等方面见解独到，主导参与华为骨干路由器、即时通信、网数通产品等多个项目研发，其产品创新解决方案荣获多个华为新颖创新奖。曾负责项目：华为骨干网、智能农业系统。</div>
-        </li>-->
-        <!-- <li class="content"> -->
-          <!-- <div>课程简介</div> -->
+        
            <el-tabs type="card" class="bottom-box">
           <el-tab-pane label="课程介绍">
             <div v-html="info.class_content"></div>
           </el-tab-pane>
-          <el-tab-pane label="讲师介绍">
+          <!-- <el-tab-pane label="讲师介绍">
             <div v-html="info.class_content"></div>
-          </el-tab-pane>
+          </el-tab-pane> -->
         </el-tabs>
-        <!-- </li> -->
+     
       </ul>
       <div class="submit_btn">
         <el-button type="primary" @click="apply">立即报名</el-button>

@@ -41,10 +41,7 @@ class userModel extends dbBase {
             if (err) {
                 callback(err)
             } else {
-<<<<<<< HEAD
                 console.log(result)
-=======
->>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
                 callback(result);
             }
         })
@@ -82,7 +79,6 @@ class userModel extends dbBase {
         })
     }
     //编辑学生信息
-<<<<<<< HEAD
     editStudent(data, callback) {
         this.table = 'student'
         let string1 = [];
@@ -122,30 +118,6 @@ class userModel extends dbBase {
        let sql = `insert into ${this.table} (${fieldstring.join(",")}) select${field.join(",")} from dual 
        where not exists(select username from ${this.table} where username=?)`;
         this.mydb.query(sql, data, function (err, result) {
-=======
-    editStudent(info, callback) {
-        // UPDATE 表名称 SET 列名称 = 新值 WHERE 列名称 = 某值
-        this.table = 'student'
-        let data = [];
-        let fieldstring = [];
-        let field = [];
-        let arr=[]
-
-        for (const key in info) {
-            if (info.hasOwnProperty(key)) {
-                field.push("?");
-                data.push(info[key]);
-                fieldstring.push(key)
-                arr.push(`${key}=?`)
-            }
-        }
-      
-        // console.log('string3',string3)
-        // string2.push(data.sid);
-        // INSERT INTO tablename(field1,field2, field3, ...) VALUES(value1, value2, value3, ...) ON DUPLICATE KEY UPDATE field1=value1,field2=value2, field3=value3, ...;
-        let sql = `INSERT INTO ${this.table} (${fieldstring.join(",")}) values (${field.join(",")}) ON DUPLICATE KEY UPDATE ${arr.join(',')}`;
-        this.mydb.query(sql, data.concat(data), function (err, result) {
->>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
             if(err){
                 console.log(err)
             }else{

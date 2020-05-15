@@ -20,7 +20,7 @@
         </el-radio-group>
         <!-- 用户名 -->
         <el-form-item prop="username">
-          <el-input v-model="loginForm.username" prefix-icon="el-icon-user" placeholder="请输入账号" style="width:360px"></el-input>
+          <el-input v-model="loginForm.username" prefix-icon="el-icon-user" placeholder="请输入账号" style="width:360px" clearable></el-input>
         </el-form-item>
         <!-- 密码 -->
         <el-form-item prop="password">
@@ -31,6 +31,7 @@
             show-password
             placeholder="请输入密码"
             style="width:360px"
+            clearable
           ></el-input>
         </el-form-item>
 
@@ -40,6 +41,7 @@
               placeholder="请输入验证码"
               style="width:50%;margin-right:20px"
               v-model="loginForm.verifycode"
+              clearable
             ></el-input>
 
             <div @click="refreshCode">
@@ -64,7 +66,7 @@ export default {
     const validateVerifycode = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请输入验证码"));
-      } else if (value !== this.identifyCode) {
+      } else if (value.toLowerCase().trim() !== this.identifyCode.toLowerCase().trim()) {
         callback(new Error("验证码不正确!"));
       } else {
         callback();
@@ -84,11 +86,7 @@ export default {
         // 验证用户名是否合法
         username: [
           { required: true, message: "请输入账号", trigger: "blur" },
-<<<<<<< HEAD
           // { min: 6, max: 12, message: "长度在 6到 12个字符", trigger: "blur" }
-=======
-          { min: 6, max: 12, message: "长度在 6到 12个字符", trigger: "blur" }
->>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
         ],
         // 验证密码是否合法
         password: [
@@ -134,21 +132,20 @@ export default {
           this.$axios
             .post("/xqhz/user/login", this.loginForm)
             .then(res => {
-<<<<<<< HEAD
               this.$alert(res.msg);
+              
               localStorage.setItem("token", res.data.token);
               localStorage.setItem("role", res.data.role);
+              localStorage.setItem('username',res.data.username)
+              console.log(res.data.role=='admin')
               if(res.data.role=='admin'){
-                this.$router.push({path:'/sysadminhome'})
-              }else{
+
+                this.$router.push({path:'/sysadminhome'});
+              }
+              
+              else{
                 this.$router.push({ path: "/home" });
               }
-=======
-              this.$message(res.msg);
-              localStorage.setItem("token", res.data.token);
-              localStorage.setItem("role", res.data.role);
-              this.$router.push({ path: "/home" });
->>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
             })
             .catch(err => {
               console.log(err);

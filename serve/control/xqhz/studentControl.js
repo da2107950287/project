@@ -5,7 +5,7 @@ const JwtUtil = require('../../tool/jwt');
 let studentmodel = new studentModel();
 let jwt = new JwtUtil();
 
-//获取学生信息
+//获取学生个人信息
 router.post('/getStudentInfo', (req, res) => {
     console.log("getstudentInfo")
     jwt.checkToken(req.headers.authorization).then(res1 => {
@@ -85,10 +85,8 @@ router.post('/getSelfDeliveryList', (req, res) => {
 //获取培训成绩
 router.post('/getTrainScore', (req, res) => {
     jwt.checkToken(req.headers.authorization).then(res1 => {
-        //token验证成功
         let data={};
         data.sid=res1.sid
-        
         studentmodel.getTrainScore(data, (result) => {
             res.json({ code: 0, data:result })
         })
@@ -132,8 +130,9 @@ router.post('/verifyPassword',(req,res)=>{
     jwt.checkToken(req.headers.authorization).then(res1 => {
         //token验证成功
         let data={};
-        data.sid=res1.sid
+        data.sid=res1.sid;
         studentmodel.verifyPassword(data, (result) => {
+            console.log(result[0]);
             res.json({ code: 0,data:result[0], msg:'操作成功' })
         })
     }).catch(err => {
@@ -151,7 +150,11 @@ router.post('/editPassword',(req,res)=>{
         data.sid=res1.sid
         
         studentmodel.editPassword(data, (result) => {
-            res.json({ code: 0,data:result[0], msg:'操作成功' })
+            if(result.affectedRows){
+                res.json({ code: 0,msg:'修改密码成功！' })
+            }else{
+                res.json({code:1,msg:'修改密码失败，请重新操作！'})
+            }
         })
     }).catch(err => {
         res.json({ err: -1, msg: 'token非法' });

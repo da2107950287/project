@@ -28,9 +28,10 @@ router.post('/login', (req, res) => {
                 }
             } else {
                 result[0].role = 'admin'
+               
                 token = jwt.createToken({ aid: result[0].aid })
             }
-            res.json({ msg: "登录成功！", data: { token: token, role: result[0].role } })
+            res.json({ msg: "登录成功！", data: { token: token, role: result[0].role,username:result[0].username} })
         }
 
 
@@ -42,15 +43,9 @@ router.post('/register', (req, res) => {
     usermodel.register(data, (result) => {
         console.log(result.affectedRows)
         if(result.affectedRows){
-<<<<<<< HEAD
             res.json({code:0, msg: "操作成功，请等待管理员！" })
         }else{
             res.json({code:1,msg:'操作失败，你已注册，请勿重复注册！'})
-=======
-            res.json({code:0, msg: "操作成功" })
-        }else{
-            res.json({code:1,msg:'操作失败'})
->>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
         }
         
     })

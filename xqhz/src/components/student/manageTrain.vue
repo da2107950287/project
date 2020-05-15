@@ -121,7 +121,7 @@ export default {
         .post("/xqhz/student/getTrainScore", {})
         .then(res => {
           this.data = res.data;
-console.log(res.data)
+
           this.getList();
           console.log(this.tableData)
         })

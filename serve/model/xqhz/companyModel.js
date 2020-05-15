@@ -265,7 +265,6 @@ class companyModel extends dbBase {
         this.table='recruitment'
         let sql = `delete from ${this.table} where rid = ?`;
         this.mydb.query(sql, [data.rid], (err, result) => {
-<<<<<<< HEAD
             if(err){
                 console.log(err)
             }
@@ -318,32 +317,17 @@ class companyModel extends dbBase {
 
     // }
     saveScore(info, callback) {
-=======
-            callback(result);
-        })
-    }
-    saveScore(info, callback) {
-        // UPDATE 表名称 SET 列名称 = 新值 WHERE 列名称 = 某值
-        console.log(info)
->>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
         this.table = 'score'
         let data = [];
         let fieldstring = [];
         let field = [];
-<<<<<<< HEAD
         let arr=[]
         info.forEach((item,index) => {
             console.log(item)
-=======
-        let arr = [];
-        let sql;
-        info.forEach((item, index) => {
->>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
             for (const key in item) {
                 if (item.hasOwnProperty(key)) {
                     field.push("?");
                     data.push(item[key]);
-<<<<<<< HEAD
                     fieldstring.push(key)
                     arr.push(`${key}=?`)
                 }
@@ -353,28 +337,6 @@ class companyModel extends dbBase {
         this.mydb.query(sql, data.concat(data), function (err, result) {
             callback(result);
         })
-=======
-                    fieldstring.push(key);
-                }
-            }
-            arr.push("(" + field + ")");
-            field = []
-            fieldstring = Array.from(new Set(fieldstring))
-            sql = `insert into ${this.table} (${fieldstring.join(",")}) values ${arr.join(",")}`;
-        });
-        this.mydb.query(sql, data, (err, result) => {
-            if (err) {
-                console.log(err)
-                callback(err)
-            } else {               
-                callback(result);
-            }
-        })
-       
-
-        
-
->>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
     }
 }
 module.exports = companyModel;

@@ -62,14 +62,7 @@
               </el-menu-item-group>
             </el-submenu>
 
-            <!-- <el-submenu index="5">
-              <template slot="title">
-                <i class="el-icon-menu"></i>简历信息管理
-              </template>
-              <el-menu-item-group>
-                <el-menu-item index="4-1">简历信息</el-menu-item>
-              </el-menu-item-group>
-            </el-submenu> -->
+           
             <el-submenu index="6">
               <template slot="title">
                 <!-- <i class="el-icon-message"></i> -->

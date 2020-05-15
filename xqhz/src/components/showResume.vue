@@ -62,4 +62,7 @@ export default {
     margin: 50px 100px;
     background-color: #fcfcfc;
 }
+.arrow{
+  cursor: pointer;
+}
 </style>

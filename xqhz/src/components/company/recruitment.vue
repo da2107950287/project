@@ -1,30 +1,16 @@
 <template>
   <div class="continer">
     <div class="aside">
-<<<<<<< HEAD
       <div @click="show(1)" :class="[isShow===1?'selected':'']">招聘信息列表</div>
       <div @click="show(3)" :class="[isShow===3?'selected':'']">岗位投递列表</div>
       <div @click="show(2)" :class="[isShow==2?'selected':'']">发布招聘信息</div>
     </div>
 
-    <div class="resume-list" v-if="isShow===1">
+    <div class="resume-list" v-show="isShow===1">
       <div class="header">
         <h3>招聘信息列表</h3>
         <div class="handle-box">
           <el-select v-model="status" @change="handleSearch" placeholder="请选择" style="width:150px">
-=======
-      <div @click="show(1)" :class="[isShow==1?'selected':'']">招聘信息列表</div>
-
-      <div @click="show(2)" :class="[isShow==2?'selected':'']">发布招聘信息</div>
-      <!-- <div @click="show(3)" :class="[isShow==3?'selected':'']">岗位投递列表</div> -->
-    </div>
-
-    <div class="resume-list" v-if="isShow==1">
-      <div class="header">
-        <h3>招聘信息列表</h3>
-        <div class="handle-box">
-          <el-select v-model="status" @change="handleSearch" placeholder="请选择">
->>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -59,24 +45,14 @@
 
             <el-table-column label="操作" width="200" align="center">
               <template slot-scope="scope">
-<<<<<<< HEAD
                 <el-button type="text" icon="el-icon-view" @click="getRecruitmentInfo(scope.row.rid)">查看</el-button>
 
                 <!-- <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.row)">编辑</el-button> -->
-=======
-                <el-button type="text" icon="el-icon-view" @click="handleSeeList(scope.row)">查看</el-button>
-
-                <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.row)">编辑</el-button>
->>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
                 <el-button
                   type="text"
                   icon="el-icon-delete"
                   class="red"
-<<<<<<< HEAD
                   @click="handleDelete(scope.$index,scope.row)"
-=======
-                  @click="handleDelete(scope.row)"
->>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
                 >删除</el-button>
               </template>
             </el-table-column>
@@ -94,8 +70,7 @@
         </div>
       </div>
     </div>
-<<<<<<< HEAD
-    <div class="page" v-if="isShow===2">
+    <div class="page" v-show="isShow===2">
       <div class="header">
         <h3 class="title">发布招聘信息</h3>
       </div>
@@ -115,7 +90,7 @@
               type="datetime"
               align="right"
               placeholder="选择日期"
-              value-format="yyyy-MM-dd 00:00:00"
+             
             ></el-date-picker>
           </el-form-item>
           <el-form-item label="招聘地点：" prop="rec_place_name">
@@ -135,58 +110,11 @@
         </el-form>
       </div>
     </div>
-    <div class="resume-list" v-if="isShow===3">
+    <div class="resume-list" v-show="isShow===3">
       <div class="header">
         <h3>岗位投递列表</h3>
         <div class="handle-box">
           <el-input v-model="keywords" placeholder="请输入职位名称" class="handle-input mr10" @keyup.enter.native="handleSearch"></el-input>
-=======
-        <div class="page" v-if="isShow==2">
-      <div class="header">
-        <h3 class="title">发布招聘信息</h3>
-      </div>
-      <hr />
-
-      <div class="set-note">
-        <el-form :model="ruleForm" ref="ruleForm" label-width="110px" class="demo-ruleForm">
-          <el-form-item label="招聘职位：" prop="rec_position">
-            <el-input clearable v-model="ruleForm.rec_position"></el-input>
-          </el-form-item>
-          <el-form-item label="学历要求：" prop="rec_degree">
-            <el-input clearable v-model="ruleForm.rec_degree"></el-input>
-          </el-form-item>
-          <el-form-item label="招聘时间：" prop="rec_time">
-            <el-date-picker
-              v-model="ruleForm.rec_time"
-              type="datetime"
-              align="right"
-              placeholder="选择日期"
-              value-format="yyyy-MM-dd 00:00:00"
-            ></el-date-picker>
-          </el-form-item>
-          <el-form-item label="招聘地点：" prop="rec_place_name">
-            <el-input clearable v-model="ruleForm.rec_place_name"></el-input>
-          </el-form-item>
-          <el-form-item label="工作地点" prop="rec_work_place">
-            <el-input clearable v-model="ruleForm.rec_work_place"></el-input>
-          </el-form-item>
-          <el-form-item label="职位描述：" prop="rec_content">
-            <editor-bar v-model="ruleForm.rec_content" :isClear="isClear"></editor-bar>
-          </el-form-item>
-          <el-form-item class="btns">
-            <el-button type="danger" @click="postRecruitment">发布</el-button>
-            <!--  v-if="isPost==true" -->
-            <!-- <el-button v-else type="danger" @click="postRecruitment">修改</el-button> -->
-          </el-form-item>
-        </el-form>
-      </div>
-    </div>
-    <div class="resume-list" v-if="isShow==3">
-      <div class="header">
-        <h3>岗位投递列表</h3>
-        <div class="handle-box">
-          <el-input v-model="postion" placeholder="请输入职位名称" class="handle-input mr10"></el-input>
->>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
           <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
         </div>
         <!-- <hr /> -->
@@ -228,21 +156,6 @@
                 >删除</el-button> -->
               </template>
             </el-table-column>
-<<<<<<< HEAD
-=======
-            <el-table-column prop="delivery_time" label="投递时间" align="center"></el-table-column>-->
-            <el-table-column label="操作" width="200" align="center">
-              <template slot-scope="scope">
-                <el-button type="text" icon="el-icon-view" @click="handleSeeList(scope.row)">查看</el-button>
-                <el-button
-                  type="text"
-                  icon="el-icon-delete"
-                  class="red"
-                  @click="handleDelete(scope.row)"
-                >删除</el-button>
-              </template>
-            </el-table-column>
->>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
           </el-table>
           <div class="pagination">
             <el-pagination
@@ -291,11 +204,7 @@
         <el-button type="primary" @click="saveEdit">确 定</el-button>
       </span>
     </el-dialog>
-<<<<<<< HEAD
     <el-dialog title="岗位投递列表" :visible.sync="listVisible" width="60%">
-=======
-    <el-dialog title="报名列表" :visible.sync="listVisible" width="60%">
->>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
       <el-table :data="dialogTable" border style="width: 100%">
         <el-table-column prop="username" label="学号" align="center"></el-table-column>
         <el-table-column prop="name" label="姓名" align="center"></el-table-column>
@@ -383,7 +292,6 @@ export default {
   },
   methods: {
     show(type) {
-<<<<<<< HEAD
       
       // this.tableData=[]
       if (type == 1) {
@@ -392,19 +300,6 @@ export default {
         this.ruleForm = {};
       } else if (type == 3) {
          this.getSelfRecruitmentList();
-=======
-      this.isShow = type;
-      // this.tableData=[]
-      if (type == 1) {
-        this.getSelfRecruitmentList();
-        
-      } else if (type == 2) {
-        this.ruleForm = {};
-        ;
-      } else if (type == 3) {
-        this.getDeliveryRecordList();
-        console.log(this.tableData);
->>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
       }
       this.isShow = type;
     },
@@ -445,7 +340,6 @@ export default {
       this.tableData = [];
       let list = this.data.filter((item, index) => {
         if (this.status === 0 || this.status === 1 || this.status === 2) {
-<<<<<<< HEAD
           return (
             this.status === item.status &&
             item.rec_position.includes(this.keywords)
@@ -458,17 +352,6 @@ export default {
       //  console.log(list)
       list.forEach((item, index) => {
         console.log(item);
-=======
-            return  this.status === item.status && item.rec_position.includes(this.postion);
-        } else {
-          return true && item.rec_position.includes(this.postion);
-        }
-      });
-      console.log(list)
-      //  console.log(list)
-      list.forEach((item, index) => {
-        console.log(item)
->>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
         if (item.delivery_time) {
           item.delivery_time = item.delivery_time
             .replace(/T/g, " ")
@@ -494,7 +377,6 @@ export default {
           index >= this.pageSize * (this.pageIndex - 1)
       );
       this.pageTotal = list.length;
-<<<<<<< HEAD
       console.log(this.tableData);
     },
     // //获取招聘投递列表
@@ -525,58 +407,13 @@ export default {
       );
       this.dialogPageTotal = this.data.length;
     },
-=======
-      console.log(this.tableData)
-    },
-    // //获取招聘投递列表
-    // getDeliveryRecordList() {
-    //   this.$axios
-    //     .post("/xqhz/company/getDeliveryRecordList", {})
-    //     .then(res => {
-    //       this.data = res.data;
-    //       console.log(this.data);
-    //       this.dialogTable = this.getList(this.dialogTable);
-    //     })
-    //     .catch(err => {
-    //       console.log(err);
-    //     });
-    // },
-    getDialogList() {
-      this.data.forEach((item, index) => {
-        if (item.delivery_time) {
-          item.delivery_time = item.delivery_time
-            .replace(/T/g, " ")
-            .replace(/\.[\d]{3}Z/, "");
-        }
-      });
-      this.dialogTable = this.data.filter(
-        (item, index) =>
-          index < this.dialogPageIndex * this.dialogPageSize &&
-          index >= this.dialogPageSize * (this.dialogPageIndex - 1)
-      );
-      this.dialogPageTotal = this.data.length;
-    },
->>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
     handleSeeList(data) {
       this.listVisible = true;
       this.$axios
         .post("/xqhz/company/getDeliveryRecordList", { rid: data.rid })
         .then(res => {
           this.data = res.data;
-<<<<<<< HEAD
           this.getDialogList();
-=======
-          this.getDialogList()
-        })
-        .catch(err => {});
-    },
-    handleDelete(data) {
-      console.log(data);
-      this.$axios
-        .post("/xqhz/company/delRecruitment", {})
-        .then(res => {
-          console.log(res);
->>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
         })
         .catch(err => {});
     },
@@ -591,10 +428,8 @@ export default {
             if(res.code==0){
                this.tableData.splice(index, 1);
                 --this.pageTotal;
-              this.$message.success(res.msg)
-            }else{
-              this.$message.error(res.msg)
             }
+              this.$alert(res.msg,"提示")
             });
         })
         .catch(() => {});
@@ -693,14 +528,9 @@ export default {
   // height: 35px;
   // display: inline-block;
 }
-<<<<<<< HEAD
 .pagination {
   margin-top: 20px;
   text-align: center;
-=======
-.pagination{
-  margin-top: 10px;
->>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
 }
 // .handle-input {
 //   width: 300px;

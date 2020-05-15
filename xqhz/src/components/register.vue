@@ -199,15 +199,15 @@ export default {
   methods: {
     register() {
       if (this.ruleForm.password !== this.verify_password) {
-        this.$message("密码不一致");
+        this.$alert("密码不一致");
       } else {
         this.$axios
           .post("/xqhz/user/register", this.ruleForm)
           .then(res => {
             if(res.code==0){
-              this.$message.success(res.msg)
+              this.$alert(res.msg)
             }else{
-              this.$message.error(res.msg)
+              this.$alert(res.msg)
             }
           })
           .catch(err => {

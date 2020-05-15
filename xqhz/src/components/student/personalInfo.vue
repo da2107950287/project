@@ -1,10 +1,8 @@
 <template>
   <div class="register">
-<div class="aside">
-     <div @click="show(1)" :class="[isShow==1?'selected':'']">查看个人信息</div>
+    <div class="aside">
+      <div @click="show(1)" :class="[isShow==1?'selected':'']">查看个人信息</div>
       <div @click="show(2)" :class="[isShow==2?'selected':'']">修改密码</div>
-
-   
     </div>
     <div class="page" v-if="isShow==1">
       <div class="header">
@@ -15,20 +13,17 @@
         <el-form ref="ruleForm" label-width="60px" class="demo-ruleForm" size="mini">
           <el-form-item label="学号：" prop="sno">
             <div class="content">{{ruleForm.username}}</div>
-<<<<<<< HEAD
           </el-form-item>
           <el-form-item label="姓名：" prop="username">
             <div class="content">{{ruleForm.name}}</div>
-=======
->>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
           </el-form-item>
-            <el-form-item label="密码：" prop="password">
+          <el-form-item label="密码：" prop="password">
             <div class="content">{{ruleForm.password}}</div>
           </el-form-item>
-          <el-form-item label="姓名：" prop="username">
+          <!-- <el-form-item label="姓名：" prop="username">
             <div class="content">{{ruleForm.name}}</div>
-          </el-form-item>
-        
+          </el-form-item> -->
+
           <el-form-item label="学院：" prop="academy">
             <div class="content">{{ruleForm.academy}}</div>
           </el-form-item>
@@ -37,7 +32,7 @@
           </el-form-item>
           <!-- <el-form-item class="btns">
             <el-button type="primary" @click="edit">编辑</el-button>
-          </el-form-item> -->
+          </el-form-item>-->
         </el-form>
       </div>
       <el-dialog title="修改个人信息" :visible.sync="editVisible" width="40%" class="base-informaion">
@@ -68,19 +63,19 @@
     <div class="page" v-if="isShow==2">
       <div>
         <div class="header">
-        <h3 class="title">修改密码</h3>
-      </div>
-      <hr />
-         <el-form :model="ruleForm" ref="ruleForm" label-width="90px" class="demo-ruleForm">
+          <h3 class="title">修改密码</h3>
+        </div>
+        <hr />
+        <el-form :model="ruleForm" ref="ruleForm" label-width="90px" class="demo-ruleForm">
           <el-form-item label="原始密码：" prop="oldPassword">
-            <el-input clearable v-model="form.oldPassword"></el-input>
+            <el-input clearable v-model="form.oldPassword" show-password></el-input>
           </el-form-item>
           <el-form-item label="新密码：" prop="newPassword">
-            <el-input clearable v-model="form.newPassword"></el-input>
+            <el-input clearable v-model="form.newPassword" show-password></el-input>
             <div></div>
           </el-form-item>
           <el-form-item label="确认密码：" prop="verifyPassword">
-            <el-input clearable v-model="form.verifyPassword"></el-input>
+            <el-input clearable v-model="form.verifyPassword" show-password></el-input>
           </el-form-item>
           <el-form-item class="btns">
             <el-button type="primary" @click="editPassword">修改密码</el-button>
@@ -101,47 +96,60 @@ export default {
         academy: "", //学院
         major: "" //专业
       },
-      form:{
-        oldPassword:'',
-        newPassword:'',
-        verifyPassword:''
+      form: {
+        oldPassword: "",
+        newPassword: "",
+        verifyPassword: ""
       },
       editVisible: false,
-      isShow:1
+      isShow: 1
     };
   },
   methods: {
-        show(type) {
-     
-      if(type==1){
-         this.getStudentInfo();
-      }else{
+    show(type) {
+      if (type == 1) {
+        this.getStudentInfo();
+      } else {
         // this.getTrainScore()
       }
-       this.isShow = type;
+      this.isShow = type;
     },
-    editPassword(){
-      let _this=this;
-      this.$axios.post("/xqhz/student/verifyPassword",{})
-       .then(res => {
-         if(res.data.password===this.form.oldPassword){
-           console.log(this.form.newPassword)
- _this.$axios.post('/xqhz/student/editPassword',{password:_this.form.newPassword})
-          .then(res=>{
-            console.log(res)
-          }).catch(err=>{
-            console.log(err)
+    editPassword() {
+      let _this = this;
+      if (this.form.newPassword != this.form.verifyPassword) {
+        this.$alert("新密码与确认密码不一致！");
+      } else {
+        this.$axios
+          .post("/xqhz/student/verifyPassword", {})
+          .then(res => {
+            console.log(res.data.password,this.form.oldPassword)
+            if (res.data.password == this.form.oldPassword) {
+              if (this.form.oldPassword === this.form.newPassword) {
+                this.$alert("新密码不能与原密码相同，请重新输入新密码！");
+              } else {
+                _this.$axios
+                  .post("/xqhz/student/editPassword", {
+                    password: _this.form.newPassword
+                  })
+                  .then(res => {
+                    
+                      this.$alert(res.msg);
+                    
+                  })
+                  .catch(err => {
+                    console.log(err);
+                  });
+              }
+            } else {
+              this.$alert("原始密码错误!");
+            }
+
+            console.log(res);
           })
-         }else{
-           this.$message.warning('原始密码错误')
-         }
-          this.$message(res.msg);
-          console.log(res)
-         
-        })
-        .catch(err => {
-          console.log(err);
-        });
+          .catch(err => {
+            console.log(err);
+          });
+      }
     },
     change(val) {
       console.log(val);
@@ -151,25 +159,14 @@ export default {
     },
     confirm() {
       this.editVisible = false;
-<<<<<<< HEAD
       this.$axios
         .post("/xqhz/student/editStudentInfo", this.ruleForm)
         .then(res => {
-          this.$message(res.msg);
+          this.$alert(res.msg);
         })
         .catch(err => {
           console.log(err);
         });
-=======
-        this.$axios
-          .post("/xqhz/student/editStudentInfo", this.ruleForm)
-          .then(res => {
-            this.$message(res.msg);
-          })
-          .catch(err => {
-            console.log(err);
-          });
->>>>>>> 3303b1b39b0ee612accc3990bdbc2299465234bc
     },
     getStudentInfo() {
       this.$axios.post("/xqhz/student/getStudentInfo").then(res => {
@@ -206,7 +203,7 @@ export default {
     }
   }
   .page {
-   width: 100%;
+    width: 100%;
     padding: 10px 50px;
     background-color: #fff;
     // box-shadow: 2px 2px 5px 0 #666;
