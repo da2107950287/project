@@ -16,6 +16,7 @@
             :key="item.value"
             :label="item.label"
             :value="item.value"
+            
           ></el-option>
         </el-select>
         <el-input
@@ -88,8 +89,8 @@
             <el-date-picker
               v-model="ruleForm.class_time"
               type="datetimerange"
-              range-separator="至"
-           
+              value-format="yyyy-MM-dd HH:mm:ss"
+              range-separator="~"
               start-placeholder="开始日期"
               end-placeholder="结束日期"
             ></el-date-picker>
@@ -111,13 +112,13 @@
     <div class="page" v-show="isShow==3">
       <h3>培训报名列表</h3>
       <div class="handle-box">
-        <el-select v-model="status" placeholder="请选择">
+        <el-select v-model="status" @change="handleSearch" placeholder="请选择">
           <el-option
             v-for="item in options"
             :key="item.value"
             :label="item.label"
             :value="item.value"
-            @change="handleSearch"
+            
           ></el-option>
         </el-select>
         <el-input
@@ -185,8 +186,8 @@
           <el-date-picker
             v-model="form.class_time"
             type="datetimerange"
-            range-separator="至"
-            value-format="yyyy-MM-dd 00:00:00"
+            range-separator="~"
+            value-format="yyyy-MM-dd HH:mm:ss"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
           ></el-date-picker>
@@ -296,15 +297,12 @@ export default {
   },
   methods: {
     show(type) {
+      this.keywords=''
       if (type == 1) {
         this.getSelfTrainingList();
       } else if (type == 2) {
         this.ruleForm = {};
-        // class_name: "", //课程名
-        //   class_teacher: "", //培训讲师
-        //   class_time: "", //培训时间
-        //   class_place: "", //培训地点
-        //   class_content: "" //课程介绍
+       
       } else if (type == 3) {
         this.getSelfTrainingList();
       }
@@ -326,6 +324,9 @@ export default {
         return data;
       });
       this.$axios.post("/xqhz/company/saveScore", { data: data }).then(res => {
+        if(res.code==0){
+          this.$alert(res.msg,"提示")
+        }
         this.data = res.data;
         this.getDialogList();
       });
@@ -343,7 +344,7 @@ export default {
     handleEdit(data) {
       this.editVisible = true;
 
-      var arr = data.class_time.split("至");
+      var arr = data.class_time.split("~");
       data.class_time = arr;
       this.form = data;
     },
@@ -408,11 +409,14 @@ export default {
     },
     postTraining() {
       console.log(this.ruleForm.class_time);
-      this.ruleForm.class_time = this.ruleForm.class_time.join("至");
+      this.ruleForm.class_time = this.ruleForm.class_time.join("~");
       this.$axios
         .post("/xqhz/company/postTraining", this.ruleForm)
         .then(res => {
-          console.log(res);
+          if(res.code==0){
+            this.$alert(res.msg,'提示');
+            this.ruleForm={}
+          }
         })
         .catch(err => {
           console.log(err);

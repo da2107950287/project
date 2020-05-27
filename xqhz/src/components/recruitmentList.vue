@@ -81,6 +81,14 @@ export default {
     },
     // 处理数据
     getList() {
+       this.data.forEach((item, index) => {
+if (item.rec_time) {
+          item.rec_time = item.rec_time
+            .replace(/T/g, " ")
+            .replace(/\.[\d]{3}Z/, "");
+        }
+       })
+      
       let list1 = this.data.filter((item, index) =>
         item.rec_position.includes(this.keywords)
       );
@@ -126,7 +134,7 @@ li {
   margin: 50px 150px;
   background-color: #ffffff;
   //  box-shadow: 2px 2px 5px 0 #666;
-  padding: 20px 50px 50px;
+  padding: 20px 50px 20px;
   .handle-box {
     height: 35px;
     margin-bottom: 20px;

@@ -30,7 +30,7 @@
         </el-table-column>
         <el-table-column prop="rec_tel" label="企业联系电话" align="center"></el-table-column>
         <el-table-column prop="rec_address" label="企业地址" align="center"></el-table-column>
-        <el-table-column prop="status" label="状态" align="center"></el-table-column>
+        <el-table-column prop="statusText" label="状态" align="center"></el-table-column>
         <el-table-column label="操作" width="200" align="center">
           <template slot-scope="scope">
             <el-button
@@ -38,11 +38,12 @@
               icon="el-icon-view"
               @click="handleSee(scope.$index, scope.row)"
             >审核</el-button>
-            <!-- <el-button
+            
+               <el-button
               type="text"
               icon="el-icon-edit"
               @click="handleEdit(scope.$index, scope.row)"
-            >编辑</el-button>-->
+            >编辑</el-button>
             <el-button
               type="text"
               icon="el-icon-delete"
@@ -65,10 +66,10 @@
     </div>
 
     <!-- 编辑弹出框 -->
-    <el-dialog title="编辑" :visible.sync="editVisible" width="30%">
+    <el-dialog title="修改密码" :visible.sync="editVisible" width="30%">
       <el-form :model="form" label-width="70px">
-        <el-form-item label="状态">
-          <el-input v-model="form.status"></el-input>
+        <el-form-item label="密码">
+          <el-input v-model="form.password"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -150,11 +151,25 @@ export default {
     handleEdit(index, row) {
       this.form = row;
       this.editVisible = true;
+      // this.getCompanyInfo()
     },
+    // getCompanyInfo() {
+    //   this.$axios
+    //     .post("/sysadmin/user/getCompanyInfo", { cid: this.cid })
+    //     .then(res => {
+    //       this.info = res.data;
+          
+    //       console.log(res.data);
+    //     })
+    //     .catch(err => {
+    //       console.log(err);
+    //     });
+    // },
     // 保存编辑
     saveEdit() {
       this.editVisible = false;
       console.log(this.form);
+      delete this.form.statusText;
       this.$axios
         .post("/sysadmin/user/editCompany", this.form)
         .then(res => {
@@ -199,12 +214,13 @@ export default {
         item.rec_name.includes(this.rec_name)
       );
       list.forEach((item, index) => {
-        if (item.status == 0) {
-          item.status = "待审核";
+       
+          if (item.status == 0) {
+          this.$set(item, "statusText", "待审核");
         } else if (item.status == 1) {
-          item.status = "审核已通过";
+          this.$set(item, "statusText", "审核已通过");
         } else {
-          item.status = "审核未通过";
+          this.$set(item, "statusText", "审核未通过");
         }
       });
       this.tableData = list.filter(

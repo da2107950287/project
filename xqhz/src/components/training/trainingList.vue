@@ -43,12 +43,12 @@
               icon="el-icon-edit"
               @click="handleEdit(scope.$index, scope.row)"
             >编辑</el-button>-->
-            <!-- <el-button
+            <el-button
               type="text"
               icon="el-icon-delete"
               class="red"
-              @click="handleDelete(scope.$index, scope.row)"
-            >删除</el-button> -->
+              @click="handleDelete(scope.$index,scope.row.tid)"
+            >删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -134,6 +134,27 @@ export default {
     // 查看个人信息详情
     handleSee(tid) {
       this.$router.push({ path: "/sysadminTrainingInfo", query: { tid } });
+    },
+    handleDelete(index,tid) {
+      this.$confirm("确定要删除该条数据吗？", "提示", {
+        type: "warning"
+      })
+        .then(() => {
+          this.$axios
+            .post("/sysadmin/training/delTraining", { tid: tid })
+            .then(res => {
+              console.log(res)
+              if(res.code == 0) {
+                 this.tableData.splice(index, 1);
+                --this.pageTotal;
+                this.$alert(res.msg, "提示");
+              }
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        })
+        .catch(() => {});
     },
     // 分页导航
     handlePageChange(val) {

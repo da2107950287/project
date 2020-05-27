@@ -210,9 +210,9 @@ router.post('/saveScore', (req, res) => {
     companymodel.saveScore(data, (result) => {
         console.log(result)
         if (result.affectedRows) {
-            res.json({ code: 0, msg: '导入学生列表成功' })
+            res.json({ code: 0, msg: '操作成功' })
         } else {
-            res.json({ code: 1, msg: '导入学生列表失败' })
+            res.json({ code: 1, msg: '操作失败' })
         }
     })
 

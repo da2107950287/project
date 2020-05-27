@@ -12,7 +12,7 @@ router.post('/getRecruitmentList', (req, res) => {
     
     })
 })
-//删除培训信息
+//删除招聘信息
 router.post('/delRecruitment',(req,res)=>{
     let data=req.body;
     recruitmentmodel.delRecruitment(data,(result)=>{

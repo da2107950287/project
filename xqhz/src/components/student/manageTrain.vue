@@ -233,9 +233,7 @@ cursor: pointer;
 }
 .pagination {
   margin-top: 10px;
+  text-align: center;
 }
-// .selected {
-//   color: red;
-//   cursor: pointer;
-// }
+
 </style>

@@ -19,7 +19,7 @@
         </el-select>
         <el-input
           v-model="keywords"
-          placeholder="职位名称"
+          placeholder="请输入职位名称"
           class="handle-input mr10"
           @keyup.enter.native="handleSearch"
         ></el-input>
@@ -48,12 +48,12 @@
               icon="el-icon-edit"
               @click="handleEdit(scope.$index, scope.row)"
             >审核</el-button>-->
-            <!-- <el-button
+            <el-button
               type="text"
               icon="el-icon-delete"
               class="red"
-              @click="handleDelete(scope.$index, scope.row)"
-            >删除</el-button>-->
+              @click="handleDelete(scope.$index,scope.row.rid)"
+            >删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -84,7 +84,7 @@ export default {
       delList: [],
       pageTotal: null,
       form: {},
-      status:-1,
+      status: -1,
       options: [
         {
           value: -1,
@@ -137,6 +137,26 @@ export default {
         query: { rid: rid }
       });
     },
+    handleDelete(index,rid) {
+      this.$confirm("确定要删除该条数据吗？", "提示", {
+        type: "warning"
+      })
+        .then(() => {
+          this.$axios
+            .post("/sysadmin/recruitment/delRecruitment", { rid: rid })
+            .then(res => {
+              if (res.code == 0) {
+                 this.tableData.splice(index, 1);
+                --this.pageTotal;
+                this.$alert(res.msg, "提示");
+              }
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        })
+        .catch(() => {});
+    },
     // 分页导航
     handlePageChange(val) {
       this.pageIndex = val;
@@ -157,21 +177,17 @@ export default {
     // 处理数据
     getList() {
       // es6过滤得到满足搜索条件的展示数据list
-      let list = this.data.filter((item, index) =>{
+      let list = this.data.filter((item, index) => {
         if (this.status === 0 || this.status === 1 || this.status === 2) {
-          
-          return this.status === item.status&&(item.rec_position.includes(this.keywords));
+          return (
+            this.status === item.status &&
+            item.rec_position.includes(this.keywords)
+          );
         } else {
-          return true&&(item.rec_position.includes(this.keywords));
+          return true && item.rec_position.includes(this.keywords);
         }
-        
-      }
-    
-      
-    
-      );
+      });
       list.forEach((item, index) => {
-        
         if (item.status == 0) {
           this.$set(item, "statusText", "待审核");
         } else if (item.status == 1) {

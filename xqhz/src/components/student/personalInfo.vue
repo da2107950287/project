@@ -17,9 +17,9 @@
           <el-form-item label="姓名：" prop="username">
             <div class="content">{{ruleForm.name}}</div>
           </el-form-item>
-          <el-form-item label="密码：" prop="password">
+          <!-- <el-form-item label="密码：" prop="password">
             <div class="content">{{ruleForm.password}}</div>
-          </el-form-item>
+          </el-form-item> -->
           <!-- <el-form-item label="姓名：" prop="username">
             <div class="content">{{ruleForm.name}}</div>
           </el-form-item> -->

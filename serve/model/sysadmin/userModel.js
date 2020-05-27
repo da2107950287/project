@@ -39,6 +39,7 @@ class userModel extends dbBase {
         });
         this.mydb.query(sql, data, (err, result) => {
             if (err) {
+                console.log(err)
                 callback(err)
             } else {
                 console.log(result)
@@ -248,7 +249,12 @@ class userModel extends dbBase {
         string2.push(data.cid);
         let sql = `update ${this.table} set ${string1.join(",")} where cid=?`;
         this.mydb.query(sql, string2, function (err, result) {
-            callback(result);
+            if(err){
+                console.log(err)
+            }else{
+                callback(result);
+
+            }
         })
 
     }

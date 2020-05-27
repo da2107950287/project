@@ -2,7 +2,7 @@
   <div class="home">
     <h3>培训信息</h3>
     <div class="handle-box">
-      <el-input v-model="keywords" placeholder="请输入课程名或培询讲师" class="handle-input mr10"  @keyup.enter.native="handleSearch"></el-input>
+      <el-input v-model="keywords" placeholder="请输入课程名或讲师名" class="handle-input mr10"  @keyup.enter.native="handleSearch"></el-input>
       <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
     </div>
     <el-table
@@ -14,7 +14,7 @@
       :show-header="false"
    
     >
-       <!-- @selection-change="handleSelectionChange" -->
+     
       <el-table-column show-overflow-tooltip>
         <template slot-scope="scope">
           <span class="active" @click="getTrainingInfo(scope.row.tid)">{{ scope.row.class_name }}</span>

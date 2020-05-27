@@ -12,7 +12,7 @@ router.post('/getTrainingList', (req, res) => {
         res.json({code:0,msg:'获取数据成功',data:result})
     })
 })
-//删除学生信息
+//删除培训信息
 router.post('/delTraining',(req,res)=>{
     let data=req.body;
     trainingmodel.delTraining(data,(result)=>{

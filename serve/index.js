@@ -10,8 +10,7 @@ const upload = multer({ dest: 'uploads/' });
 // var app = express();
 
 app.use(require('./tool/cor.js').cors);
-// app.use(require('./Self/').cookie);
-// app.use(require('./Self/').session);
+
 
 //用body-parser模块用来解析post的传过来的值
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -47,7 +46,7 @@ app.use('/xqhz/consult',require('./control/xqhz/consultControl'));
 
 app.use('/xqhz/upload',require('./control/xqhz/uploadControl'))
 app.use('/uploads', express.static(__dirname+'/uploads'));
-//上传个人头像图片
+
 
   
 app.use('/sysadmin/company',require('./control/sysadmin/companyControl'));

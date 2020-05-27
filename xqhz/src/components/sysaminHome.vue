@@ -10,7 +10,7 @@
    <div id="box">
       欢迎
       <span style="color:red">{{username}}</span>
-      登录校企合作信息后台管理系统!
+      登录校企合作后台信息管理系统!
    </div>
   </div>
 </template>

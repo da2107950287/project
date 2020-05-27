@@ -4,11 +4,10 @@
       <div class="handle-box">
         <div style="display:flex">
           <div class="mr10">
-            <el-button type="danger" @click="getExcel(tableData)">导出学生列表</el-button>
-            <el-button type="primary" icon="el-icon-plus" @click="addStudent(form)">添加学生</el-button>
-          </div>
-          <el-upload
-            class="upload-demo"
+          <el-button type="primary" @click="getExcel(tableData)">下载模板</el-button>
+              </div>
+            <el-upload
+            class="upload-demo mr10"
             action
             :on-change="handleChange"
             :limit="limitUpload"
@@ -16,8 +15,13 @@
             :auto-upload="false"
             :show-file-list="false"
           >
-            <el-button type="primary">批量添加学生</el-button>
+            <el-button type="primary" icon="el-icon-plus">批量添加学生</el-button>
           </el-upload>
+          <div class="mr10">
+            
+            <!-- <el-button type="primary" icon="el-icon-plus" @click="addStudent(form)">添加学生</el-button> -->
+          </div>
+        
         </div>
         <el-button
           type="danger"
@@ -27,7 +31,7 @@
         >批量删除</el-button>
         <el-input
           v-model="keywords"
-          placeholder="学号或姓名"
+          placeholder="请输入学号或姓名"
           class="handle-input mr10"
           @keyup.enter.native="handleSearch"
         ></el-input>
@@ -192,9 +196,9 @@ export default {
           let arr = [];
           this.da.map(v => {
             let obj = {};
-            obj.username = v["账号"];
+            obj.username = v["学号"];
             obj.name = v["姓名"];
-            obj.password = v["密码"];
+            // obj.password = v["密码"];
             obj.academy = v["学院"];
             obj.major = v["专业"];
             arr.push(obj);
@@ -202,6 +206,7 @@ export default {
           _this.$axios
             .post("/sysadmin/user/addStudentList", { data: arr })
             .then(res => {
+              console.log(res)
               _this.$alert(res.msg);
               if (res.code === 0) {
                 _this.getStudentList();
@@ -225,15 +230,8 @@ export default {
         const {
           export_json_to_excel
         } = require("../../../assets/js/Excel/Export2Excel");
-        const tHeader = ["ID", "学号", "姓名", "密码", "学院", "专业"];
-        const filterVal = [
-          "sid",
-          "username",
-          "name",
-          "password",
-          "academy",
-          "major"
-        ];
+        const tHeader = ["学号", "姓名", "学院", "专业"];
+        const filterVal = [];
         const list = res;
         const data = this.formatJson(filterVal, list);
         export_json_to_excel(tHeader, data, "学生列表");
@@ -265,7 +263,7 @@ export default {
               if (res.code== 0) {
                  this.tableData.splice(index, 1);
               --this.pageTotal;
-              this.$alert(res.msg);
+              this.$alert(res.msg,"提示");
               }
             })
             .catch(err => {

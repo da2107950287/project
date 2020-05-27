@@ -19,7 +19,8 @@
         >
           <i class="el-icon-upload"></i>
           <div class="el-upload__text">
-            <em>上传简历附件</em>
+            <em v-if="src==''">上传简历附件</em>
+            <em v-else>更新简历</em>
           </div>
         </el-upload>
         <!-- <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div> -->

@@ -94,6 +94,8 @@ class companyModel extends dbBase {
         let sql = `insert into ${this.table} (${fieldstring.join(",")}) values (${field.join(",")})`;
         this.mydb.query(sql, data, (err, result) => {
             if (err) {
+            console.log(err)
+
                 callback(err)
             } else {
                 callback(result);
@@ -170,6 +172,7 @@ class companyModel extends dbBase {
 
         })
     }
+
     getSelfRecruitmentList(data,callback){
         this.table = 'recruitment';
         console.log(data.cid)
@@ -213,8 +216,10 @@ class companyModel extends dbBase {
         })
     }
     getApplyRecordList(data,callback){
-        let sql = `select entry.*,student.* from student,entry where student.sid=entry.sid and entry.tid=?`;
-        this.mydb.query(sql,[data.tid],(err, result) => {
+        let sql = `select entry.*,student.*, score.score as score from student,entry,score where student.sid=entry.sid and entry.sid=score.sid and entry.eid=score.eid and entry.tid=? union
+        select entry.*,student.*,'' as score from student,entry,score where student.sid=entry.sid and entry.tid=? and  entry.eid not in 
+        (select score.eid from score)`
+         this.mydb.query(sql,[data.tid,data.tid],(err, result) => {
             console.log(result)
             console.log(sql)
             if (err) {
@@ -322,20 +327,38 @@ class companyModel extends dbBase {
         let fieldstring = [];
         let field = [];
         let arr=[]
+        let str=''
         info.forEach((item,index) => {
             console.log(item)
+             field=[];
             for (const key in item) {
+                
                 if (item.hasOwnProperty(key)) {
                     field.push("?");
                     data.push(item[key]);
                     fieldstring.push(key)
                     arr.push(`${key}=?`)
                 }
+                
+                
             }
+            console.log("ppp",field)
+            str  =str +'('+field.join(',')+'),';
+            
+            console.log(str)
+            fieldstring= Array.from(new Set(fieldstring))
         });
-       let sql = `INSERT INTO ${this.table} (${fieldstring.join(",")}) values (${field.join(",")}) ON DUPLICATE KEY UPDATE ${arr.join(',')}`;
+       str =str.substr(0,str.length - 1);  
+        console.log("kkk",field)
+       let sql = `INSERT INTO ${this.table} (${fieldstring.join(",")}) values ${str} ON DUPLICATE KEY UPDATE eid=values(eid),sid=values(sid),score=values(score)`;
         this.mydb.query(sql, data.concat(data), function (err, result) {
-            callback(result);
+            if(err){
+                
+                console.log(err)
+            }else{
+                callback(result);
+            }
+            
         })
     }
 }

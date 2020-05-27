@@ -44,6 +44,7 @@ export default {
   },
   methods: {
     apply() {
+      console.log(this.info)
       this.$axios
         .post("/xqhz/training/selectIsApply", { tid: this.info.tid })
         .then(res => {

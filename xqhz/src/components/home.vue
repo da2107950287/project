@@ -21,13 +21,9 @@
       </div>
       <div class="panel-body">
         <table class="table">
-    
           <tbody>
             <tr v-for="(item,index) in trainingList" :key="index">
-              <td class="post-sort" @click="getTrainingInfo(item.tid)">
-               
-                {{item.class_name}}
-              </td>
+              <td class="post-sort" @click="getTrainingInfo(item.tid)">{{item.class_name}}</td>
               <td class="post-intro">{{item.class_teacher}}</td>
               <td class="post-time">{{item.class_time}}</td>
             </tr>
@@ -43,13 +39,6 @@
       </div>
       <div class="panel-body">
         <table class="table">
-          <!-- <thead>
-            <tr>
-              <th>职位名称</th>
-              <th>企业名称</th>
-              <th>招聘日期</th>
-            </tr>
-          </thead>-->
           <tbody>
             <tr v-for="(item,index) in recruitmentList" :key="index">
               <td class="post-sort" @click="getRecruitmentInfo(item.rid)">{{item.rec_position}}</td>
@@ -123,11 +112,7 @@ export default {
         },
         { identity: "管理员", arr: [{ name: "登录", path: "/login" }] }
       ],
-      dataList: [
-        { title: "【军队文职专栏】军队文职招聘信息汇总 3月16日更新", id: 1 },
-        { title: "【军队文职专栏】军队文职招聘信息汇总 3月16日更新", id: 2 },
-        { title: "【军队文职专栏】军队文职招聘信息汇总 3月16日更新", id: 3 }
-      ],
+
       trainingList: [],
       recruitmentList: [],
       companyList: []
@@ -169,6 +154,13 @@ export default {
       this.$axios
         .post("/xqhz/company/getRecruitmentList", {})
         .then(res => {
+           res.data.forEach((item, index) => {
+            if (item.rec_time) {
+              item.rec_time = item.rec_time
+                .replace(/T/g, " ")
+                .replace(/\.[\d]{3}Z/, "");
+            }
+          });
           this.recruitmentList = res.data;
         })
         .catch(err => {
@@ -180,7 +172,11 @@ export default {
       this.$axios
         .post("/xqhz/company/getCompanyList", {})
         .then(res => {
+          console.log(res.data)
+           
           this.companyList = res.data;
+          
+        
         })
         .catch(err => {
           console.log(err);
@@ -244,7 +240,7 @@ li {
     border: 1px solid #efefef;
     // border-radius: 4px;
     // box-shadow: #ccc 0 0px 4px;
-    padding-bottom: 30px;
+    padding-bottom: 15px;
     .panel-heading {
       color: #333333;
       background-color: #fbfbfb;
@@ -307,15 +303,14 @@ li {
               margin-right: 5px;
             }
           }
-            .post-sort:hover{
-          color: #1e649f;
-          text-decoration: solid;
+          .post-sort:hover {
+            color: #1e649f;
+            text-decoration: solid;
           }
-          .post-time{
-           color: #999
+          .post-time {
+            color: #999;
           }
         }
-        
       }
       .company-box {
         display: flex;

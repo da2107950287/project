@@ -18,7 +18,11 @@ class trainingModel extends dbBase{
     delTraining(data,callback){
         let sql = `delete from ${this.table} where tid = ?`;
         this.mydb.query(sql,[data.tid],(err,result)=>{
-            callback(result)
+            if(err){
+                console.log(err)
+            }else{
+                callback(result)
+            }
         })
     }
     editTraining(data,callback){

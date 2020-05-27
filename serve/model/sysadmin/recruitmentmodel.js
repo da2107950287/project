@@ -16,8 +16,8 @@ class recruitmentModel extends dbBase {
         })
     }
     delRecruitment(data, callback) {
-        let sql = `delete from ${this.table} where tid = ?`;
-        this.mydb.query(sql, [data.tid], (err, result) => {
+        let sql = `delete from ${this.table} where rid = ?`;
+        this.mydb.query(sql, [data.rid], (err, result) => {
             callback(result)
         })
     }

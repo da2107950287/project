@@ -21,7 +21,7 @@ let jwt = new JwtUtil();
 router.post('/addStudentList', (req, res) => {
     let data=req.body.data;
     usermodel.addStudentList(data, (result) => {
-        console.log(888888,result.affectedRows)
+      
         if(result.affectedRows){
             res.json({code:0,msg: '导入学生信息成功！' })
         }else{

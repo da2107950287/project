@@ -15,7 +15,7 @@
     <div class="aside">
       <div @click="show(1)" :class="[isShow==1?'selected':'']">学校简介</div>
       <div @click="show(2)" :class="[isShow==2?'selected':'']">历史沿改</div>
-      <div @click="show(3)" :class="[isShow==3?'selected':'']">治理架构</div>
+      <!-- <div @click="show(3)" :class="[isShow==3?'selected':'']">治理架构</div> -->
     </div>
     <div class="content" v-if="isShow==1">
       <h3>攀枝花学院简介</h3>

@@ -10,7 +10,7 @@
       <div class="header">
         <h3>招聘信息列表</h3>
         <div class="handle-box">
-          <el-select v-model="status" @change="handleSearch" placeholder="请选择" style="width:150px">
+          <el-select v-model="status" @change="handleSearch" placeholder="请选择" style="width:120px">
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -90,7 +90,7 @@
               type="datetime"
               align="right"
               placeholder="选择日期"
-             
+               value-format="yyyy-MM-dd HH:mm:ss"
             ></el-date-picker>
           </el-form-item>
           <el-form-item label="招聘地点：" prop="rec_place_name">
@@ -185,7 +185,7 @@
             type="datetime"
             align="right"
             placeholder="选择日期"
-            value-format="yyyy-MM-dd 00:00:00"
+             value-format="yyyy-MM-dd HH:mm:ss"
           ></el-date-picker>
         </el-form-item>
         <el-form-item label="招聘地址">
@@ -204,7 +204,7 @@
         <el-button type="primary" @click="saveEdit">确 定</el-button>
       </span>
     </el-dialog>
-    <el-dialog title="岗位投递列表" :visible.sync="listVisible" width="60%">
+    <el-dialog title="岗位投递详情列表" :visible.sync="listVisible" width="60%">
       <el-table :data="dialogTable" border style="width: 100%">
         <el-table-column prop="username" label="学号" align="center"></el-table-column>
         <el-table-column prop="name" label="姓名" align="center"></el-table-column>
@@ -318,6 +318,7 @@ export default {
         .post("/xqhz/company/postRecruitment", this.ruleForm)
         .then(res => {
           this.$alert(res.msg,'提示');
+          this.ruleForm={}
         })
         .catch(err => {
           console.log(err);
@@ -536,4 +537,5 @@ export default {
 //   width: 300px;
 //   display: inline-block;
 // }
+
 </style>

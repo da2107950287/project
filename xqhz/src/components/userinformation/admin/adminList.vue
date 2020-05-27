@@ -4,7 +4,7 @@
       <div class="handle-box">
         <el-button type="primary" icon="el-icon-plus" @click="addAdmin(form)">添加管理员</el-button>
 
-        <el-input v-model="username" placeholder="ID" class="handle-input mr10"></el-input>
+        <el-input v-model="username" placeholder="请输入用户名" class="handle-input mr10"></el-input>
         <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
       </div>
       <el-table
@@ -16,7 +16,7 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="60" align="center"></el-table-column>
-        <el-table-column prop="aid" label="ID" align="center" sortable></el-table-column>
+        <!-- <el-table-column prop="aid" label="ID" align="center" sortable></el-table-column> -->
         <el-table-column prop="username" label="用户名" align="center"></el-table-column>
         <el-table-column prop="password" label="密码" align="center"></el-table-column>
         <el-table-column label="操作" width="200" align="center">

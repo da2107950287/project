@@ -9,7 +9,7 @@
           @click="delAllSelection"
         >批量删除</el-button>-->
         <!-- <el-input v-model="status" placeholder="课程名" class="handle-input mr10"></el-input> -->
-        <el-select v-model="status" placeholder="请选择" @change="handleSearch">
+        <el-select v-model="status" placeholder="请选择" @change="handleSearch" style="width:120px">
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -122,10 +122,16 @@ export default {
       ]
     };
   },
+   watch:{
+    keywords(){
+      if(this.keywords===''){
+        this.handleSearch()
+      }
+    }
+  },
   methods: {
     // 触发搜索按钮
     handleSearch() {
-      console.log(7777);
       this.pageIndex = 1;
       this.getList();
     },
@@ -190,10 +196,7 @@ export default {
           console.log(err);
         });
     },
-    // 查看个人信息详情
-    // handleSee(index, row) {
-
-    // },
+    
     // 分页导航
     handlePageChange(val) {
       this.pageIndex = val;
@@ -217,9 +220,7 @@ export default {
       // es6过滤得到满足搜索条件的展示数据list
       let list1 = this.data.filter((item, index) => {
         if (this.status === 0 || this.status === 1) {
-          return
-          
-          this.status === item.status && item.question.includes(this.keywords);
+          return this.status === item.status && item.question.includes(this.keywords);
         } else {
           return true && item.question.includes(this.keywords);
         }

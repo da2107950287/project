@@ -13,7 +13,7 @@ let jwt = new JwtUtil();
 router.post("/insertSelfResume", function (req, res) {
     let datas = {};
     datas.code = '0';
-    datas.message = '上传图片成功';
+    datas.message = '上传简历成功';
     var form = new formidable.IncomingForm();
     form.encoding = 'utf-8';//设置表单域的编码
     console.log(__dirname);

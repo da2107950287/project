@@ -137,6 +137,7 @@ export default {
 
 </style>
 <style lang="scss" scoped>
+
 .el-header {
   background-color: #242f42;
   color: #fff;
@@ -201,4 +202,7 @@ body > .el-container {
 .el-container:nth-child(7) .el-aside {
   line-height: 320px;
 }
+// .el-menu-item{
+//   text-align: left;
+// }
 </style>

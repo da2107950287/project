@@ -15,18 +15,22 @@
       router
     >
       <el-menu-item index="home">首页</el-menu-item>
+      <el-menu-item index="trainingList">培训信息</el-menu-item>
+      <el-menu-item index="recruitmentList">招聘信息</el-menu-item>
+
       <el-menu-item index="profile">学校简介</el-menu-item>
       <el-menu-item index="consult">留言咨询</el-menu-item>
-      <el-menu-item index="register" v-if="!showStudent&&!showCompany">注册</el-menu-item>
-      <el-menu-item index="login" v-if="!showStudent&&!showCompany">登录</el-menu-item>
-      <el-submenu index="2" class="right" v-if="showStudent">
+
+      <el-menu-item index="register" v-if="!showStudent()&&!showCompany()">注册</el-menu-item>
+      <el-menu-item index="login" v-if="!showStudent()&&!showCompany()">登录</el-menu-item>
+      <el-submenu index="2" class="right" v-if="showStudent()">
         <template slot="title">hi，{{username}}</template>
         <el-menu-item index="personalInfo">个人信息管理</el-menu-item>
         <el-menu-item index="manageResume">简历投递管理</el-menu-item>
         <el-menu-item index="manageTrain">培训报名管理</el-menu-item>
         <el-menu-item @click="loginout">退出登录</el-menu-item>
       </el-submenu>
-      <el-submenu index="3" class="right" v-if="showCompany">
+      <el-submenu index="3" class="right" v-if="showCompany()">
         <template slot="title">hi，{{username}}</template>
         <el-menu-item index="companyInfo">企业信息管理</el-menu-item>
         <el-menu-item index="recruitment">招聘管理</el-menu-item>
@@ -34,9 +38,9 @@
         <el-menu-item @click="loginout">退出登录</el-menu-item>
       </el-submenu>
     </el-menu>
-    <keep-alive>
-        <router-view></router-view>
-    </keep-alive>
+    <!-- <keep-alive> -->
+      <router-view></router-view>
+    <!-- </keep-alive> -->
   </div>
 </template>
 <script>
@@ -44,27 +48,31 @@ export default {
   data() {
     return {
       activeIndex: "home",
-      username:'',
-      
+      username: ""
     };
   },
-  computed: {
+  methods: {
     showStudent() {
-     
-      this.username=localStorage.getItem("username")
-      return  localStorage.getItem('token')&&localStorage.getItem("role") === "student";
+      this.username = localStorage.getItem("username");
+      return (
+        localStorage.getItem("token") &&
+        localStorage.getItem("role") === "student"
+      );
     },
     showCompany() {
-      this.isShow=false
-      this.username=localStorage.getItem("username")
-      return  localStorage.getItem('token')&&localStorage.getItem("role") === "company";
-    }
-  },
-  methods: {
-    loginout(){
-      localStorage.removeItem('token');
-      this.$router.push({path:'/home'})
-      window.location.reload()
+      // this.isShow=false
+      this.username = localStorage.getItem("username");
+      return (
+        localStorage.getItem("token") &&
+        localStorage.getItem("role") === "company"
+      );
+    },
+    loginout() {
+      localStorage.removeItem("token");
+      localStorage.removeItem("username");
+      this.$nextTick(function() {
+        this.$router.push({ path: "/" });
+      });
     }
   }
 };
@@ -88,8 +96,11 @@ export default {
 .el-menu.el-menu--horizontal {
   padding: 0 150px;
 }
+.el-menu-demo {
+  position: static;
+}
 .right {
-  position: fixed;
+  position: absolute;
   right: 150px;
 }
 </style>
