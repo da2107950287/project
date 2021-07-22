@@ -21,7 +21,7 @@
     "vue-pdf": "^4.0.8",
     "vue-router": "^3.0.1",
     "wangeditor": "^3.1.1",
-    "xlsx": "^0.16.0"
+    "xlsx": "^0.17.0"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
